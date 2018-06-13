@@ -1,0 +1,170 @@
+	
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item "><a href="javascript:loadPhp('central.php');">Central</a></li>
+			<li class="breadcrumb-item active">Pedidos por Cliente</li>
+		</ol>
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12 ">
+				<div class="card">
+					<div class="card-body">
+						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido'>+ Novo Pedido</button>
+						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalCliente'>+ Novo Cliente</button>
+						<h2>Pedidos por Cliente:</h2>
+<?php 
+	require('conn.php');
+
+//Carrrga as empresas pra colocar no titulo dos cards
+$stmt0 = $conn->query("SELECT id_cliente,tx_nome,tx_cnpj FROM cliente ORDER BY tx_nome ASC");
+
+while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
+	$cliente = $row0->id_cliente;
+	$cnpj = substr($row0->tx_cnpj, 0, 2) . "." .substr($row0->tx_cnpj, 2, 3) .".".substr($row0->tx_cnpj, 5, 3)."/".substr($row0->tx_cnpj, 8, 4)."-".substr($row0->tx_cnpj, 12, 2);
+	$id=$row0->id_cliente;	
+	echo"<div class='card-body'>
+	<div class='accordion b-b-1' id='accordion'>
+		<div class='card mb-0'>
+		<div class='card-header' id='heading".$id."'>
+			<h5 class='mb-0'>
+				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$id."' aria-expanded='true' aria-controls='collapse".$id."'>";					
+	echo $row0->tx_nome." - CNPJ: ".$cnpj;
+	echo"</button>
+			</h5>
+				</div>
+					<div id='collapse".$id."' class='collapse' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
+	
+		
+	// Carrega os pedidos e coloca nos cards
+	$stmt = $conn->query("SELECT c.id_cliente, p.tx_codigo, p.id_pedido, p.cs_estado, v.medido_total, v.nb_valor FROM cliente As c 
+							INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
+							INNER JOIN v_sum_pedido_total AS v ON p.id_pedido = v.id_pedido
+							WHERE c.id_cliente = " . $cliente . " ORDER BY p.tx_codigo ASC;");
+
+	if($stmt->rowCount() == 0){
+		echo"<p> Não Tem NADA. !! </p>";}
+	else{
+	//	href='javascript:atvPhp(&#39;atividades.php&#39;);'	  
+	
+		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
+			
+			echo "<div class='progress-group'>";
+			  if($row->cs_estado == 0) 
+					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><div><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . " (Ativo)</strong></a></div>";
+			  if($row->cs_estado == 1) 
+					echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . " (Encerrado)</strong></a></div>";
+			  $percent = ($row->medido_total / $row->nb_valor) * 100;
+			  echo "<div class='ml-auto'>Progresso: (" . round($percent) ."%) - ";
+			  echo " R$" . $row->medido_total . " / " . $row->nb_valor . "</div></div>";
+			  echo "<div class='progress-group-bars'> <div class='progress progress-md'>";
+			  echo "<div class='progress-bar progress-bar-stripped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'></div></div></div></div>";
+		}
+	}
+	echo"</div></div></div></div></div>";
+}
+$stmt = null;
+$stmt0 = null;
+?>
+</div>
+
+<script>
+		$(document).ready(function(){ 
+		  $('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
+		  });
+</script>
+
+<!-- Modal Novo Cliente  -->
+<div class="modal" style="text-align: left" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="modalCliente" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title" id="modalCliente">Novo Cliente</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h3>
+								<form>
+    <div class="form-row">			
+	  <div class="form-group col-md-12">
+		<label for="formCliente">Razão Social</label>
+		<input style="text-transform: uppercase;" type="text" class="form-control" id="formCliente" placeholder="Razação Social" name="Cliente">
+	  </div>
+	</div>
+	<div class="form-row">		
+	  <div class="form-group col-md-12">
+		<label for="formCNPJ">CNPJ<h6><p class="text-muted"> Somente Números</p></h6></label>
+		<input type="text" class="form-control" id="formCNPJ" name="CNPJ" placeholder="00.000.000/0000-0" max-length="14" >
+	  </div>
+	</div> 
+	
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
+			</h3></form><div id="process"></div>
+			  </div>
+			    <div class="modal-footer">
+				
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+			  </div>
+			</div>
+		  </div>
+		  
+<!-- Modal Novo Pedido  -->
+<div class="modal" style="text-align: left" id="modalPedido" tabindex="-1" role="dialog" aria-labelledby="modalPedido" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title" id="modalPedido">Novo Pedido</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h3>
+								<form>
+    <div class="form-row">			
+	  <div class="form-group col-md-8">
+		<label for="formPedido">Código Pedido</label>
+		<input style="text-transform: uppercase;" type="text" class="form-control" id="formPedido" placeholder="" name="Pedido">
+	  </div>
+	  <div class="form-group col-md-4">
+		<label for="formData">Data</label>
+		<input type="date" class="form-control" id="formData" pattern="">
+	  </div>
+	</div>
+	
+	<div class="form-row">	
+		<div class="form-group col-md-12">	
+			<div class="form-group">
+				<label for="formSCliente">Cliente</label>
+				<select class="form-control" id="formSCliente" name="SCliente">
+		  <?php 	$stmt4 = $conn->query("SELECT tx_nome FROM cliente ORDER BY tx_nome ASC");
+				while($row4 = $stmt4->fetch(PDO::FETCH_OBJ)){ 
+				  echo "<option>".$row4->tx_nome."</option>";
+				}
+				  ?>
+				</select>  
+				  </div>
+			</div> 
+	</div>
+	
+	<div class="form-group m-3">
+		<label for="formControlTextarea">Informações Reliacionadas</label>
+		<textarea class="form-control" id="formControlTextarea" rows="3" name="pdDescricao"></textarea>
+    </div>
+	
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
+			</h3></form><div id="process"></div>
+			  </div>
+			    <div class="modal-footer">
+				
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+			  </div>
+			</div>
+		  </div>
+
+		
+
+
+				
