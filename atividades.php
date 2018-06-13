@@ -18,31 +18,41 @@ $pid = $_REQUEST["pid"];
 //Carrega dados do pedido
 $stmt3 = $conn->query("SELECT p.*, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
 $row3 = $stmt3->fetch(PDO::FETCH_OBJ);
-echo"<div class='card-body'>
-			<h2>Pedido: ".$row3->tx_codigo."</h2>";
-// Carrega o grupo das atividades result das atividades
-$stmt1 = $conn->query("SELECT c.*, (a.nb_valor / a.nb_qtd) v_unit FROM atividade a  
-		INNER JOIN categoria c ON a.id_categoria=c.id_categoria
-		WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
-		
-if($stmt1->fetch(PDO::FETCH_OBJ) == null){
-		echo"<h2>Não há atividades cadastradas para este pedido. Tenha um bom dia e obrigado.</h2>";}
-	else{	
-
-//Inicia card para organização das Categorias
+echo"<div class='card-body border border-primary rounded-top'>
+			
+			<h2>Pedido: ".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h2>
+			<h3>Total do Pedido: R$ ".$row3->nb_valor." - Data do Pedido: ".$row3->dt_data."</h3>
+				<div class='border border-secondary'>	
+			<h4>Informações Relacionadas: </h4>
+			
+				<p class='m-2'>".$row3->tx_descricao."</p><br>
+	 </div>			
+	 </div>";
+				
 echo"<div class='card-body'>
 			<button type='button' class='btn btn-outline-primary float-right' data-toggle='modal' data-target='#modalCenter'>+ Nova Atividade</button>
 			<h3>Atividades por Categoria:</h3>
 			";
 			
+// Carrega o grupo das atividades result das atividades
+$stmt1 = $conn->query("SELECT c.*, (a.nb_valor / a.nb_qtd) v_unit FROM atividade a  
+		INNER JOIN categoria c ON a.id_categoria=c.id_categoria
+		WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
+		
+if($stmt1->rowCount() == 0){
+		echo"<h4 class='danger'>Não há atividades cadastradas para este pedido. Tenha um bom dia e obrigado.</h4>";}
+	else{	
+
+//Inicia card para organização das Categorias
+
 while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){	
 
 	$cid = $row1->id_categoria;
 	$cpercent = $count =0;	
 //Inicia accordion para cada categoria
-echo"<div class='bd-example'>
+echo"<div class='card-body'>
 	<div class='accordion' id='accordion'>
-	<div class='card border-success'>
+	<div class='card border-success rounded-top'>
 		<div class='card-header' id='headingCat$cid'>
 			<h5 class='mb-0'>
 				<div class='row'>
@@ -104,9 +114,9 @@ echo"<div class='bd-example'>
 
 		}
 		
-		echo"</div></div></div>";
+		echo"</div></div></div></div></div>";
 	}
-	echo"</div></div>";
+	echo"</div></div></div></div>";
 };
 
 // Carrega as somas result das medições
@@ -167,15 +177,15 @@ echo"</div></div></div></div>";
 								  <span aria-hidden="true">&times;</span>
 								</button>
 							  </div>
-							  <div class="modal-body"><h3>
+							  <div class="modal-body"><h4>
 								<form>
     <div class="form-row">			
 	  <div class="form-group col-md-8">
-		<label for="formAtividade">Atividade</label>
+		<label for="formAtividade">Atividade:</label>
 		<input style="text-transform: uppercase;" type="text" class="form-control" id="formAtividade" placeholder="Descrição Atividade" name="Atividade">
 	  </div>
 	  <div class="form-group col-md-4">
-		<label for="formTubo">Tubo</label>
+		<label for="formTubo">Ø:<small class='text-muted'><cite>(Diâmetro)</cite></small></label>
 		<select class="form-control" id="formTubo" name="Tubo">
 		  <option></option>
 		  <option>Ø3/4"</option>
@@ -197,41 +207,41 @@ echo"</div></div></div></div>";
 	
 	<div class="form-row">			
 	  <div class="form-group col-md-5">
-		<label for="formQtd">Quantidade</label>
+		<label for="formQtd">Quantidade:</label>
 		<input type="text" class="form-control" id="formQtd" placeholder="Número Inteiro" name="Qtd">
+		<input type="text" class="form-control d-none" id="formID" name="Pid" value="<?php echo$pid?>" readonly>
 	  </div>
 	  <div class="form-group col-md-3">
-		<label for="formTipo">Tipo</label>
+		<label for="formTipo">Tipo:</label>
 		<input style="text-transform: uppercase;" type="text" class="form-control" id="formTipo" placeholder="PÇ, VB, CJ, ..." name="Tipo"> 
 	  </div>
 	  <div class="form-group col-md-4">
-		<label for="formValor">Valor</label>
+		<label for="formValor">Valor:</label>
 		<input type="text" class="form-control" id="formValor" placeholder="0.00" name="Valor">
 	  </div>
 	  
 	</div>
 	<div class="form-row">			
-	  <div class="form-group col-md-10">	
+	  <div class="form-group col-8">
 		<div class="form-group">
-			<label for="formCategoria">Categoria</label>
+		<label for="formCategoria">Categoria:</label>
 			<select class="form-control" id="formCategoria" name="Categoria">
 			<?php 	$stmt = $conn->query("SELECT * FROM categoria ORDER BY id_categoria ASC");
 			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
-			  echo "<option>".$row->id_categoria.". ".$row->tx_nome."</option>";
+			  echo "<option value=".$row->id_categoria.">".$row->tx_nome."</option>";
 			}
 			  ?>
 			</select>
 		  </div>
 		 </div>
-		<div class="form-group col-md-2">	
-			<div class="form-group">
-				<label for="formID">Id</label>
-				<input type="text" class="form-control" id="formID" name="Pid" value="<?php echo$pid?>" readonly>
-			</div>
-		</div>
-	</div>		
+		<div class="form-group col-4">
+			<label for="formData">Entrega:</label>
+			<input type="date" class="form-control" id="formData" value="<?php echo date('Y-m-d');?>" name="eData">
+		  </div>
+	</div>
+	
 	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
-			</h3></form><div id="process"></div>
+			</h4></form><div id="process"></div>
 							  </div>
 							  <div class="modal-footer">
 								<h6 id="success"><small></small></h6>

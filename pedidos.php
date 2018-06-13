@@ -10,7 +10,6 @@
 			<div class="col-12 ">
 				<div class="card">
 					<div class="card-body">
-						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido'>+ Novo Pedido</button>
 						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalCliente'>+ Novo Cliente</button>
 						<h2>Pedidos por Cliente:</h2>
 <?php 
@@ -31,6 +30,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$id."' aria-expanded='true' aria-controls='collapse".$id."'>";					
 	echo $row0->tx_nome." - CNPJ: ".$cnpj;
 	echo"</button>
+				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido'>+ Adicionar Pedido</button>
 			</h5>
 				</div>
 					<div id='collapse".$id."' class='collapse' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
@@ -68,12 +68,6 @@ $stmt0 = null;
 ?>
 </div>
 
-<script>
-		$(document).ready(function(){ 
-		  $('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
-		  });
-</script>
-
 <!-- Modal Novo Cliente  -->
 <div class="modal" style="text-align: left" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="modalCliente" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
@@ -84,7 +78,7 @@ $stmt0 = null;
 								  <span aria-hidden="true">&times;</span>
 								</button>
 							  </div>
-							  <div class="modal-body"><h3>
+							  <div class="modal-body"><h4>
 								<form>
     <div class="form-row">			
 	  <div class="form-group col-md-12">
@@ -94,13 +88,13 @@ $stmt0 = null;
 	</div>
 	<div class="form-row">		
 	  <div class="form-group col-md-12">
-		<label for="formCNPJ">CNPJ<h6><p class="text-muted"> Somente Números</p></h6></label>
+		<label for="formCNPJ">CNPJ <h6><p class="text-muted"><cite> Somente Números</cite></p></h6></label>
 		<input type="text" class="form-control" id="formCNPJ" name="CNPJ" placeholder="00.000.000/0000-0" max-length="14" >
 	  </div>
 	</div> 
 	
 	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
-			</h3></form><div id="process"></div>
+			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">
 				
@@ -120,41 +114,58 @@ $stmt0 = null;
 								  <span aria-hidden="true">&times;</span>
 								</button>
 							  </div>
-							  <div class="modal-body"><h3>
+							  <div class="modal-body"><h4>
 								<form>
     <div class="form-row">			
-	  <div class="form-group col-md-8">
-		<label for="formPedido">Código Pedido</label>
+	  <div class="form-group col-8">
+		<label for="formPedido">Código Pedido:</label>
 		<input style="text-transform: uppercase;" type="text" class="form-control" id="formPedido" placeholder="" name="Pedido">
 	  </div>
-	  <div class="form-group col-md-4">
-		<label for="formData">Data</label>
-		<input type="date" class="form-control" id="formData" pattern="">
+	  <div class="form-group col-4">
+		<label for="formData">Data:</label>
+		<input type="date" class="form-control" id="formData" name="iData" value="<?php echo date('Y-m-d');?>">
 	  </div>
 	</div>
 	
-	<div class="form-row">	
-		<div class="form-group col-md-12">	
+	<div class="form-row">
+	    <div class="form-group col-8">
+			<label for="formVPedido">Valor do Pedido:</label>
+			<input type="text" class="form-control" id="formVPedido" placeholder="0.00" name="valorPedido">
+	    </div>
+		 
+		<div class="form-group col-4">	
 			<div class="form-group">
-				<label for="formSCliente">Cliente</label>
-				<select class="form-control" id="formSCliente" name="SCliente">
-		  <?php 	$stmt4 = $conn->query("SELECT tx_nome FROM cliente ORDER BY tx_nome ASC");
+				<label for="formRetencao">Retenção:</label>
+				<select class="form-control" id="formRetencao" name="Retencao">
+					<option value='5'>5%</option>
+					<option value='10'>10%</option>
+				</select>  
+			 </div>
+		</div> 
+	</div>
+	
+	<div class="form-row">
+		<div class="form-group col-8">	
+			<div class="form-group">
+				<label for="formSCliente">Cliente:</label>
+				<select class="form-control" id="formSCliente" name="sCliente">
+		  <?php 	$stmt4 = $conn->query("SELECT id_cliente, tx_nome FROM cliente ORDER BY tx_nome ASC");
 				while($row4 = $stmt4->fetch(PDO::FETCH_OBJ)){ 
-				  echo "<option>".$row4->tx_nome."</option>";
+				  echo "<option value=".$row4->id_cliente.">".$row4->tx_nome."</option>";
 				}
 				  ?>
 				</select>  
-				  </div>
-			</div> 
+			</div>
+		</div>
 	</div>
 	
-	<div class="form-group m-3">
-		<label for="formControlTextarea">Informações Reliacionadas</label>
+	<div class="form-group">
+		<label for="formControlTextarea">Informações Relacionadas:</label>
 		<textarea class="form-control" id="formControlTextarea" rows="3" name="pdDescricao"></textarea>
     </div>
 	
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
-			</h3></form><div id="process"></div>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Adicionar</a>
+			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">
 				
@@ -163,7 +174,11 @@ $stmt0 = null;
 			  </div>
 			</div>
 		  </div>
-
+<script>
+		$(document).ready(function(){ 
+		  $('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
+		  });
+</script>
 		
 
 
