@@ -11,7 +11,7 @@
 				<div class="card">
 					<div class="card-body">
 						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalCliente'>+ Novo Cliente</button>
-						<h2>Pedidos por Cliente:</h2>
+						<h2>Pedidos por Cliente: <p id="fecharBtn">Refresh</p></h2>
 <?php 
 	require('conn.php');
 
@@ -22,7 +22,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	$cliente = $row0->id_cliente;
 	$cnpj = substr($row0->tx_cnpj, 0, 2) . "." .substr($row0->tx_cnpj, 2, 3) .".".substr($row0->tx_cnpj, 5, 3)."/".substr($row0->tx_cnpj, 8, 4)."-".substr($row0->tx_cnpj, 12, 2);
 	$id=$row0->id_cliente;	
-	echo"<div class='card-body'>
+	echo"<div class='card-body' id='pedidoAccord'>
 	<div class='accordion b-b-1' id='accordion'>
 		<div class='card mb-0'>
 		<div class='card-header' id='heading".$id."'>
@@ -43,7 +43,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 							WHERE c.id_cliente = " . $cliente . " ORDER BY p.tx_codigo ASC;");
 
 	if($stmt->rowCount() == 0){
-		echo"<p> Não Tem NADA. !! </p>";}
+		echo"<p> Não há pedidos cadastrados para este cliente! </p>";}
 	else{
 	//	href='javascript:atvPhp(&#39;atividades.php&#39;);'	  
 	
@@ -170,16 +170,15 @@ $stmt0 = null;
 			    <div class="modal-footer">
 				
 				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
 			  </div>
 			</div>
 		  </div>
 <script>
 		$(document).ready(function(){ 
 		  $('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
-		  });
+		});
+		$("#fecharBtn").click(function(){
+			$("#pedidoAccord").load("pedidos.php #pedidoAccord");
+		});
 </script>
-		
-
-
-				

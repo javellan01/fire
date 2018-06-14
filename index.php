@@ -62,7 +62,10 @@
 			var formData = $('form').serialize();
 			xhttp.open("GET", "process.php?"+formData, true);
 			xhttp.send();
-			}	
+			}
+		$("#fecharBtn").click(function(){
+			$("#main").load("pedidos.php #pedidoAccord");
+		});			
 	</script>
 	<script>
 		$(document).ready(function(){ 
@@ -98,7 +101,7 @@
 	<div class="sidebar">
 	  <nav class="sidebar-nav">
 		<ul class="nav">
-		  <li class="nav-title"><strong>FIRESYSTEMS.online</strong></li>
+		  <li class="nav-title" id="fecharBtn"><strong>FIRESYSTEMS.online</strong></li>
 		  <li class="nav-item">
 			<a class="nav-link" href="#">
 			  <i class="nav-icon cui-speedometer"></i> Top

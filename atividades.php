@@ -49,76 +49,111 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 
 	$cid = $row1->id_categoria;
 	$cpercent = $count =0;	
-//Inicia accordion para cada categoria
-echo"<div class='card-body'>
-	<div class='accordion' id='accordion'>
-	<div class='card border-success rounded-top'>
-		<div class='card-header' id='headingCat$cid'>
-			<h5 class='mb-0'>
-				<div class='row'>
-					<div class='col-xl-2 col-md-3 col-sm-4'>
-		<button class='btn btn-outline-success float-left' type='button' data-toggle='collapse' data-target='#collapseCat$cid' aria-expanded='true' aria-controls='collapseCat$cid'><strong>";
+
+	$stmt2 = $conn->query("SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, CAST(SUM(progresso) AS DECIMAL(10,2)) progresso, v_unit FROM v_categoria_sums WHERE id_pedido = $pid AND id_categoria = $cid GROUP BY id_categoria");
+	$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
+		
+	$execpercent = ($row2->progresso / $row2->nbvalor) * 100;
+	$execpercent = round($execpercent,1);
+	
+	$medpercent = ($row2->valorsum / $row2->nbvalor) * 100;
+	$medpercent = round($medpercent,1);	
+		//Inicia accordion para cada categoria
+	echo"
+<div class='accordion border border-success rounded-top mb-3' id='accordion'>
+  <div class='card mb-0'>
+    <div class='card-header' id='headingCat$cid'>
+      <h5 class='mb-0'>
+	    <div class='row'>
+		
+		<div class='col-3'>";
+		echo"<button class='btn btn-outline-success float-left' type='button' data-toggle='collapse' data-target='#collapseCat$cid' aria-expanded='true' aria-controls='collapseCat$cid'><strong>";
 		echo $row1->tx_nome;
-		
-		echo"</strong></button></div>";
-		
-		$stmt2 = $conn->query("SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, SUM(progresso) progresso, v_unit FROM v_categoria_sums WHERE id_pedido = $pid AND id_categoria = $cid GROUP BY id_categoria");
-		while($row2 = $stmt2->fetch(PDO::FETCH_OBJ)){
-		
-		$execpercent = ($row2->progresso / $row2->nbvalor) * 100;
-		$execpercent = round($execpercent,1);
-		
-		$medpercent = ($row2->valorsum / $row2->nbvalor) * 100;
-		$medpercent = round($medpercent,1);
-		
-		
-		echo"
-			<div class='col-md-4 h5'>
+		echo"</strong></button>
+		</div>
+		 
+		<div class='col-5'>
 				<div class='callout callout-info'>
 				  <small class='text-muted'>Progresso Categoria</small><br>
 				  <strong class='h6'>".$execpercent."% - (R$ ".$row2->progresso."/".$row2->nbvalor.")</strong>
 			</div>
-			</div>
-				<div class='col-md-4 h5'>
-					<div class='callout callout-success'>
-					  <small class='text-muted'>Medido</small><br>
-					  <strong class='h6'>".$medpercent."% - (R$ ".$row2->valorsum."/".$row2->nbvalor.")</strong>
-				</div>
-			</div>	
-			
-					</div>
-				</h5>
-		</div> 
-					<div id='collapseCat$cid' class='collapse' aria-labelledby='headingCat$cid' data-parent='#accordion'><div class='card card-body'>";
-	//ACCORDION CARD HEADER END ------------------------		
-		}
-		$stmt2 = $conn->query("SELECT a.*, v1.qtd_sum FROM atividade a 
+		</div>
+		</div>
+      </h5>
+    
+	</div>
+
+    <div id='collapseCat$cid' class='collapse' aria-labelledby='headingCat$cid' data-parent='#accordion'>
+      <div class='card-body'>
+	  
+	  <!-- MAIN WHILE FOR ATIVIDADE CATEGORIA -->";
+	  
+        $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum FROM atividade a 
 		LEFT JOIN v_sum_atividade_exec v1 ON a.id_atividade=v1.id_atividade 
 		WHERE a.id_pedido = $pid AND a.id_categoria = $cid");
 		
 		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
-		//Cria as barras de progresso por atividade	
-			echo "<div class='row'><div class='progress-group-prepend'>";
-			  if($row->cs_finalizada == 0) 
+		echo"	
+		<div class='row align-items-center'>
+						
+						
+		<div class='col-sm-10 p-1'>
+			<div class='callout callout-danger b-t-1 b-r-1 b-b-1 m-1 col-12 float-left'>
+			
+			<div class='progress-group-prepend'>";
+		  if($row->cs_finalizada == 0) 
 					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><strong>" . $row->tx_descricao . " (Ativa)</strong></div>";
-			  if($row->cs_finalizada == 1) 
+		  if($row->cs_finalizada == 1) 
 					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong>" . $row->tx_descricao . " (Encerrada)</strong></div>";
-			  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
-			  echo "<div class='ml-auto'>Progresso: (" . round($percent) ."%) - ";
-			  echo $row->qtd_sum . " / " . $row->nb_qtd . $row->tx_tipo . "</div>";
-			  echo "<div class='progress-group-bars'> <div class='progress progress-md'>";
-			  echo "<div class='progress-bar progress-bar bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'></div></div>
-			  <div class='progress progress-sm'>
-			  <div class='progress-bar progress-bar bg-primary' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'></div></div></div></div>
-			  </div>";
-
-		}
+		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
+		  echo "<div class='ml-auto'>Progresso: (" . round($percent) ."%) - ";
+		  echo $row->qtd_sum . " / " . $row->nb_qtd . $row->tx_tipo . "</div>";
+		  echo"	  
+		  <div class='progress-group-bars mb-1'>
+			<div class='progress progress'>
+			  <div class='progress-bar bg-orange' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'></div>
+			</div>
+		  </div>
+		  <div class='progress-group-bars mb-1'>
+			<div class='progress progress'>
+			  <div class='progress-bar bg-info' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'></div>
+			</div>
+		  </div>
+		</div>
+		</div><!--/.callout-->
+				</div><!--/.col-->
+							
+				<div class='col-2 p-1'>	
+			
+			<div class='custom-control custom-checkbox form-control-sm'>
+				<input type='checkbox' class='custom-control-input' id='validMedicao'>
+				<label class='custom-control-label' for='validMedicao'>Medir</label>
+				<div class='text-muted float-right'>916.000,00</div>
+			 </div>
+				
+				  <div class='input-group input-group-sm'>
+					<div class='input-group-prepend'>
+					  <span class='input-group-text' id='inputGroupPrepend'>%</span>
+					</div>
+					<input type='text' class='form-control form-control-sm' id='validationCustomUsername' placeholder='0' aria-describedby='inputGroupPrepend'> 
+					</div>
+				</div><!--/.col-->
+					
+		</div><!--/.BAR CALLOUT INFO GROUP END ROW -->";
+	
 		
-		echo"</div></div></div></div></div>";
+		
+		}
+	echo"	
+      </div>
+    </div>
+	<div class='card-footer text-muted'>
+		Atualizando.... Em construção... 80%....
+	</div>
+	</div>
+	</div>";
 	}
-	echo"</div></div></div></div>";
-};
-
+}
 // Carrega as somas result das medições
 
 $stmt0 = $conn->query("SELECT SUM(am.nb_valor) v_medido, am.id_usuario, m.*, u.tx_name  FROM atividade_medida am 
@@ -141,7 +176,7 @@ echo"<div class='accordion' id='accordion'>
 				<div class='card-body'>";
 	
 	$mid = 0;
-if($stmt0->fetch(PDO::FETCH_OBJ) == null){
+if($stmt0->rowCount() == 0){
 		echo"<div class='card'><h4>Não há medições cadastradas para este pedido. Tenha um bom dia e obrigado.</h4></div>";}
 	else{					
 while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){

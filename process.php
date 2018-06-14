@@ -36,7 +36,7 @@
 		}
 	catch(PDOException $e)
 		{
-		echo "Error: " . $e->getMessage();
+		echo "Error Ativ. Proc.: " . $e->getMessage();
 		}
 		
 		if($e == null) echo strtoupper($tx_nome)." ".$nb_qtd." ".strtoupper($tx_tipo).", Valor: R$ ".$nb_valor." - Atividade Cadastrada!";
@@ -47,11 +47,11 @@
 		
 	$tx_nome = $cnpj = "";
 	
-	strtoupper($tx_nome =$_GET['Cliente']);
+	$tx_nome = strtoupper( $_GET['Cliente']);
 	if(isset($_GET['CNPJ'])){   	 $cnpj = $_GET['CNPJ'];}
 	
 		try{
-	$stmt = $conn->prepare("INSERT INTO cliente (tx_nome, tx_cnpj, tx_descricao) VALUES (:tx_nome, :tx_cnpj)");
+	$stmt = $conn->prepare("INSERT INTO cliente (tx_nome, tx_cnpj) VALUES (:tx_nome, :tx_cnpj)");
 	$stmt->bindParam(':tx_nome', $tx_nome);
 	$stmt->bindParam(':tx_cnpj', $cnpj);
 
@@ -59,7 +59,7 @@
 		}
 	catch(PDOException $e)
 		{
-		echo "Error: " . $e->getMessage();
+		echo "Error Cliente Proc.: " . $e->getMessage();
 		}
 		
 		if($e == null) echo "Cliente: ".strtoupper($tx_nome)." - ".$cnpj.", cadastrado!";
@@ -77,16 +77,7 @@
 	if(isset($_GET['valorPedido'])){   	 $nb_valor = $_GET['valorPedido'];}
 	$nb_retencao = $_GET['Retencao'];
 	$id_cliente = $_GET['sCliente']; 
-	
-	echo $tx_codigo." 1 ";
-	echo $tx_descricao." 2 ";
-	echo $id_cliente." 3 ";
-	echo $dt_data." 4 ";
-	echo $nb_retencao." 5 ";
-	echo $nb_valor." 6 ";
-	
-	
-	
+		
 		try{
 	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, dt_data, id_cliente, nb_retencao, nb_valor) VALUES (:tx_codigo, :tx_descricao, :dt_data, :id_cliente, :nb_retencao, :nb_valor)");
 	$stmt->bindParam(':tx_codigo', $tx_codigo);
@@ -100,7 +91,7 @@
 		}
 	catch(PDOException $e)
 		{
-		echo "Error: " . $e->getMessage();
+		echo "Error Pedido Proc.: " . $e->getMessage();
 		}
 		
 		if($e == null) echo "Pedido: ".strtoupper($tx_codigo).", R$ ".$nb_valor." - Data:".$dt_data.", cadastrado!";
