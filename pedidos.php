@@ -11,7 +11,7 @@
 				<div class="card">
 					<div class="card-body">
 						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalCliente'>+ Novo Cliente</button>
-						<h2>Pedidos por Cliente: <p id="fecharBtn">Refresh</p></h2>
+						<h2>Pedidos por Cliente: </h2>
 <?php 
 	require('conn.php');
 
