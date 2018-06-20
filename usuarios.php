@@ -2,7 +2,7 @@
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item "><a href="javascript:loadPhp('central.php');">Central</a></li>
-			<li class="breadcrumb-item active">Pedidos por Cliente</li>
+			<li class="breadcrumb-item active">Cadastro de Usuários</li>
 		</ol>
 	</nav>
 	<div class="container-fluid">
@@ -10,7 +10,7 @@
 			<div class="col-12 ">
 				<div class="card">
 					<div class="card-body">
-						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalCliente'>+ Novo Cliente</button>
+						<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>+ Novo Usuário</button>
 						<h2>Pedidos por Cliente: </h2>
 <?php 
 	require('conn.php');
@@ -30,7 +30,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$id."' aria-expanded='true' aria-controls='collapse".$id."'>";					
 	echo $row0->tx_nome." - CNPJ: ".$cnpj;
 	echo"</button>
-				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido'>+ Adicionar Pedido</button>
+				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>+ Adicionar Pedido</button>
 			</h5>
 				</div>
 					<div id='collapse".$id."' class='collapse' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
@@ -68,12 +68,12 @@ $stmt0 = null;
 ?>
 </div>
 
-<!-- Modal Novo Cliente  -->
-<div class="modal" style="text-align: left" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="modalCliente" aria-hidden="true">
+<!-- Modal Novo Usuário  -->
+<div class="modal" style="text-align: left" id="modalUsr" tabindex="-1" role="dialog" aria-labelledby="modalUsr" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
 							  <div class="modal-header">
-								<h4 class="modal-title" id="modalCliente">Novo Cliente</h4>
+								<h4 class="modal-title" id="modalUsr">Novo Usu</h4>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								  <span aria-hidden="true">&times;</span>
 								</button>
@@ -81,18 +81,32 @@ $stmt0 = null;
 							  <div class="modal-body"><h4>
 								<form>
     <div class="form-row">			
-	  <div class="form-group col-md-12">
-		<label for="formCliente">Razão Social</label>
-		<input style="text-transform: uppercase;" type="text" class="form-control" id="formCliente" placeholder="Razação Social" name="Cliente">
+	  <div class="form-group col-12">
+		<label for="formCliente">Nome: </label>
+		<input style="text-transform: uppercase;" type="text" class="form-control" id="formCliente" placeholder="" name="Usuario">
 	  </div>
 	</div>
 	<div class="form-row">		
-	  <div class="form-group col-md-12">
-		<label for="formCNPJ">CNPJ <h6><p class="text-muted"><cite> Somente Números</cite></p></h6></label>
-		<input type="text" class="form-control" id="formCNPJ" name="CNPJ" placeholder="00.000.000/0000-0" max-length="14" >
+	  <div class="form-group col-8">
+		<label for="formCPF">CPF: <p class='text-danger'>*</p><h6><p class="text-muted"><cite> Somente Números</cite></p></h6></label>
+		<input type="text" class="form-control" id="formCPF" name="CPF" placeholder="000.000.000-00" max-length="11" >
+	  </div>
+	  <div class="form-group col-4">	
+			<div class="form-group">
+				<label for="formCatuser">Tipo:</label>
+				<select class="form-control" id="formCatuser" name="Catuser">
+					<option value='0'>Administrador</option>
+					<option selected value='1'>Normal</option>
+				</select>  
+			 </div>
+		</div> 
+	</div> 
+	<div class="form-row">		
+	  <div class="form-group col-12">
+		<label for="formEmail">CPF: <p class='text-danger'>*</p><h6><p class="text-muted"><cite> Somente Números</cite></p></h6></label>
+		<input type="text" class="form-control" id="formEmail" name="Email" placeholder="000.000.000-00" max-length="11" >
 	  </div>
 	</div> 
-	
 	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
 			</h4></form><div id="process"></div>
 			  </div>

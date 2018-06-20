@@ -14,7 +14,7 @@
 	//'Atividade.php' ---	Processa para inserir nova atividade no database
 	if(isset($_GET['Atividade']) && ($_GET['Atividade']) != ''){
 	$tx_nome = $cid = $categoria = $nb_qtd = $nb_valor = $tx_tipo = $pid = "";
-	strtoupper($tx_nome = $_GET['Atividade']);
+	$tx_nome = strtoupper($_GET['Atividade']);
 	$tx_nome .= " ".$_GET['Tubo'];
 
 	if(isset($_GET['Qtd'])){   		 $nb_qtd = (int)$_GET['Qtd'];}
@@ -75,13 +75,15 @@
 	if(isset($_GET['iData'])){   	 $dt_data = $_GET['iData'];}
 	if(isset($_GET['pdDescricao'])){   	 $tx_descricao = $_GET['pdDescricao'];}
 	if(isset($_GET['valorPedido'])){   	 $nb_valor = $_GET['valorPedido'];}
+	if(isset($_GET['Local'])){   	 $tx_local = strtoupper($_GET['Local']);}
 	$nb_retencao = $_GET['Retencao'];
 	$id_cliente = $_GET['sCliente']; 
 		
 		try{
-	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, dt_data, id_cliente, nb_retencao, nb_valor) VALUES (:tx_codigo, :tx_descricao, :dt_data, :id_cliente, :nb_retencao, :nb_valor)");
+	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, tx_local, dt_data, id_cliente, nb_retencao, nb_valor) VALUES (:tx_codigo, :tx_descricao, :tx_local, :dt_data, :id_cliente, :nb_retencao, :nb_valor)");
 	$stmt->bindParam(':tx_codigo', $tx_codigo);
 	$stmt->bindParam(':tx_descricao', $tx_descricao);
+	$stmt->bindParam(':tx_local', $tx_local);
 	$stmt->bindParam(':dt_data', $dt_data);
 	$stmt->bindParam(':id_cliente', $id_cliente);
 	$stmt->bindParam(':nb_valor', $nb_valor);

@@ -22,11 +22,28 @@
 		<script src="./assets/js/docs.min.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 	<script>
+		function require(file,callback){
+            var head=document.getElementsByTagName("head")[0];
+            var script=document.createElement('script');
+            script.src=file;
+            script.type='text/javascript';
+            //real browsers
+            script.onload=callback;
+            //Internet explorer
+            script.onreadystatechange = function() {
+                if (_this.readyState == 'complete') {
+                    callback();
+                }
+            }
+            head.appendChild(script);
+        }
 		function loadPhp(str) {
 			var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
 			document.getElementById("main").innerHTML = this.responseText;
+			$('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
+			$('#formCPF').mask('000.000.000-00', {reverse: false});
 			}
 		};
 		xhttp.open("GET", str, true);
@@ -37,9 +54,33 @@
 				xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
 			document.getElementById("main").innerHTML = this.responseText;
+			
 			}
+			
 			};
 			xhttp.open("GET", "atividades.php?pid="+str, true);
+			xhttp.send();
+			}
+		function atv_uPhp(str) {
+			var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+			document.getElementById("main").innerHTML = this.responseText;
+			
+			$('#modalCenter').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget);
+			  var atividade = button.data('atividade');
+			  var id_atividade = button.data('id_atividade');
+			  var modal = $(this);
+			  modal.find('.modal-title').text(atividade);
+			  modal.find('#Qtdin').val(id_atividade);
+			});
+			function myFunction() {
+				document.getElementById("process").innerHTML = "Paragraph changed.";
+			}
+				}
+			};
+			xhttp.open("GET", "atividades_usr.php?pid="+str, true);
 			xhttp.send();
 			}
 		function loadBar(str) {
@@ -67,21 +108,7 @@
 			$("#main").load("pedidos.php #pedidoAccord");
 		});			
 	</script>
-	<script>
-		$(document).ready(function(){ 
-		  $('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
-		  });
-	</script>
-	<!-- autocomplete Javascript -->
-	<script type="text/javascript">
-		$(function() {
-			var availableTags = ["REVIS\u00c3O DO PROJETO EXECUTIVO","ELABORA\u00c7\u00c3O DO PROJETO DE FABRICA\u00c7\u00c3O","ISOMETRIA DO SISTEMA","INTEGRA\u00c7\u00c3O","MOBILIZA\u00c7\u00c3O","CONTAINER DEP\u00d3SITO\/ESCRIT\u00d3RIO","ANDAIMES","FRETES","PIPESHOP - EL\u00c9TRICA","PIPESHOP - HIDRAULICA","PIPESHOP - FERRAMENTARIA","PREPARA\u00c7\u00c3O DOS SUPORTES","PREPARA\u00c7\u00c3O E PINTURA","PREPARA\u00c7\u00c3O DOS SUPORTES","PR\u00c9 FABRICA\u00c7\u00c3O - SPOOL \u00d81","FABRICA\u00c7\u00c3O DOS SUPORTES","INSTALA\u00c7\u00c3O DOS SUPORTES","INSTALA\u00c7\u00c3O DOS RAMAIS (SPOOL)","INSTALA\u00c7\u00c3O DAS DESCIDAS","INSTALA\u00c7\u00c3O TUBUL\u00c7\u00c3O","INSTALA\u00c7\u00c3O DOS HIDRANTES","INSTALA\u00c7\u00c3O DA INFRA SECA","PASSAGEM DE FIOS & CABOS","INSTALA\u00c7\u00c3O DOS SUPORTES","INSTALA\u00c7\u00c3O SPOOL","INSTALA\u00c7\u00c3O DOS SPOOL (1.1\/2 \u00e0 2\")","MANIFOLD 10\" COM 02 SA\u00cdDAS (8\" e 4\")","CONEX\u00c3O DE DRENO","CONEX\u00c3O DE TESTE","INSTALA\u00c7\u00c3O DOS SPRINKLERS","INSTALA\u00c7\u00c3O - FSP-851","INSTALA\u00c7\u00c3O - FST-851R","INSTALA\u00c7\u00c3O - P2R-PG","INSTALA\u00c7\u00c3O - FCM-1","INSTALA\u00c7\u00c3O - FMM-1","INSTALA\u00c7\u00c3O - FCPS-24S8","ALARME - PROGRAMA\u00c7\u00c3O E START-UP"];
-			$("#formAtividade").autocomplete({
-				source: availableTags,
-				autoFocus:true
-			});
-		});
-	</script>
+
 </head>
 <body class="app header-fixed sidebar-md-show sidebar-fixed">
 <header class='app-header navbar' style='background: #2f353a; border-bottom: 4px solid #a60117;'>
@@ -107,15 +134,10 @@
 			  <i class="nav-icon cui-speedometer"></i> Top
 			</a>
 		  </li>
-		  <li class="nav-item">
-			<a class="nav-link" href=".\empresa.php">
-			  <i class="nav-icon cui-speedometer"></i> Old page
-			  <span class="badge badge-primary">OLD</span>
-			</a>
-		  </li>
 		  <li class="nav-item nav-dropdown">
 			<a class="nav-link nav-dropdown-toggle" href="#">
 			  <i class="nav-icon cui-puzzle"></i> Sistema
+			  <span class="badge badge-danger">ADMIN</span>
 			</a>
 			<ul class="nav-dropdown-items">
 				<li class="nav-item">
@@ -130,10 +152,28 @@
 			  </li>
 			  <li class="nav-item">
 				<a class="nav-link" href="javascript:loadPhp('modal.php');">
-				  <i class="nav-icon cui-puzzle"></i>Modal
+				  <i class="nav-icon cui-puzzle"></i>Usuários
 				</a>
 			  </li>
 			  
+			</ul>
+		  </li>
+		  <li class="nav-item nav-dropdown">
+			<a class="nav-link nav-dropdown-toggle" href="#">
+			  <i class="nav-icon cui-puzzle"></i> Sistema
+			  <span class="badge badge-light">BASE</span>
+			</a>
+			<ul class="nav-dropdown-items">
+				<li class="nav-item">
+				<a class="nav-link" href="javascript:loadPhp('central_usr.php');">
+				  <i class="nav-icon cui-puzzle"></i>Central
+				</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="javascript:loadPhp('pedidos_usr.php');">
+				  <i class="nav-icon cui-puzzle"></i>Pedidos
+				</a>
+			  </li>
 			</ul>
 		  </li>
 		  <li class="nav-item">

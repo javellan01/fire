@@ -21,7 +21,7 @@ $row3 = $stmt3->fetch(PDO::FETCH_OBJ);
 echo"<div class='card-body border border-primary rounded-top'>
 			
 			<h2>Pedido: ".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h2>
-			<h3>Total do Pedido:<label class='border border-secondary rounded'> R$ ".$row3->nb_valor." </label> - Data do Pedido: <label class='border border-secondary rounded'>".$row3->dt_data."</label></h3>
+			<h3>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".$row3->nb_valor." </label> - Data do Pedido: <label class='border border-secondary rounded p-1'>".$row3->dt_data."</label> - Área: <label class='border border-secondary rounded p-1'>".$row3->tx_local."</label></h3>
 				<div class='border border-secondary'>	
 			<h4>Informações Relacionadas: </h4>
 			
@@ -149,7 +149,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
         $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum, v1.progresso, v1.nb_valor, v1.valor_sum FROM atividade a 
 		LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
 		WHERE a.id_pedido = $pid AND a.id_categoria = $cid");
-		
+		$subtotal = 0.00;
 		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
 			
 		$execpercent = ($row->progresso / $row->nb_valor) * 100;
@@ -159,6 +159,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		$medpercent = round($medpercent,1);	
 	
 		$balpercent = $execpercent - $medpercent;
+		
 		if($balpercent < 0) $balpercent = 0;
 		if($balpercent > 100) $balpercent = 100;
 		$balance = $row->progresso - $row->valor_sum;
@@ -197,23 +198,21 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 				<div class='col-2 p-1'>	
 			
 			<div class='custom-control custom-checkbox form-control-sm'>
-				<input type='checkbox' class='custom-control-input' id='checkMedicao".$row->id_atividade."'>
+				<input type='checkbox' class='custom-control-input' id='checkMedicao".$row->id_atividade."'/>
 				<label class='custom-control-label' for='checkMedicao".$row->id_atividade."'>Medir</label>
-				<div class='text-muted float-right'>R$ ".$balance."</div>
+				<div class='text-muted float-right' id='balance".$row->id_atividade."'>R$ ".$balance."</div>
 			 </div>
 				
 				  <div class='input-group input-group-sm'>
 					<div class='input-group-prepend'>
 					  <span class='input-group-text' id='inputGroupPrepend'>%</span>
 					</div>
-					<input type='text' class='form-control form-control-sm' id='validMedicao".$row->id_atividade." placeholder='".$balpercent."' aria-describedby='inputGroupPrepend'> 
+					<input type='text' class='form-control form-control-sm' id='validMedicao".$row->id_atividade."' placeholder='".$balpercent."' aria-describedby='inputGroupPrepend' /> 
 					</div>
 				</div><!--/.col-->
 					
 		</div><!--/.BAR CALLOUT INFO GROUP END ROW -->";
-	
-		
-		
+		$subtotal +=  $balance;
 		}
 	echo"	
       </div>
@@ -224,7 +223,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 				Atualizando.... Em construção... 80%....
 			</div>
 			<div class='col-6 text-right'>
-				<h5>Subtotal: R$ 0,00</h5>
+				<h5>Subtotal: R$ ".$subtotal."</h5>
 			</div>
 		</div>	
 		
@@ -333,5 +332,5 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		</div>
 		
 	</div>
-	
+
 	
