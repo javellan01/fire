@@ -66,25 +66,58 @@
 	}
 	
 	
+	//'Usuarios.php' ---	Processa para inserir novo USUARIO no database
+	if(isset($_GET['Usuario']) && ($_GET['Usuario']) != ''){
+		
+	$tx_name = $tx_cpf = $tx_telefone = $nb_category_user = $tx_email = "";
+	
+	$tx_name = strtoupper($_GET['Usuario']);
+	if(isset($_GET['CPF'])){   	 		 $tx_cpf = $_GET['CPF'];}
+	if(isset($_GET['Telefone'])){   	 $tx_telefone = $_GET['Telefone'];}
+	if(isset($_GET['Catuser'])){   	 $nb_category_user = $_GET['Catuser'];}
+	if(isset($_GET['Email'])){   	 $tx_email = $_GET['Email'];}
+		
+		try{
+	$stmt = $conn->prepare("INSERT INTO usuario (tx_name, tx_cpf, tx_telefone, nb_category_user, tx_email) VALUES (:tx_name, :tx_cpf, :tx_telefone, :nb_category_user, :tx_email)");
+	
+	$stmt->bindParam(':tx_name', $tx_name);
+	$stmt->bindParam(':tx_cpf', $tx_cpf);
+	$stmt->bindParam(':tx_telefone', $tx_telefone);
+	$stmt->bindParam(':nb_category_user', $nb_category_user);
+	$stmt->bindParam(':tx_email', $tx_email);
+	
+	$stmt->execute();
+		}
+	catch(PDOException $e)
+		{
+		echo "Error User Proc.: " . $e->getMessage();
+		}
+		
+		if($e == null) echo "Usuário: ".$tx_name." cadastrado!";
+	}
+	
 	//'Pedidos.php' ---	Processa para inserir novo PEDIDO no database
+	
 	if(isset($_GET['Pedido']) && ($_GET['Pedido']) != ''){
 		
-	$tx_codigo = $tx_descricao = $id_cliente = $dt_data = $nb_retencao = $nb_valor = "";
+	$tx_codigo = $tx_descricao = $id_cliente = $dt_idata = $dt_tdata = $nb_retencao = $nb_valor = "";
 	
 	$tx_codigo = strtoupper($_GET['Pedido']);
-	if(isset($_GET['iData'])){   	 $dt_data = $_GET['iData'];}
+	if(isset($_GET['iData'])){   	 $dt_idata = $_GET['iData'];}
+	if(isset($_GET['tData'])){   	 $dt_tdata = $_GET['tData'];}
 	if(isset($_GET['pdDescricao'])){   	 $tx_descricao = $_GET['pdDescricao'];}
 	if(isset($_GET['valorPedido'])){   	 $nb_valor = $_GET['valorPedido'];}
 	if(isset($_GET['Local'])){   	 $tx_local = strtoupper($_GET['Local']);}
 	$nb_retencao = $_GET['Retencao'];
-	$id_cliente = $_GET['sCliente']; 
+	$id_cliente = $_GET['idCliente']; 
 		
 		try{
-	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, tx_local, dt_data, id_cliente, nb_retencao, nb_valor) VALUES (:tx_codigo, :tx_descricao, :tx_local, :dt_data, :id_cliente, :nb_retencao, :nb_valor)");
+	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, tx_local, dt_idata, dt_tdata, id_cliente, nb_retencao, nb_valor) VALUES (:tx_codigo, :tx_descricao, :tx_local, :dt_idata, :dt_tdata, :id_cliente, :nb_retencao, :nb_valor)");
 	$stmt->bindParam(':tx_codigo', $tx_codigo);
 	$stmt->bindParam(':tx_descricao', $tx_descricao);
 	$stmt->bindParam(':tx_local', $tx_local);
-	$stmt->bindParam(':dt_data', $dt_data);
+	$stmt->bindParam(':dt_idata', $dt_idata);
+	$stmt->bindParam(':dt_tdata', $dt_tdata);
 	$stmt->bindParam(':id_cliente', $id_cliente);
 	$stmt->bindParam(':nb_valor', $nb_valor);
 	$stmt->bindParam(':nb_retencao', $nb_retencao);
@@ -96,7 +129,9 @@
 		echo "Error Pedido Proc.: " . $e->getMessage();
 		}
 		
-		if($e == null) echo "Pedido: ".strtoupper($tx_codigo).", R$ ".$nb_valor." - Data:".$dt_data.", cadastrado!";
+		if($e == null) echo "Pedido: ".strtoupper($tx_codigo).", R$ ".$nb_valor." - Início:".$dt_idata.", cadastrado!";
 	}
+	
+	
 	
 ?>

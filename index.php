@@ -42,11 +42,26 @@
 				xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
 			document.getElementById("main").innerHTML = this.responseText;
-			$('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
+			
+			$('#formCNPJ').mask('00.000.000/0000-00', {reverse: false});
 			$('#formCPF').mask('000.000.000-00', {reverse: false});
-			}
-		};
-		xhttp.open("GET", str, true);
+			$('#formTel').mask('(00) #0000-0000', {reverse: false});
+			
+			$('#modalPedido').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget);
+			  var cliente = button.data('cliente');
+			  var id_cliente = button.data('id_cliente');
+			  var modal = $(this);
+			  modal.find('#formSCliente.form-control').val(cliente);
+			  modal.find('#formidCliente.form-control').val(id_cliente);
+			});
+			
+			}		
+				
+			
+			};
+		
+		xhttp.open("GET", str+"?ts="+Date.now(), true);
 		xhttp.send();
 		}
 		function atvPhp(str) {
@@ -151,7 +166,7 @@
 				</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link" href="javascript:loadPhp('modal.php');">
+				<a class="nav-link" href="javascript:loadPhp('usuarios.php');">
 				  <i class="nav-icon cui-puzzle"></i>Usuários
 				</a>
 			  </li>

@@ -7,9 +7,16 @@
 		</ol>
 	</nav>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-12 ">
-				<div class="card">
+		<div class="card">
+		<div class='card-header'><div class="row mt-4"><div class="col-10 ">
+			<h3>Detalhes do Pedido: </h3>
+							</div>
+							<div class='col-2'>
+							
+							</div>
+						</div>
+					</div> 	
+					
 					
 <?php
   require("conn.php");
@@ -18,18 +25,34 @@ $pid = $_REQUEST["pid"];
 //Carrega dados do pedido
 $stmt3 = $conn->query("SELECT p.*, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
 $row3 = $stmt3->fetch(PDO::FETCH_OBJ);
+	$retencao = ($row3->nb_retencao * $row3->nb_valor) / 100;
 echo"<div class='card-body border border-primary rounded-top'>
-			
-			<h2>Pedido: ".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h2>
-			<h3>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".$row3->nb_valor." </label> - Data do Pedido: <label class='border border-secondary rounded p-1'>".$row3->dt_data."</label> - Área: <label class='border border-secondary rounded p-1'>".$row3->tx_local."</label></h3>
-				<div class='border border-secondary'>	
+			<div class='row justify-content-between'>
+						<div class='col-6'>
+			<h3>Pedido: ".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h3>
+						</div>
+						<div class='col-6'>
+						<h4>Data Ínicio: <label class='border border-secondary rounded p-1'>".$row3->dt_idata."</label> - 
+							Data Término: <label class='border border-secondary rounded p-1'>".$row3->dt_tdata."</label></h4>
+						</div>
+						</div>
+		<div class='row'>
+			<div class='col-8'>
+			<h4>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".$row3->nb_valor."</label> - Retenção: <label class='border border-secondary rounded p-1'>R$ ".$retencao." (".$row3->nb_retencao."%)</label>
+			</div>
+			<div class='col-4'>
+			<h4>Área: <label class='border border-secondary rounded p-1'>".$row3->tx_local."</label></h4>
+		</div>
+		</div>	
+		<div class='row'>
+			<div class='col-11 border border-secondary'>
 			<h4>Informações Relacionadas: </h4>
 			
-				<p class='m-2'>".$row3->tx_descricao."</p><br>
-	 </div>			
-	 </div>";
-				
-echo"<div class='card-body'>";
+				<p class='m-2'>".$row3->tx_descricao."</p><br><br>
+			</div>	
+		</div>			
+		</div>
+	<div class='card-body'>";
 
 // Carrega as somas result das medições
 

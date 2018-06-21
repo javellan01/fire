@@ -6,11 +6,19 @@
 		</ol>
 	</nav>
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-12 ">
 				<div class="card">
+					<div class='card-header'><div class="row mt-4"><div class="col-10 ">
+						<h3>Pedidos por Cliente: </h3>
+							</div>
+							<div class='col-2'>
+							
+							</div>
+						</div>
+					</div> 	
+					<div class='row'>
+						<div class='col-12'>
 					<div class="card-body">
-						<h2>Pedidos por Cliente: </h2>
+						<h2> </h2>
 <?php 
 	require('conn.php');
 
@@ -29,7 +37,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$id."' aria-expanded='true' aria-controls='collapse".$id."'>";					
 	echo $row0->tx_nome." - CNPJ: ".$cnpj;
 	echo"</button>
-				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido'>+ Adicionar Pedido</button>
+				
 			</h5>
 				</div>
 					<div id='collapse".$id."' class='collapse' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
