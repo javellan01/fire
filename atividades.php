@@ -8,17 +8,12 @@
 	</nav>
 	<div class="container-fluid">
 		<div class="card">
-		<div class='card-header'><div class="row mt-4"><div class="col-10 ">
-			<h3>Detalhes do Pedido: </h3>
-							</div>
-							<div class='col-2'>
-							
-							</div>
-						</div>
-					</div> 	
+		<div class='card-header'><div class="row mt-4"><div class="col-9">
+			<h3>Detalhes do Pedido: 
 					
 					
 <?php
+	
   require("conn.php");
 $pid = $_REQUEST["pid"];
 
@@ -26,26 +21,34 @@ $pid = $_REQUEST["pid"];
 $stmt3 = $conn->query("SELECT p.*, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
 $row3 = $stmt3->fetch(PDO::FETCH_OBJ);
 	$retencao = ($row3->nb_retencao * $row3->nb_valor) / 100;
-echo"<div class='card-body border border-primary rounded-top'>
-			<div class='row justify-content-between'>
-						<div class='col-6'>
-			<h3>Pedido: ".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h3>
+echo"					".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h3>
+							</div>
+							<div class='col-3'>
+								<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalCliente'>Gerenciar Categorias</button>
+							</div>
 						</div>
-						<div class='col-6'>
-						<h4>Data Ínicio: <label class='border border-secondary rounded p-1'>".$row3->dt_idata."</label> - 
-							Data Término: <label class='border border-secondary rounded p-1'>".$row3->dt_tdata."</label></h4>
+					</div> 	
+		<div class='card-body border border-primary rounded-top'>
+			<div class='row justify-content-between'>
+						<div class='col-8'>
+				<h4>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".$row3->nb_valor."</label> - Retenção: <label class='border border-secondary rounded p-1'>R$ ".$retencao." (".$row3->nb_retencao."%)</label>
+						</div>
+						<div class='col-4'>
+						<h4>Data Ínicio: <label class='border border-secondary rounded p-1'>".$row3->dt_idata."</label>
+							</h4>
 						</div>
 						</div>
 		<div class='row'>
 			<div class='col-8'>
-			<h4>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".$row3->nb_valor."</label> - Retenção: <label class='border border-secondary rounded p-1'>R$ ".$retencao." (".$row3->nb_retencao."%)</label>
+			<h4>Área: <label class='border border-secondary rounded p-1'>".$row3->tx_local."</label></h4>
 			</div>
 			<div class='col-4'>
-			<h4>Área: <label class='border border-secondary rounded p-1'>".$row3->tx_local."</label></h4>
+				<h4>Data Término: <label class='border border-secondary rounded p-1'>".$row3->dt_tdata."</label>
+					</h4>
 		</div>
 		</div>	
 		<div class='row'>
-			<div class='col-11 border border-secondary'>
+			<div class='col-12 border border-secondary'>
 			<h4>Informações Relacionadas: </h4>
 			
 				<p class='m-2'>".$row3->tx_descricao."</p><br><br>
@@ -168,13 +171,15 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
       <div class='card-body'>
 	  
 	  <!-- MAIN WHILE FOR ATIVIDADE CATEGORIA -->";
-	  
+		$encerradas = 0;
+		
         $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum, v1.progresso, v1.nb_valor, v1.valor_sum FROM atividade a 
 		LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
 		WHERE a.id_pedido = $pid AND a.id_categoria = $cid");
+		
 		$subtotal = 0.00;
 		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
-			
+		if($row->cs_finalizada	== 1) $encerradas += 1;	
 		$execpercent = ($row->progresso / $row->nb_valor) * 100;
 		$execpercent = round($execpercent,1);
 		
@@ -236,6 +241,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 					
 		</div><!--/.BAR CALLOUT INFO GROUP END ROW -->";
 		$subtotal +=  $balance;
+		$pendentes = $stmt2->rowCount() - $encerradas;
 		}
 	echo"	
       </div>
@@ -243,10 +249,10 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	<div class='card-footer'>
 		<div class='row'>
 			<div class='col-6 text-muted text-left'>
-				Atualizando.... Em construção... 80%....
+				<h5><label class='border border-danger rounded p-1'>Pendentes: ".$pendentes."</label> / <label class='border border-success rounded p-1'>Encerradas: ".$encerradas.".</label></h5>
 			</div>
 			<div class='col-6 text-right'>
-				<h5>Subtotal: R$ ".$subtotal."</h5>
+				<h5><label class='border border-primary rounded p-1'>Total Atividades: ".$stmt2->rowCount()."</label>    -  Subtotal: R$ ".$subtotal."</h5>
 			</div>
 		</div>	
 		
@@ -320,6 +326,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		<div class="form-group">
 		<label for="formCategoria">Categoria:</label>
 			<select class="form-control" id="formCategoria" name="Categoria">
+			<option selected hidden>Selecionar Categoria</option>
 			<?php 	$stmt = $conn->query("SELECT * FROM categoria ORDER BY id_categoria ASC");
 			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
 			  echo "<option value=".$row->id_categoria.">".$row->tx_nome."</option>";

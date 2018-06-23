@@ -44,7 +44,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	// Aloca os users e cria a list
 	
 	if($row0->nb_category_user == 0){	
-	echo"<tr class='text-primary'>
+	echo"<tr class='text-danger'>
 			<th>$id</th>
 			<th>".$row0->tx_name."</th>
 			<th>$tel</th>
@@ -55,16 +55,38 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 		</tr>";
 	}
 	if($row0->nb_category_user == 1){		
+	echo"<tr class='text-success'>
+			<th>$id</th>
+			<th>".$row0->tx_name."</th>
+			<th>$tel</th>
+			<th>".$row0->tx_email."</th>
+			<th>$cpf</th>
+			<th>Gerente</th>
+			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>Editar</button></th>
+		</tr>";
+	}
+	if($row0->nb_category_user == 2){		
 	echo"<tr class='text-dark'>
 			<th>$id</th>
 			<th>".$row0->tx_name."</th>
 			<th>$tel</th>
 			<th>".$row0->tx_email."</th>
 			<th>$cpf</th>
-			<th>Comum</th>
+			<th>Base</th>
 			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>Editar</button></th>
 		</tr>";
-	}		// Carrega os pedidos e coloca nos cards
+	}
+		if($row0->nb_category_user == 3){		
+	echo"<tr class='text-warning'>
+			<th>$id</th>
+			<th>".$row0->tx_name."</th>
+			<th>$tel</th>
+			<th>".$row0->tx_email."</th>
+			<th>$cpf</th>
+			<th>Convidado</th>
+			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>Editar</button></th>
+		</tr>";
+	}// Carrega os pedidos e coloca nos cards
 	}	
 $stmt = null;
 $stmt0 = null;
@@ -103,7 +125,9 @@ $stmt0 = null;
 				<label for="formCatuser">Tipo: </label>
 				<select class="form-control" id="formCatuser" name="Catuser">
 					<option value='0'>Administrador</option>
-					<option selected value='1'>Normal</option>
+					<option selected value='1'>Gerente</option>
+					<option selected value='2'>Base</option>
+					<option selected value='3'>Convidado</option>
 				</select>  
 			 </div>
 		</div> 

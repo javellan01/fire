@@ -10,6 +10,7 @@
 	  $data = htmlspecialchars($data);
 	  return $data;
 	}
+	//'Atividade.php --- Processo para adicionar categoria
 	
 	//'Atividade.php' ---	Processa para inserir nova atividade no database
 	if(isset($_GET['Atividade']) && ($_GET['Atividade']) != ''){
@@ -69,22 +70,24 @@
 	//'Usuarios.php' ---	Processa para inserir novo USUARIO no database
 	if(isset($_GET['Usuario']) && ($_GET['Usuario']) != ''){
 		
-	$tx_name = $tx_cpf = $tx_telefone = $nb_category_user = $tx_email = "";
+	$tx_name = $tx_cpf = $tx_telefone = $nb_category_user = $tx_email = $tx_password = "";
 	
 	$tx_name = strtoupper($_GET['Usuario']);
 	if(isset($_GET['CPF'])){   	 		 $tx_cpf = $_GET['CPF'];}
 	if(isset($_GET['Telefone'])){   	 $tx_telefone = $_GET['Telefone'];}
 	if(isset($_GET['Catuser'])){   	 $nb_category_user = $_GET['Catuser'];}
 	if(isset($_GET['Email'])){   	 $tx_email = $_GET['Email'];}
-		
+	$tx_password = md5('123456');
+	
 		try{
-	$stmt = $conn->prepare("INSERT INTO usuario (tx_name, tx_cpf, tx_telefone, nb_category_user, tx_email) VALUES (:tx_name, :tx_cpf, :tx_telefone, :nb_category_user, :tx_email)");
+	$stmt = $conn->prepare("INSERT INTO usuario (tx_name, tx_cpf, tx_telefone, nb_category_user, tx_email, tx_password) VALUES (:tx_name, :tx_cpf, :tx_telefone, :nb_category_user, :tx_email, :tx_password)");
 	
 	$stmt->bindParam(':tx_name', $tx_name);
 	$stmt->bindParam(':tx_cpf', $tx_cpf);
 	$stmt->bindParam(':tx_telefone', $tx_telefone);
 	$stmt->bindParam(':nb_category_user', $nb_category_user);
 	$stmt->bindParam(':tx_email', $tx_email);
+	$stmt->bindParam(':tx_password', $tx_password);
 	
 	$stmt->execute();
 		}
@@ -108,11 +111,12 @@
 	if(isset($_GET['pdDescricao'])){   	 $tx_descricao = $_GET['pdDescricao'];}
 	if(isset($_GET['valorPedido'])){   	 $nb_valor = $_GET['valorPedido'];}
 	if(isset($_GET['Local'])){   	 $tx_local = strtoupper($_GET['Local']);}
+	$id_usu_resp = $_GET['Responsavel'];
 	$nb_retencao = $_GET['Retencao'];
 	$id_cliente = $_GET['idCliente']; 
 		
 		try{
-	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, tx_local, dt_idata, dt_tdata, id_cliente, nb_retencao, nb_valor) VALUES (:tx_codigo, :tx_descricao, :tx_local, :dt_idata, :dt_tdata, :id_cliente, :nb_retencao, :nb_valor)");
+	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, tx_local, dt_idata, dt_tdata, id_cliente, nb_retencao, nb_valor, id_usu_resp) VALUES (:tx_codigo, :tx_descricao, :tx_local, :dt_idata, :dt_tdata, :id_cliente, :nb_retencao, :nb_valor, :id_usu_resp)");
 	$stmt->bindParam(':tx_codigo', $tx_codigo);
 	$stmt->bindParam(':tx_descricao', $tx_descricao);
 	$stmt->bindParam(':tx_local', $tx_local);
@@ -121,6 +125,7 @@
 	$stmt->bindParam(':id_cliente', $id_cliente);
 	$stmt->bindParam(':nb_valor', $nb_valor);
 	$stmt->bindParam(':nb_retencao', $nb_retencao);
+	$stmt->bindParam(':id_usu_resp', $id_usu_resp);
 	
 	$stmt->execute();
 		}

@@ -47,8 +47,9 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	
 		
 	// Carrega os pedidos e coloca nos cards
-	$stmt = $conn->query("SELECT c.id_cliente, p.tx_codigo, p.id_pedido, p.cs_estado, v.medido_total, v.nb_valor FROM cliente As c 
+	$stmt = $conn->query("SELECT c.id_cliente, p.tx_codigo, p.id_pedido, p.cs_estado, u.tx_name, v.medido_total, v.nb_valor FROM cliente As c 
 							INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
+							INNER JOIN usuario AS u ON p.id_usu_resp = u.id_usuario
 							INNER JOIN v_sum_pedido_total AS v ON p.id_pedido = v.id_pedido
 							WHERE c.id_cliente = " . $cliente . " ORDER BY p.tx_codigo ASC;");
 
@@ -67,8 +68,12 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 			  $percent = ($row->medido_total / $row->nb_valor) * 100;
 			  echo "<div class='ml-auto'>Progresso: (" . round($percent) ."%) - ";
 			  echo " R$" . $row->medido_total . " / " . $row->nb_valor . "</div></div>";
-			  echo "<div class='progress-group-bars'> <div class='progress progress-md'>";
-			  echo "<div class='progress-bar progress-bar-stripped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'></div></div></div></div>";
+			  echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
+			  echo "<div class='progress-bar progress-bar-striped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'>".round($percent)."%</div>
+			  </div>
+			  </div>
+			<p class='mb-0 mt-1 ml-2'><cite> Responsável: ".$row->tx_name."</cite></p>  
+		</div>";
 		}
 	}
 	echo"</div></div></div></div></div>";
@@ -171,7 +176,21 @@ $stmt0 = null;
 			<input type="text" style="text-transform: uppercase;" class="form-control" id="formLocal" name="Local" placeholder="Local das Atividades">
 		  </div>
 	</div>
-	
+	<div class="form-row">
+	<div class="form-group col-12">
+		<div class="form-group">
+		<label for="formRespons">Responsável:</label>
+			<select class="form-control" id="formRespons" name="Responsavel">
+			<option selected hidden>Selecionar Responsável</option>
+	<?php 	$stmt = $conn->query("SELECT * FROM usuario ORDER BY id_usuario ASC");
+			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
+			  echo "<option value=".$row->id_usuario.">".$row->tx_name."</option>";
+			}
+			  ?>
+			</select> 
+		</div>
+	</div>
+	</div>	
 	<div class="form-group">
 		<label for="formControlTextarea">Informações Relacionadas:</label>
 		<textarea class="form-control" id="formControlTextarea" rows="3" name="pdDescricao"></textarea>

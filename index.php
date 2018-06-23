@@ -63,7 +63,8 @@
 		
 		xhttp.open("GET", str+"?ts="+Date.now(), true);
 		xhttp.send();
-		}
+			}
+			
 		function atvPhp(str) {
 			var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
@@ -76,6 +77,7 @@
 			xhttp.open("GET", "atividades.php?pid="+str, true);
 			xhttp.send();
 			}
+			
 		function atv_uPhp(str) {
 			var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
@@ -90,24 +92,13 @@
 			  modal.find('.modal-title').text(atividade);
 			  modal.find('#Qtdin').val(id_atividade);
 			});
-			function myFunction() {
-				document.getElementById("process").innerHTML = "Paragraph changed.";
-			}
+			
 				}
 			};
 			xhttp.open("GET", "atividades_usr.php?pid="+str, true);
 			xhttp.send();
 			}
-		function loadBar(str) {
-			var xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-			document.getElementById("bar").innerHTML = this.responseText;
-			}
-			};
-			xhttp.open("GET", "progress.php?"+str, true);
-			xhttp.send();
-			}	
+		
 		function formProc() {
 			var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
@@ -119,12 +110,15 @@
 			xhttp.open("GET", "process.php?"+formData, true);
 			xhttp.send();
 			}
-		$("#fecharBtn").click(function(){
-			$("#main").load("pedidos.php #pedidoAccord");
-		});			
+					
 	</script>
 
 </head>
+<?php
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); //
+?>
 <body class="app header-fixed sidebar-md-show sidebar-fixed">
 <header class='app-header navbar' style='background: #2f353a; border-bottom: 4px solid #a60117;'>
 	<button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
@@ -141,32 +135,28 @@
 </header>
 <div class="app-body">	
 	<div class="sidebar">
-	  <nav class="sidebar-nav">
+	  <nav class="sidebar-nav" style="font-weight: 480;">
 		<ul class="nav">
 		  <li class="nav-title" id="fecharBtn"><strong>FIRESYSTEMS.online</strong></li>
-		  <li class="nav-item">
-			<a class="nav-link" href="#">
-			  <i class="nav-icon cui-speedometer"></i> Top
-			</a>
-		  </li>
-		  <li class="nav-item nav-dropdown">
-			<a class="nav-link nav-dropdown-toggle" href="#">
-			  <i class="nav-icon cui-puzzle"></i> Sistema
-			  <span class="badge badge-danger">ADMIN</span>
+		  
+		  <li class="nav-item nav-dropdown ">
+			<a class="nav-link nav-dropdown-toggle text-warning" href="#">
+			  <i class="nav-icon cui-puzzle"></i><strong> Sistema ADMIN </strong> 
+			  
 			</a>
 			<ul class="nav-dropdown-items">
 				<li class="nav-item">
-				<a class="nav-link" href="javascript:loadPhp('central.php');">
+				<a class="nav-link text-warning" href="javascript:loadPhp('central.php');">
 				  <i class="nav-icon cui-puzzle"></i>Central
 				</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link" href="javascript:loadPhp('pedidos.php');">
+				<a class="nav-link text-warning" href="javascript:loadPhp('pedidos.php');">
 				  <i class="nav-icon cui-puzzle"></i>Situação Pedidos
 				</a>
 			  </li>
-			  <li class="nav-item">
-				<a class="nav-link" href="javascript:loadPhp('usuarios.php');">
+			  <li class="nav-item ">
+				<a class="nav-link text-warning" href="javascript:loadPhp('usuarios.php');">
 				  <i class="nav-icon cui-puzzle"></i>Usuários
 				</a>
 			  </li>
@@ -175,8 +165,8 @@
 		  </li>
 		  <li class="nav-item nav-dropdown">
 			<a class="nav-link nav-dropdown-toggle" href="#">
-			  <i class="nav-icon cui-puzzle"></i> Sistema
-			  <span class="badge badge-light">BASE</span>
+			  <i class="nav-icon cui-puzzle"></i><strong> Sistema BASE </strong>
+			  
 			</a>
 			<ul class="nav-dropdown-items">
 				<li class="nav-item">
@@ -203,7 +193,7 @@
 	</div>
 
 <!-- Seção 0000, PARTE CENTRAL DOS DISPLAY DOS DADOS - USAR AJAX PARA DAR NAVEGAR SEM SAIR DA CENTRAL -->
-<main class="main">
+<main class="main" style="background-image:url('img/_f_back.jpg'); background-repeat: no-repeat; background-attachment: fixed; background-position: top;">
 	<div id="main">
 	
 	</div>
