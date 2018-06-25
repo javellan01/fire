@@ -1,7 +1,7 @@
 	
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item "><a href="javascript:loadPhp('central.php');">Central</a></li>
+			<li class="breadcrumb-item "><a href="central.php">Central</a></li>
 			<li class="breadcrumb-item active">Pedidos por Cliente</li>
 		</ol>
 	</nav>
@@ -22,7 +22,7 @@
 						
 						<h2> </h2>
 <?php 
-	require('conn.php');
+	require("./DB/conn.php");
 
 //Carrrga as empresas pra colocar no titulo dos cards
 $stmt0 = $conn->query("SELECT id_cliente,tx_nome,tx_cnpj FROM cliente ORDER BY tx_nome ASC");

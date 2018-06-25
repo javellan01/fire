@@ -1,5 +1,5 @@
 <?php
-	require('conn.php');
+	require("./DB/conn.php");
 	$e = null;
 	$stmt = null;
 	

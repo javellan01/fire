@@ -11,7 +11,7 @@
 				<div class="card">
 					
 <?php
-  require("conn.php");
+  require("./DB/conn.php");
 $pid = $_REQUEST["pid"];
 
 //Carrega dados do pedido

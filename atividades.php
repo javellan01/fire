@@ -1,7 +1,7 @@
 
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item "><a href="javascript:loadPhp('central.php');">Central</a></li>
+			<li class="breadcrumb-item "><a href="central.php">Central</a></li>
 			<li class="breadcrumb-item "><a href="javascript:loadPhp('pedidos.php');">Pedidos por Cliente</a></li>
 			<li class="breadcrumb-item active">Detalhes do Pedido</li>
 		</ol>
@@ -14,7 +14,7 @@
 					
 <?php
 	
-  require("conn.php");
+require("./DB/conn.php");
 $pid = $_REQUEST["pid"];
 
 //Carrega dados do pedido

@@ -1,7 +1,7 @@
 	
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item "><a href="javascript:loadPhp('central.php');">Central</a></li>
+			<li class="breadcrumb-item "><a href="central.php">Central</a></li>
 			<li class="breadcrumb-item active">Cadastro de Usuários</li>
 		</ol>
 	</nav>
@@ -31,7 +31,7 @@
 		<tbody>
 
 <?php 
-	require('conn.php');
+	require("./DB/conn.php");
 
 //Carrrga as users pra colocar na lista
 $stmt0 = $conn->query("SELECT * FROM usuario ORDER BY id_usuario ASC");
