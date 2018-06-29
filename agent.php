@@ -112,7 +112,7 @@
 <?php 
 // session_start inicia a sessão
 session_start();
-$login = $senha = $user = $catu = '';
+$login = $senha = $user = $catu = $uid = '';
 // as variáveis login e senha recebem os dados digitados na página anterior
 
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
@@ -143,6 +143,7 @@ if($result->rowCount() == 1 )
 		'contato' => $row->tx_telefone
 	  
     );
+	$uid = $row->id_usuario;
 	$catu = $row->nb_category_user;
 	$user = $row->tx_name;
     header('Content-Type: application/json');
@@ -156,15 +157,15 @@ if($result->rowCount() == 1 )
     echo "<script>var user_email=".$row['tx_email']."</script>";
     */
   };
-$_SESSION['login'] = $login;
-$_SESSION['usuario'] = $user;
-$_SESSION['catuser'] = $ucat;
-header('Location: central.php');
-/*
-echo  $array = array('username'=>$_SESSION['login'],
-                     'passuordi'=>$_SESSION['senha'];
-    echo json_encode($array);
-/**/
+	$_SESSION['login'] = $login;
+	$_SESSION['usuario'] = $user;
+	$_SESSION['catuser'] = $catu;
+	$_SESSION['userid'] = $uid;
+	
+	if($_SESSION['catuser'] == 0) header('Location: central.php');
+	if($_SESSION['catuser'] == 1) header('Location: central_ger.php');
+	if($_SESSION['catuser'] == 2) header('Location: central_usr.php');
+	if($_SESSION['catuser'] == 3) header('Location: central_gst.php');
   
 	}
 }	
@@ -173,12 +174,14 @@ else{
 unset ($_SESSION['login']);
 unset ($_SESSION['usuario']);
 unset ($_SESSION['catuser']);
+unset ($_SESSION['userid']);
 session_destroy();
 echo "<p>Login Inválido!</p>";
 
 
 header('Location: login.php');
-
+sleep(1);
+exit();
 
 }
  

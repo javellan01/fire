@@ -5,6 +5,7 @@ if(isset($_GET['token']) && $_GET['token'] === $token) {
 	unset ($_SESSION['login']);
 	unset ($_SESSION['usuario']);
 	unset ($_SESSION['catuser']);
+	unset ($_SESSION['userid']);
 	session_destroy();
 	header('Location: login.php');
 	exit();

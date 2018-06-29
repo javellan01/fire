@@ -40,51 +40,53 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	$id = $row0->id_usuario;
 	$cpf = $row0->tx_cpf;
 	$tel = $row0->tx_telefone;
+	$catuser = $row0->nb_category_user;
+	
 	
 	// Aloca os users e cria a list
 	
 	if($row0->nb_category_user == 0){	
-	echo"<tr class='text-danger'>
+	echo"<tr class='text-danger' id='uid$id'>
 			<th>$id</th>
-			<th>".$row0->tx_name."</th>
-			<th>$tel</th>
-			<th>".$row0->tx_email."</th>
-			<th>$cpf</th>
+			<th class='uname'>".$row0->tx_name."</th>
+			<th class='utel'>$tel</th>
+			<th class='umail'>".$row0->tx_email."</th>
+			<th class='ucpf'>$cpf</th>
 			<th>Administrador</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>Editar</button></th>
+			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
 		</tr>";
 	}
 	if($row0->nb_category_user == 1){		
-	echo"<tr class='text-success'>
+	echo"<tr class='text-success' id='uid$id'>
 			<th>$id</th>
-			<th>".$row0->tx_name."</th>
-			<th>$tel</th>
-			<th>".$row0->tx_email."</th>
-			<th>$cpf</th>
+			<th class='uname'>".$row0->tx_name."</th>
+			<th class='utel'>$tel</th>
+			<th class='umail'>".$row0->tx_email."</th>
+			<th class='ucpf'>$cpf</th>
 			<th>Gerente</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>Editar</button></th>
+			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
 		</tr>";
 	}
 	if($row0->nb_category_user == 2){		
-	echo"<tr class='text-dark'>
+	echo"<tr class='text-dark' id='uid$id'>
 			<th>$id</th>
-			<th>".$row0->tx_name."</th>
-			<th>$tel</th>
-			<th>".$row0->tx_email."</th>
-			<th>$cpf</th>
+			<th class='uname'>".$row0->tx_name."</th>
+			<th class='utel'>$tel</th>
+			<th class='umail'>".$row0->tx_email."</th>
+			<th class='ucpf'>$cpf</th>
 			<th>Base</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>Editar</button></th>
+			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
 		</tr>";
 	}
 		if($row0->nb_category_user == 3){		
-	echo"<tr class='text-warning'>
+	echo"<tr class='text-warning' id='uid$id'>
 			<th>$id</th>
-			<th>".$row0->tx_name."</th>
-			<th>$tel</th>
-			<th>".$row0->tx_email."</th>
-			<th>$cpf</th>
+			<th class='uname'>".$row0->tx_name."</th>
+			<th class='utel'>$tel</th>
+			<th class='umail'>".$row0->tx_email."</th>
+			<th class='ucpf'>$cpf</th>
 			<th>Convidado</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalUsr'>Editar</button></th>
+			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
 		</tr>";
 	}// Carrega os pedidos e coloca nos cards
 	}	
@@ -125,9 +127,9 @@ $stmt0 = null;
 				<label for="formCatuser">Tipo: </label>
 				<select class="form-control" id="formCatuser" name="Catuser">
 					<option value='0'>Administrador</option>
-					<option selected value='1'>Gerente</option>
+					<option value='1'>Gerente</option>
 					<option selected value='2'>Base</option>
-					<option selected value='3'>Convidado</option>
+					<option value='3'>Convidado</option>
 				</select>  
 			 </div>
 		</div> 
@@ -143,6 +145,63 @@ $stmt0 = null;
 	  </div>
 	</div> 
 	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
+			</h4></form><div id="process"></div>
+			  </div>
+			    <div class="modal-footer">
+				
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+			  </div>
+			</div>
+		  </div>
+
+<!-- Modal Editar Usuário  -->		  
+		  <div class="modal" style="text-align: left" id="modalEdUsr" tabindex="-1" role="dialog" aria-labelledby="modalEdUsr" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title" id="modalEdUsr">Editar Usuário</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h4>
+								<form>
+    <div class="form-row">			
+	  <div class="form-group col-12">
+		<label for="formUser">Nome: </label>
+		<input style="text-transform: uppercase;" type="text" class="form-control" id="formUser" value="" name="editUsuario">
+		<input type="text" class="form-control" id="formUserid" value="" name="editUserid" hidden>
+	  </div>
+	</div>
+	<div class="form-row">		
+	  <div class="form-group col-8">
+		<label for="formCPF">CPF:<span class='text-danger'>*</span></label>
+		<input type="text" class="form-control" id="formCPF" name="editCPF" placeholder="000.000.000-00" max-length="14" >
+	  </div>
+	  <div class="form-group col-4">	
+			<div class="form-group">
+				<label for="formECatuser">Tipo: </label>
+				<select class="form-control" id="formECatuser" name="editCatuser">
+					<option value='0'>Administrador</option>
+					<option value='1'>Gerente</option>
+					<option value='2'>Base</option>
+					<option value='3'>Convidado</option>
+				</select>  
+			 </div>
+		</div> 
+	</div> 
+	<div class="form-row">		
+	  <div class="form-group col-6">
+		<label for="formEmail">E-mail: </label>
+		<input type="text" class="form-control" id="formEmail" name="editEmail">
+	  </div>
+	  <div class="form-group col-6">
+		<label for="formTel">Contato: </label>
+		<input type="text" class="form-control" id="formTel" name="editTelefone" placeholder="(00) 0.0000-0000" max-length="16" >
+	  </div>
+	</div> 
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Atualizar</a>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">

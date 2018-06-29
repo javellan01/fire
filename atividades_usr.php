@@ -1,9 +1,16 @@
 
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item "><a href="javascript:loadPhp('central.php');">Central</a></li>
-			<li class="breadcrumb-item "><a href="javascript:loadPhp('pedidos_usr.php');">Pedidos por Cliente (User Mode)</a></li>
-			<li class="breadcrumb-item active">Cadastro de Atividades</li>
+			<li class="breadcrumb-item ">
+			<?php 
+				session_start();
+				if($_SESSION['catuser'] == 0) echo"<a href='central.php'>Central</a>";
+				if($_SESSION['catuser'] == 1) echo"<a href='central_ger.php'>Central</a>";
+				if($_SESSION['catuser'] == 2) echo"<a href='central_usr.php'>Central</a>";
+				?>
+			</li>	
+			<li class="breadcrumb-item "><a href="javascript:loadPhp('pedidos_ger.php');">Pedidos</a></li>
+			<li class="breadcrumb-item active">Atividades</li>
 		</ol>
 	</nav>
 	<div class="container-fluid">
@@ -12,8 +19,8 @@
 				<div class="card">
 					
 <?php
-  require("conn.php");
-$pid = $_REQUEST["pid"];
+	require("./DB/conn.php");
+	$pid = $_REQUEST["pid"];
 
 //Carrega dados do pedido
 $stmt3 = $conn->query("SELECT p.*, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
@@ -71,15 +78,15 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	</div>
 
     <div id='collapseCat$cid' class='collapse' aria-labelledby='headingCat$cid' data-parent='#accordion'>
-      <div class='card-body'>
+      <div class='card-body'>";
 	  
-	  <!-- MAIN WHILE FOR ATIVIDADES DA CATEGORIA -->";
+	//  <!-- MAIN WHILE FOR ATIVIDADES DA CATEGORIA -->
 	$encerradas = 0;
 		
 		
         $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum, v1.progresso, v1.nb_valor, v1.valor_sum FROM atividade a 
 		LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
-		WHERE a.id_pedido = $pid AND a.id_categoria = $cid");
+		WHERE a.id_pedido = $pid AND a.id_categoria = $cid AND a.cs_finalizada = 0");
 		
 		
 		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
@@ -94,9 +101,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 			<div class='progress-group-prepend'>";
 		  if($row->cs_finalizada == 0) 
 
-					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><button type='button' class='btn btn-ghost p-1' data-toggle='modal' data-target='#modalCenter' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $row->tx_descricao . " (Ativa)</strong></div>";
-		  if($row->cs_finalizada == 1) 
-					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong>" . $row->tx_descricao . " (Encerrada)</strong></div>";
+					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><button type='button' class='btn btn-ghost p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $row->tx_descricao . "</strong></div>";
 		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $row->qtd_sum . " / " . $row->nb_qtd ." ". $row->tx_tipo . "</div>";
@@ -141,11 +146,11 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 </div></div>
 
 <!-- Modal Update Atividade  -->
-<div class="modal" style="text-align: left" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenter" aria-hidden="true">
+<div class="modal" style="text-align: left" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdate" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
 							  <div class="modal-header">
-								<h5 class="modal-title" id="modalCenter"></h5>
+								<h5 class="modal-title" id="modalUpdate"></h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								  <span aria-hidden="true">&times;</span>
 								</button>
@@ -153,47 +158,21 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 							  <div class="modal-body"><h4>
 								<form>
     <div class="form-row">			
-	  <div class="form-group col-5">
+	  <div class="form-group col-8">
 		<label for="formQtdin">Quantidade:</label>
 		<input type="text" class="form-control" id="formQtdin" placeholder="Insira Quantidade" name="Qtdin">
-		<input type="text" class="form-control d-none" id="formAid" name="Aid" >
+		<input type="text" class="form-control" id="formAid" name="Aid" hidden>
 	  </div>
-	  <div class="form-group col-2">
-		<label for="formDia">Dia:</label>
-		<input type="text" class="form-control" id="formDia" name="Dia" value="<?php echo date('d');?>">
-	  </div>
-	  <div class="form-group col-3">
-		<label for="formMes">Mês:</label>
-		<select class="form-control" id="formMes" name="Mes" selected="<?php echo date('m');?>">
-		  <option value='01'>Janeiro</option>
-		  <option value='02'>Fevereiro</option>
-		  <option value='03'>Março</option>
-		  <option value='04'>Abril</option>
-		  <option value='05'>Maio</option>
-		  <option value='06'>Junho</option>
-		  <option value='07'>Julho</option>
-		  <option value='08'>Agosto</option>
-		  <option value='09'>Setembro</option>
-		  <option value='10'>Outubro</option>
-		  <option value='11'>Novembro</option>
-		  <option value='12'>Dezembro</option>
-		</select>
-	  </div>
-	  <div class="form-group col-2">
-		<label for="formAno">Ano:</label>
-		<input type="text" class="form-control" id="formAno" name="Ano" value="<?php echo date('Y');?>" readonly>
-	  </div>
-	</div>
-	  
-	<div class="form-row align-items-center">			
-	  	<div class="form-group col-8">
+	  <div class="form-group col-4">
 			<label for="formData">Data:</label>
 			<input type="date" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
 		  </div>
-		  
 	</div>
-	<a class='btn btn-primary float-right' href="javascript:formProc();" data-dismiss="modal" role='button'>OK</a>
-	<button type="button" class='btn btn-primary float-right' onclick="myFunction()">Try it</button>
+	  
+	<div class="form-row align-items-center">			
+	  
+	</div>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>OK</a>
 			</h4></form><div id="process"></div>
 							  </div>
 							  <div class="modal-footer">
@@ -214,24 +193,3 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		</div>
 		
 	</div>
-
-<script type="text/javascript">
-	$( document ).ajaxStop(function() {
-
-//your code
-	$('#formCNPJ').mask('00.000.000/0000-00', {reverse: true});
-		 
-
-	$('#modalCenter').on('show.bs.modal', function (event) {
-	  var button = $(event.relatedTarget);
-	  var atividade = button.data('atividade');
-	  var id_atividade = button.data('id_atividade');
-	  var modal = $(this);
-	  modal.find('.modal-title').text(atividade);
-	  modal.find('#Qtdin').val(id_atividade);
-	});
-	function myFunction() {
-		document.getElementById("process").innerHTML = "Paragraph changed.";
-	}
-	 });
-</script>	

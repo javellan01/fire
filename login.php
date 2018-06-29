@@ -316,6 +316,7 @@
 
 			var usuario = $("input#usuario").val();
 			var senha = $("input#senha").val();
+			
 	//		var dataString = 'usuario='+ usuario + '&senha=' + senha;
 			
 			$.ajax({
@@ -342,7 +343,7 @@
 						$('h1').fadeOut(function() {
 							$(this).fadeIn(2000).text("Acesso Permitido !").css('margin-top', '120px');
 						});
-						setTimeout(function(){ window.location = 'central.php'; }, 5000); /**/
+						setTimeout(function(){ window.location = 'central.php'; }, 5000); 
 			    	}
 
 			    /*
@@ -352,7 +353,7 @@
 				    .hide()
 				    .fadeIn(1500, function() {
 				    	$('#message').append("<img id='checkmark' src='images/check.png' />");
-		    		});/** /
+		    		});
 		    	}  
 		    	error: function (jqXHR, exception) {
 			        var msg = '';

@@ -21,7 +21,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
 	<title>Central | FireSystems.online</title>
-	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
 	<style>
@@ -38,11 +37,9 @@
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
 		<script src="./assets/js/docs.min.js"></script>
-		<script src="./assets/js/vue.min.js"></script>
-		<script src="./assets/js/toastr.min.js"></script>
-		
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
+
 </head>
 <?php
 
@@ -59,7 +56,7 @@
 		</a>
 			<ul class="nav navbar-nav ml-auto">
 				<li class="nav-item px-3">
-				<a class="nav-link text-warning" style="font-weight: 500;" href="javascript:loadPhp('perfil.php');"><i class="nav-icon cui-info"></i><?php echo " ".$_SESSION['usuario'];?></a>
+				<a class="nav-link text-info" style="font-weight: 500;" href="javascript:loadPhp('perfil.php');"><i class="nav-icon cui-info"></i><?php echo " ".$_SESSION['usuario'];?></a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav">
@@ -75,24 +72,19 @@
 		  <li class="nav-title" id="fecharBtn"><strong>FIRESYSTEMS.online</strong></li>
 		  
 		  <li class="nav-item nav-dropdown ">
-			<a class="nav-link nav-dropdown-toggle text-warning" href="#">
-			  <strong><i class="nav-icon cui-layers"></i> Sistema ADMIN </strong> 
+			<a class="nav-link nav-dropdown-toggle text-info" href="#">
+			  <strong><i class="nav-icon cui-layers"></i> Sistema GERENTE </strong> 
 			  
 			</a>
 			<ul class="nav-dropdown-items">
 				<li class="nav-item">
-				<a class="nav-link text-warning" href="central.php">
+				<a class="nav-link text-info" href="central_ger.php">
 				  <i class="nav-icon cui-home"></i>Central
 				</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link text-warning" href="javascript:loadPhp('pedidos.php');">
-				  <i class="nav-icon cui-list"></i>Situação Pedidos
-				</a>
-			  </li>
-			  <li class="nav-item ">
-				<a class="nav-link text-warning" href="javascript:loadPhp('usuarios.php');">
-				  <i class="nav-icon cui-people"></i>Usuários
+				<a class="nav-link text-info" href="javascript:loadPhp('pedidos_ger.php');">
+				  <i class="nav-icon cui-list"></i>Pedidos
 				</a>
 			  </li>
 			  
@@ -138,7 +130,7 @@
 				<h3>Sistema FireSystems.online:</h3>
 					</div>
 					<div class='col-5'>
-						<h3 class='btn btn-outline-success float-right'>Administrador - <?php echo "Data Atual: ".date("d/m/Y", $_SERVER['REQUEST_TIME']);?></h3>
+						<h3 class='btn btn-outline-info float-right'>Gerente - <?php echo "Data Atual: ".date("d/m/Y", $_SERVER['REQUEST_TIME']);?></h3>
 					</div>
 				</div>
 			</div> 	
@@ -146,11 +138,9 @@
 			<div class="card-body">
 				<div class='row justify-content-center'>
 					<div class='col-6'>
-					<a class='btn btn-outline-danger ' href="javascript:loadPhp('pedidos.php');" role='button'><strong>Situação dos Pedidos</strong></a>
+					<a class='btn btn-outline-info' href="javascript:loadPhp('pedidos_ger.php');" role='button'><strong>Situação dos Pedidos</strong></a>					
 					
-					<a class='btn btn-outline-danger ' href="javascript:loadPhp('usuarios.php');" role='button'><strong>Usuários</strong></a>
-					
-					<a class='btn btn-outline-danger ' href="javascript:loadPhp('');" role='button'><strong>Alocar Funcionário</strong></a>
+					<a class='btn btn-outline-info' href="javascript:loadPhp('');" role='button'><strong>Alocar Funcionário</strong></a>
 				
 					</div>
 				</div>	

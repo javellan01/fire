@@ -12,7 +12,6 @@
 							</div>
 							<div class='col-4'>
 							<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalCliente'>+ Novo Cliente</button>
-							<a class="btn btn-outline-success float-right m-1" href="javascript:loadPhp('pedidos.php');" role="button">Atualizar</a>
 							</div>
 						</div>
 					</div> 	
@@ -138,18 +137,18 @@ $stmt0 = null;
 	  </div>
 	  <div class="form-group col-3">
 		<label for="formDataA">Ínicio:</label>
-		<input type="date" class="form-control" id="formDataA" name="iData" value="<?php echo date('Y-m-d');?>">
+		<input type="date" class="form-control" id="formDataA" name="iData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	  <div class="form-group col-3">
 		<label for="formDataB">Término:</label>
-		<input type="date" class="form-control" id="formDataB" name="tData" value="<?php echo date('Y-m-d');?>">
+		<input type="date" class="form-control" id="formDataB" name="tData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	</div>
 	
 	<div class="form-row">
 	    <div class="form-group col-8">
-			<label for="formVPedido">Valor do Pedido:</label>
-			<input type="text" class="form-control" id="formVPedido" placeholder="0.00" name="valorPedido">
+			<label for="formValor">Valor do Pedido:</label>
+			<input type="text" class="form-control" id="formValor" placeholder="0.00" name="valorPedido">
 	    </div>
 		 
 		<div class="form-group col-4">	

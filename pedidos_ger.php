@@ -1,14 +1,7 @@
 	
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item ">
-			<?php 
-				session_start();
-				if($_SESSION['catuser'] == 0) echo"<a href='central.php'>Central</a>";
-				if($_SESSION['catuser'] == 1) echo"<a href='central_ger.php'>Central</a>";
-				if($_SESSION['catuser'] == 2) echo"<a href='central_usr.php'>Central</a>";
-			?>
-			</li>
+			<li class="breadcrumb-item "><a href="central_ger.php">Central</a></li>
 			<li class="breadcrumb-item active">Pedidos</li>
 		</ol>
 	</nav>
@@ -18,7 +11,6 @@
 						<h3>Pedidos: </h3>
 							</div>
 							<div class='col-4'>
-							
 							</div>
 						</div>
 					</div> 	
@@ -28,6 +20,7 @@
 						
 						<h2> </h2>
 <?php 
+	session_start();
 	require("./DB/conn.php");
 
 //Carrrga as empresas pra colocar no titulo dos cards
@@ -61,7 +54,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 							WHERE c.id_cliente = " . $cliente . " AND p.id_usu_resp = ".$_SESSION['userid']." AND p.cs_estado = 0 ORDER BY p.tx_codigo ASC;");
 
 	if($stmt->rowCount() == 0){
-		echo"<p> Não há pedidos disponíveis. </p>";}
+		echo"<p> Ainda não há pedidos disponíveis para gerenciamento. </p>";}
 	else{
 	//	href='javascript:atvPhp(&#39;atividades.php&#39;);'	  
 	
@@ -69,7 +62,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 			$percent = ($row->medido_total / $row->nb_valor) * 100;
 			
 		      echo "<div class='progress-group'>
-					<div class='progress-group-header align-items-end' style='color: #27b;'><a class='btn btn-ghost-primary' href='javascript:atv_uPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . "</strong></a>"; 
+					<div class='progress-group-header align-items-end' style='color: #27b;'><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . "</strong></a>"; 
 			  echo "<div class='btn ml-auto'>Progresso: (" . round($percent) ."%)</div></div>";
 			  echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
 			  echo "<div class='progress-bar progress-bar-striped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'>".round($percent)."%</div>
