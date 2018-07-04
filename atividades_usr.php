@@ -77,7 +77,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
     
 	</div>
 
-    <div id='collapseCat$cid' class='collapse' aria-labelledby='headingCat$cid' data-parent='#accordion'>
+    <div id='collapseCat$cid' class='collapse show' aria-labelledby='headingCat$cid' data-parent='#accordion'>
       <div class='card-body'>";
 	  
 	//  <!-- MAIN WHILE FOR ATIVIDADES DA CATEGORIA -->

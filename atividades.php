@@ -13,7 +13,8 @@
 					
 					
 <?php
-	
+session_start();	
+$_SESSION['MAtiv'] = array();
 require("./DB/conn.php");
 
 function data_usql($data) {
@@ -22,8 +23,9 @@ function data_usql($data) {
 	}
 	
 $pid = $_REQUEST["pid"];
-
-	
+$balance = array();
+$measure = 0.00;
+$mid = 0;	
 //Carrega dados do pedido
 $stmt3 = $conn->query("SELECT p.*, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
 $row3 = $stmt3->fetch(PDO::FETCH_OBJ);
@@ -66,9 +68,9 @@ echo"					".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h3>
 
 // Carrega as somas result das medições
 
-$stmt0 = $conn->query("SELECT SUM(am.nb_valor) v_medido, am.id_usuario, m.*, u.tx_name  FROM atividade_medida am 
-			LEFT JOIN medicao m ON am.id_medicao=m.id_medicao 
-			INNER JOIN usuario u ON am.id_usuario = u.id_usuario 
+$stmt0 = $conn->query("SELECT SUM(am.nb_valor) v_medido, m.id_usuario, m.*, u.tx_name  FROM atividade_medida am 
+			LEFT JOIN medicao m ON am.id_pedido=m.id_pedido AND am.nb_ordem = m.nb_ordem 
+			INNER JOIN usuario u ON m.id_usuario = u.id_usuario 
 			WHERE m.id_pedido = $pid GROUP BY m.nb_ordem ASC;");
 
 echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'>
@@ -77,7 +79,7 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 				<h5 class='mb-0'>
 				<button type='button' class='btn btn-outline-danger float-left'  data-toggle='collapse' data-target='#collapseMedicao' aria-expanded='true' aria-controls='collapseMedicao'>Medições Cadastradas
 				</button>
-				<button type='button' class='btn btn-outline-primary float-right' data-toggle='modal' data-target='#modalMedi'>+ Nova Medição
+				<button type='button' class='btn btn-outline-primary float-right' data-toggle='modal' data-target='#modalVMedir'>+ Nova Medição
 				</button>
 				</h5>
 			</div>
@@ -85,7 +87,6 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 			<div id='collapseMedicao' class='collapse' aria-labelledby='headingMedicao' data-parent='#accordion'>
 				<div class='card-body'>";
 	
-	$mid = 0;
 if($stmt0->rowCount() == 0){
 		echo"<div class='card border border-light'><h4>Não há medições cadastradas para este pedido. Tenha um bom dia e obrigado.</h4></div>";}
 	else{					
@@ -110,7 +111,7 @@ echo"</div></div></div></div>";
 		echo"
 
 			<button type='button' class='btn btn-outline-primary float-right' data-toggle='modal' data-target='#modalCenter'>+ Nova Atividade</button>
-			<h3>Atividades por Categoria:</h3>
+			<h3 class='mb-3'>Atividades por Categoria:</h3>
 			";
 			
 // Carrega o grupo das atividades result das atividades
@@ -127,7 +128,7 @@ if($stmt1->rowCount() == 0){
 while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){	
 
 	$cid = $row1->id_categoria;
-	$cpercent = $count = $execpercent = $medpercent = $balpercent = $balance = 0;	
+	$cpercent = $count = $execpercent = $medpercent = $balpercent = 0;	
 
 	$stmt2 = $conn->query("SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, CAST(SUM(progresso) AS DECIMAL(10,2)) progresso, v_unit FROM v_categoria_sums WHERE id_pedido = $pid AND id_categoria = $cid GROUP BY id_categoria");
 	$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
@@ -157,12 +158,12 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 				
 				if( $row2->progresso > $row2->nbvalor){
 					
-				echo"  <div class='callout callout-danger'>
+				echo"  <div class='callout callout-danger m-0'>
 							<small class='text-muted text-danger'>Progresso Categoria</small><br>
 							<strong class='h5 text-danger text-nowrap'>".$execpercent."% - (R$ ".$row2->progresso."/".$row2->nbvalor.")</strong>";
 				}
 				else{
-				echo"  <div class='callout callout-success'>
+				echo"  <div class='callout callout-success m-0'>
 							<small class='text-muted text-success'>Progresso Categoria</small><br>
 							<strong class='h5 text-success text-nowrap'>".$execpercent."% - (R$ ".$row2->progresso."/".$row2->nbvalor.")</strong>";
 				}
@@ -174,19 +175,20 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
     
 	</div>
 
-    <div id='collapseCat$cid' class='collapse' aria-labelledby='headingCat$cid' data-parent='#accordion'>
+    <div id='collapseCat$cid' class='collapse show' aria-labelledby='headingCat$cid' data-parent='#accordion'>
       <div class='card-body'>
 	  
 	  <!-- MAIN WHILE FOR ATIVIDADE CATEGORIA -->";
 		$encerradas = 0;
-		
+		$subtotal = 0.00;
         $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum, v1.progresso, v1.nb_valor, v1.valor_sum FROM atividade a 
 		LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
 		WHERE a.id_pedido = $pid AND a.id_categoria = $cid");
 		
-		$subtotal = 0.00;
+		
 		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
 		if($row->cs_finalizada	== 1) $encerradas += 1;	
+		if($row->valor_sum == null) $row->valor_sum = 0;
 		$execpercent = ($row->progresso / $row->nb_valor) * 100;
 		$execpercent = round($execpercent,1);
 		
@@ -197,9 +199,9 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		
 		if($balpercent < 0) $balpercent = 0;
 		if($balpercent > 100) $balpercent = 100;
-		$balance = $row->progresso - $row->valor_sum;
-		if($balance < 0) $balance = 0;	
-		if($balance > $row->nb_valor) $balance = $row->nb_valor;
+		$balance[$row->id_atividade] = round(($row->progresso - $row->valor_sum),2);
+		if($balance[$row->id_atividade] < 0) $balance[$row->id_atividade] = 0;	
+		if($balance[$row->id_atividade] > $row->nb_valor) $balance[$row->id_atividade] = $row->nb_valor;
 		echo"	
 		<div class='row align-items-center'>
 						
@@ -209,7 +211,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 			
 			<div class='progress-group-prepend'>";
 		  if($row->cs_finalizada == 0) 
-					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><strong>" . $row->tx_descricao . " (Ativa)</strong></div>";
+					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $row->tx_descricao . "</strong></div>";
 		  if($row->cs_finalizada == 1) 
 					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong>" . $row->tx_descricao . " (Encerrada)</strong></div>";
 		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
@@ -218,12 +220,12 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		  echo"	  
 		  <div class='progress-group-bars mb-1'>
 			<div class='progress progress'>
-			  <div class='progress-bar bg-orange' role='progressbar' style='width: ".$percent."%' aria-valuenow='".$percent."' aria-valuemin='0' aria-valuemax='100'>".$percent."%</div>
+			  <div class='progress-bar bg-orange' role='progressbar' style='width: ".$percent."%' aria-valuenow='".$percent."' aria-valuemin='0' aria-valuemax='100'>".$percent."% Executados</div>
 			</div>
 		  </div>
 		  <div class='progress-group-bars mb-1'>
 			<div class='progress progress'>
-			  <div class='progress-bar bg-info' role='progressbar' style='width: ".$medpercent."%' aria-valuenow='".$medpercent."' aria-valuemin='0' aria-valuemax='100'>".$medpercent."%</div>
+			  <div class='progress-bar bg-primary' role='progressbar' style='width: ".$medpercent."%' aria-valuenow='".$medpercent."' aria-valuemin='0' aria-valuemax='100'>".$medpercent."% Medidos</div>
 			</div>
 		  </div>
 		</div>
@@ -232,34 +234,36 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 							
 				<div class='col-2 p-1'>	
 			
-			<div class='custom-control custom-checkbox form-control-sm'>
-				<input type='checkbox' class='custom-control-input' id='checkMedicao".$row->id_atividade."'/>
-				<label class='custom-control-label' for='checkMedicao".$row->id_atividade."'>Medir</label>
-				<div class='text-muted float-right' id='balance".$row->id_atividade."'>R$ ".$balance."</div>
-			 </div>
+				<div class='custom-control custom-checkbox form-control-sm'>
+					<input type='checkbox' class='custom-control-input' id='checkMedicao".$row->id_atividade."'/>
+					<label class='custom-control-label' for='checkMedicao".$row->id_atividade."'>Medir</label>
+					<div class='text-muted float-right' id='balance".$row->id_atividade."'>R$ ".$balance[$row->id_atividade]."</div>
+				 </div>
 				
 				  <div class='input-group input-group-sm'>
 					<div class='input-group-prepend'>
-					  <span class='input-group-text' id='inputGroupPrepend'>%</span>
+					  <span class='input-group-text'>%</span>
 					</div>
 					<input type='text' class='form-control form-control-sm' id='validMedicao".$row->id_atividade."' placeholder='".$balpercent."' aria-describedby='inputGroupPrepend' /> 
 					</div>
 				</div><!--/.col-->
-					
+				
 		</div><!--/.BAR CALLOUT INFO GROUP END ROW -->";
-		$subtotal +=  $balance;
+		$subtotal +=  $balance[$row->id_atividade];
 		$pendentes = $stmt2->rowCount() - $encerradas;
+		echo"<div class='row'>Id:".$row->id_atividade.",Sub:".$subtotal.",Bal:".$balance[$row->id_atividade]."<h6></h6></div>";
 		}
+		$measure += $subtotal;
 	echo"	
       </div>
     </div>
 	<div class='card-footer'>
 		<div class='row'>
 			<div class='col-6 text-muted text-left'>
-				<h5><label class='border border-danger rounded p-1'>Pendentes: ".$pendentes."</label> / <label class='border border-success rounded p-1'>Encerradas: ".$encerradas.".</label></h5>
+				<h5 class='mb-0'><label class='border border-danger rounded p-1'>Pendentes: ".$pendentes."</label> / <label class='border border-success rounded p-1'>Encerradas: ".$encerradas.".</label></h5>
 			</div>
 			<div class='col-6 text-right'>
-				<h5><label class='border border-primary rounded p-1'>Total Atividades: ".$stmt2->rowCount()."</label>    -  Subtotal: R$ ".$subtotal."</h5>
+				<h5 class='mb-0'><label class='border border-primary rounded p-1'>Total Atividades: ".$stmt2->rowCount()."</label>    -  Saldo: R$ ".$subtotal."</h5>
 			</div>
 		</div>	
 		
@@ -342,10 +346,19 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 			</select>
 		  </div>
 		 </div>
-		<div class="form-group col-4">
+		<div class="form-group col-4"><?php $dt = date('d/m/Y');?>
 			<label for="formData">Entrega:</label>
-			<input type="date" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
-		  </div>
+			<select class="form-control" id="formData" name="eData">
+			  <option selected><?php echo $dt;?></option>
+			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("1 day"));?></option>
+			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("2 days"));?></option>
+			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("3 days"));?></option>
+			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("4 days"));?></option>
+			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("5 days"));?></option>
+			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("6 days"));?></option>
+			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("7 days"));?></option>
+			</select>
+		</div>
 	</div>
 	
 	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
@@ -370,4 +383,131 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		
 	</div>
 
+<!-- Modal Update Atividade  -->
+<div class="modal" style="text-align: left" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdate" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h5 class="modal-title" id="modalUpdate"></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h4>
+								<form>
+    <div class="form-row">			
+	  <div class="form-group col-8">
+		<label for="formQtdin">Quantidade:</label>
+		<input type="text" class="form-control" id="formQtdin" placeholder="Insira Quantidade" name="Qtdin">
+		<input type="text" class="form-control" id="formAid" name="Aid" hidden>
+	  </div>
+	  <div class="form-group col-4">
+			<label for="formData">Data:</label>
+			<input type="date" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+		  </div>
+	</div>
+	  
+	<div class="form-row align-items-center">			
+	  
+	</div>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>OK</a>
+			</h4></form><div id="process"></div>
+							  </div>
+							  <div class="modal-footer">
+								<h6 id="success"><small></small></h6>
+								<div class="alert alert-secondary mr-auto" role="alert">
+								<h6><?php echo"Obra: ".$row3->tx_nome.", ".$row3->tx_local.".";?> </h6>
+								</div>
+								
+							  </div>
+							  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+							</div>
+						  </div>
+						</div>
+						
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+	</div>	
+
+
+	<!-- Modal Verify Medição  -->
+<div class="modal" style="text-align: left" id="modalVMedir" tabindex="-1" role="dialog" aria-labelledby="modalVMedir" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header border border-danger rounded-top">
+								<h5 class="modal-title" id="modalVMedir">Medição <?php echo $mid." - ".$row3->tx_nome;?></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h5>
+								<form class="medicao">
+    <div class="form-row">			
+	  <div class="form-group col-6">
+			<label for="formMPed">Pedido</label>	
+			<input type="text" class="form-control" value="<?php echo $row3->tx_nome." - ".$row3->tx_codigo;?>" disabled>
+			<input type="text" class="form-control" id="formMPed" value="<?php echo $pid;?>" name="idPedido" hidden>
+			<input type="text" class="form-control" id="formMPed" value="<?php echo $mid;?>" name="nbOrdem" hidden>
+	  </div>
 	
+	  <div class="form-group col-6">
+			<label for="formData">Data:</label>
+			<input type="date" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="MData">
+	  </div>
+	</div>
+	
+	<?php
+	$stmt5 = $conn->query("SELECT a.id_atividade, a.tx_descricao, c.tx_nome FROM atividade a 
+	INNER JOIN categoria c ON a.id_categoria = c.id_categoria
+	WHERE id_pedido = $pid AND cs_medida = 0");
+	if($stmt5->rowCount() == 0){
+		echo"<div class='row'><h5>Não há atividades para medir até o momento.</h5></div>";
+	}
+	else{
+		
+		$loop = 0;
+		//LOOP START
+		while($row5 = $stmt5->fetch(PDO::FETCH_OBJ)){
+		$aid = $row5->id_atividade;
+		if($balance[$aid] == 0)	continue;	 
+		
+		echo"<div class='form-group form-group-row mb-1'>
+				<label class='col-12' for='formMAtiv'><small>".$row5->tx_descricao."<cite> (".$row5->tx_nome.") </cite></small></label>
+				<input type='text' class='form-control col-12' id='formMAtiv' value='".$balance[$aid]."' name='nbVal[$aid]'>
+				<input type='text' class='form-control' id='formMAtiv' value='".$aid."' name='idAtiv[$aid]' hidden='true'>	
+			</div>";
+			
+		$loop += 1;	
+		}
+		
+	if($loop == 0) {
+		echo"<div class='row'><h5>Não há atividades para medir até o momento.</h5></div>";
+		}
+		else{	
+	echo"<a class='btn btn-primary float-right' href='javascript:formMProc();' role='button'>OK</a>";
+		}	
+	}					
+	?>		</h5></form>	
+					<div id='process'></div>
+							  </div>
+							  <div class="modal-footer">
+								
+								<div class="alert alert-success mr-auto ml-auto" role="alert">
+								<h5><?php echo"Total: R$ ".$measure." em ".count($balance)." Atividades.";?> </h5>
+								</div>
+								
+							  </div>
+							  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+							</div>
+						  </div>
+						</div>
+						
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+	</div>	

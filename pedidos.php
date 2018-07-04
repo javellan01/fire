@@ -42,7 +42,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido' data-cliente='".$clientecnpj."' data-id_cliente=".$row0->id_cliente.">+ Adicionar Pedido</button>
 			</h5>
 				</div>
-					<div id='collapse".$id."' class='collapse' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
+					<div id='collapse".$id."' class='collapse show' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
 	
 		
 	// Carrega os pedidos e coloca nos cards

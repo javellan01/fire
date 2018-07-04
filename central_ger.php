@@ -21,6 +21,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
 	<title>Central | FireSystems.online</title>
+	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
 	<style>
@@ -37,6 +38,8 @@
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
 		<script src="./assets/js/docs.min.js"></script>
+		<script src="./assets/js/vue.min.js"></script>
+		<script src="./assets/js/toastr.min.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
 

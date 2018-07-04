@@ -71,11 +71,18 @@
 		          transform: translateY(85px);
 		}*/
 		.container {
-		  max-width: 600px;
+		  max-width: 100%;
 		  margin: 0 auto;
-		  padding: 25vh 0 0;
+		  padding: 36vh 0 22vh 0;
 		  height: 100vh;
 		  text-align: center;
+		}
+		.bg-img{
+			background-image: url("./img/tupy_back.png");
+			height: 380px;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: 90% 90%;
 		}
 		.container h1 {
 		  font-size: 40px;/*
@@ -132,6 +139,23 @@
 		}
 		form button:hover {
 		  background-color: #f5f7f9;
+		}
+		.footer {
+		  display: -ms-flexbox;
+		  display: flex;
+		  -ms-flex-wrap: wrap;
+		  flex-wrap: wrap;
+		  -ms-flex-align: center;
+		  align-items: center;
+		  color: #fff;
+		  border-top: 1px solid #c8ced3;
+		  position: fixed;
+		  margin: 0 15vh 0 15vh;
+		  right: 0;
+		  bottom: 0;
+		  left: 0;
+		  z-index: 1020;
+		  height: 50px;
 		}
 		.bg-bubbles {
 		  position: absolute;
@@ -242,13 +266,25 @@
 		    -webkit-transform: translateY(-700px) rotate(600deg);
 		            transform: translateY(-700px) rotate(600deg);
 		  }
+		 
 		}
+		a:link, a:visited, a:active {
+			color: white;
+			}
+		a:hover {
+			color: orange;
+			} 
 	</style>
 </head>
 <body>
 
 	<div class="wrap">
-		<div class="container">
+		<div class="container" style="background-image: url('./img/tupy_back.png');
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: auto;
+			position: relative;
+			">
 			<h1>FIRESYSTEMS.online</h1>
 			<p>Informe Login e Senha para acessar o sistema</p>
 			
@@ -286,6 +322,12 @@
 			<li></li>
 			<li></li>
 		</ul>
+		<div class="footer">
+			<div>
+			<a href="http://www.firesystems.com.br">FireSystems</a>
+			<span>© 2018 Sistemas de Proteção Contra Incêncido LTDA.</span>
+			</div>
+		</div>
 	</div>
 
 	<script type="text/javascript">

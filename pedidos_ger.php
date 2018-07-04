@@ -43,7 +43,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	echo"</button>
 			</h5>
 				</div>
-					<div id='collapse".$id."' class='collapse' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
+					<div id='collapse".$id."' class='collapse show' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
 	
 		
 	// Carrega os pedidos e coloca nos cards

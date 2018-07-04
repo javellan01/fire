@@ -21,14 +21,6 @@
 				if (this.readyState == 4 && this.status == 200) {
 			document.getElementById("main").innerHTML = this.responseText;
 			
-			$('#formCNPJ').mask('00.000.000/0000-00', {reverse: false});
-			$('#formCPF').mask('000.000.000-00', {reverse: false});
-			$('#formTel').mask('(00) #0000-0000', {reverse: false});
-			$('#formData').mask('00/00/0000', {reverse: false});
-			$('#formDataA').mask('00/00/0000', {reverse: false});
-			$('#formDataB').mask('00/00/0000', {reverse: false});
-			
-			
 			$('#modalPedido').on('show.bs.modal', function (event) {
 			  var button = $(event.relatedTarget);
 			  var cliente = button.data('cliente');
@@ -62,6 +54,13 @@
 			 
 			});
 			
+			$('#formCNPJ').mask('00.000.000/0000-00', {reverse: false});
+			$('#formCPF').mask('000.000.000-00', {reverse: false});
+			$('#formTel').mask('(00) #0000-0000', {reverse: false});
+			$('#formData').mask('00/00/0000', {reverse: false});
+			$('#formDataA').mask('00/00/0000', {reverse: false});
+			$('#formDataB').mask('00/00/0000', {reverse: false});
+			
 			$('.modal').on('hide.bs.modal', function (){
 				loadPhp(str);
 			});
@@ -86,6 +85,15 @@
 			
 			$('.modal').on('hide.bs.modal', function (){
 				atvPhp(str);
+			});
+			
+			$('#modalUpdate').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget);
+			  var atividade = button.data('atividade');
+			  var id_atividade = button.data('id_atividade');
+			  var modal = $(this);
+			  modal.find('.modal-title').text(atividade);
+			  modal.find('#formAid.form-control').val(id_atividade);
 			});
 			
 			}
@@ -123,8 +131,25 @@
 			xhttp.open("GET", "atividades_usr.php?pid="+str, true);
 			xhttp.send();
 			}
-		
-		function formProc() {
+		//Processa Medicao
+		function formMProc() {
+			var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+			document.getElementById("process").innerHTML = this.responseText;
+			}
+			};
+			
+			var formData = $('form.medicao').serialize();
+			
+			toastr.info(formData);
+			toastr.options.progressBar = true;
+			
+			xhttp.open("GET", "mprocess.php?"+formData, true);
+			xhttp.send();
+			}
+		//Processo Base do Sistema	
+			function formProc() {
 			var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {

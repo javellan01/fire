@@ -106,7 +106,7 @@
 	}
 	
 	//'Atividade_user.php' ---	Processa para inserir atividade executada
-	if(isset($_GET['Aid']) && ($_GET['Qtdin']) != ''){
+	if(isset($_GET['Aid']) && ($_GET['Qtdin']) != '' && ($_GET['Aid']) != 0){
 	$nb_qtd = $id_usuario = $id_atividade = $dt_data = '';
 		
 	$dt_data = data_sql($_GET['eData']);
