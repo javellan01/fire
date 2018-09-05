@@ -98,19 +98,6 @@
 			  
 			</ul>
 		  </li>
-		  <li class="nav-item nav-dropdown">
-			<a class="nav-link nav-dropdown-toggle" href="#">
-			  <strong><i class="nav-icon cui-layers"></i> Sistema BASE </strong>
-			  
-			</a>
-			<ul class="nav-dropdown-items">
-			  <li class="nav-item">
-				<a class="nav-link" href="javascript:loadPhp('pedidos_usr.php');">
-				  <i class="nav-icon cui-list"></i>Pedidos
-				</a>
-			  </li>
-			</ul>
-		  </li>
 		  <li class="nav-item">
 			<a class="nav-link nav-link-danger" href="logout.php?token=<?php echo md5(session_id());?>">
 			  <i class="nav-icon cui-account-logout"></i>

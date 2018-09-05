@@ -1,8 +1,8 @@
  <?php
-$servername = "mysql.firesystems.com.br";
-$username = "firesystems";
-$password = "fire2014";
-$dbname = "firesystems";
+$servername = "localhost:3306";
+$username = "u658453311_fire";
+$password = "fiream2014";
+$dbname = "u658453311_fire";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);

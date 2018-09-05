@@ -114,8 +114,8 @@ echo"</div></div></div></div>";
 			<h3 class='mb-3'>Atividades por Categoria:</h3>
 			";
 			
-// Carrega o grupo das atividades result das atividades
-$stmt1 = $conn->query("SELECT c.*, (a.nb_valor / a.nb_qtd) v_unit FROM atividade a  
+// Carrega as categorias
+$stmt1 = $conn->query("SELECT c.* FROM atividade a  
 		INNER JOIN categoria c ON a.id_categoria=c.id_categoria
 		WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
 		
@@ -131,6 +131,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	$cpercent = $count = $execpercent = $medpercent = $balpercent = 0;	
 
 	$stmt2 = $conn->query("SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, CAST(SUM(progresso) AS DECIMAL(10,2)) progresso, v_unit FROM v_categoria_sums WHERE id_pedido = $pid AND id_categoria = $cid GROUP BY id_categoria");
+	
 	$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
 		
 	$execpercent = ($row2->progresso / $row2->nbvalor) * 100;
@@ -346,19 +347,10 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 			</select>
 		  </div>
 		 </div>
-		<div class="form-group col-4"><?php $dt = date('d/m/Y');?>
-			<label for="formData">Entrega:</label>
-			<select class="form-control" id="formData" name="eData">
-			  <option selected><?php echo $dt;?></option>
-			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("1 day"));?></option>
-			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("2 days"));?></option>
-			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("3 days"));?></option>
-			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("4 days"));?></option>
-			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("5 days"));?></option>
-			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("6 days"));?></option>
-			  <option><?php echo date_sub($dt,date_interval_create_from_date_string("7 days"));?></option>
-			</select>
-		</div>
+		  <div class="form-group col-6">
+			<label for="formData">Data:</label>
+			<input type="date" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+	  </div>
 	</div>
 	
 	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
