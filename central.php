@@ -54,8 +54,8 @@
 	<button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
 	<span class="navbar-toggler-icon"></span>
 	</button>
-		<a class="navbar-brand" href="http://firesystems.com.br/">
-		<img src="http://firesystems.com.br/images/logo.png" alt="FIRE Logo" width="150" height="50">
+		<a class="navbar-brand ml-3" href="http://www.firesystems-am.com.br/">
+		<img src="./img/fire.png" alt="FIRE AM" width="150" height="50">
 		</a>
 			<ul class="nav navbar-nav ml-auto">
 				<li class="nav-item px-3">
@@ -72,7 +72,7 @@
 	<div class="sidebar">
 	  <nav class="sidebar-nav" style="font-weight: 480;">
 		<ul class="nav">
-		  <li class="nav-title" id="fecharBtn"><strong>FIRESYSTEMS.online</strong></li>
+		  <li class="nav-title" id="fecharBtn"><strong>Sistema FireSystems</strong></li>
 		  
 		  <li class="nav-item nav-dropdown ">
 			<a class="nav-link nav-dropdown-toggle text-warning" href="#">
@@ -122,7 +122,7 @@
 			<div class='card-header'>
 			<div class="row mt-4">
 				<div class="col-7">
-				<h3>Sistema FireSystems.online:</h3>
+				<h3>Sistema FireSystems:</h3>
 					</div>
 					<div class='col-5'>
 						<h3 class='btn btn-outline-success float-right'>Administrador - <?php echo "Data Atual: ".date("d/m/Y", $_SERVER['REQUEST_TIME']);?></h3>
@@ -154,12 +154,12 @@
 	
 	<footer class="app-footer">
 		<div>
-		<a href="http://www.firesystems.com.br">FireSystems</a>
-		<span>© 2018 Sistemas de Proteção Contra Incêncido LTDA.</span>
+		<a href="http://www.firesystems-am.com.br">FireSystems</a>
+		<span>© 2018 Produtos e Serviços Contra Incêndio </span>
 		</div>
 		<div class="ml-auto">
-		<span>Powered by</span>
-		<a href="http://www.javellan.16mb.com">JAVELLAN</a>
+		<span>Sistemas de Gerenciamento Online</span>
+		
 		</div>
 	</footer>
 		<!-- jQuery (necessary for Boot strap's JavaScript plugins) -->
