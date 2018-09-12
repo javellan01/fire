@@ -10,70 +10,43 @@
 					<div class='card-header'><div class='row mt-1'><div class='col-10'>
 						<h3> Lista Geral de Usuários: </h3></div>
 						<div class='col-2'>
-						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalUsr'>+ Novo Usuário</button>
+						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalCUsr'>+ Novo Convidado</button>
 						</div>
 						</div>
 					</div>	
 					<div class="card-body">
-	<h4><cite> Usuários FireSystems: </h4>					
+	
+	<h4><cite> Usuários Convidados: </h4>
 	<table class='table table-responsive-xl table-striped'>
 		<thead>
 			<tr>
 				<th>Nome</th>
 				<th>Contato</th>
 				<th>Email</th>
-				<th>CPF</th>
-				<th>Categoria</th>
+				<th>Cliente</th>
+				<th>Acesso</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-
-<?php 
+<?php	
 	require("./DB/conn.php");
-
-//Carrrga as users pra colocar na lista
-$stmt0 = $conn->query("SELECT * FROM usuario ORDER BY id_usuario ASC");
+	
+	$stmt0 = $conn->query("SELECT cu.*, c.tx_nome AS cnome FROM cliente_usr AS cu INNER JOIN cliente AS c ON cu.id_cliente = c.id_cliente ORDER BY cnome ASC");
 
 while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	$id = $row0->id_usuario;
-	$cpf = $row0->tx_cpf;
-	$tel = $row0->tx_telefone;
-	$catuser = $row0->nb_category_user;
-	
+	$tel = $row0->tx_contato;
 	
 	// Aloca os users e cria a list
-	
-	if($row0->nb_category_user == 0){	
-	echo"<tr id='uid$id'>
-			<th class='uname'>".$row0->tx_name."</th>
+	echo"<tr id='uid100$id'>
+			<th class='uname'>".$row0->tx_nome."</th>
 			<th class='utel'>$tel</th>
 			<th class='umail'>".$row0->tx_email."</th>
-			<th class='ucpf'>$cpf</th>
-			<th class='text-danger'>Administrador</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
-		</tr>";
-	}
-	if($row0->nb_category_user == 1){		
-	echo"<tr id='uid$id'>
-			<th class='uname'>".$row0->tx_name."</th>
-			<th class='utel'>$tel</th>
-			<th class='umail'>".$row0->tx_email."</th>
-			<th class='ucpf'>$cpf</th>
-			<th class='text-success'>Gerente</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
-		</tr>";
-	}
-	if($row0->nb_category_user == 2){		
-	echo"<tr id='uid$id'>
-			<th class='uname'>".$row0->tx_name."</th>
-			<th class='utel'>$tel</th>
-			<th class='umail'>".$row0->tx_email."</th>
-			<th class='ucpf'>$cpf</th>
-			<th>Base</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
-		</tr>";
-	}
+			<th class='ucliente'>".$row0->cnome."</th>
+			<th class='uacesso'>".$row0->last_access."</th>
+			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdCUsr' data-uid='$id'>Editar</button></th>
+		</tr>";	
 	
 	}	
 $stmt = null;
@@ -86,11 +59,11 @@ $stmt0 = null;
 </div>
 
 <!-- Modal Novo Usuário  -->
-<div class="modal" style="text-align: left" id="modalUsr" tabindex="-1" role="dialog" aria-labelledby="modalUsr" aria-hidden="true">
+<div class="modal" style="text-align: left" id="modalCUsr" tabindex="-1" role="dialog" aria-labelledby="modalCUsr" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
 							  <div class="modal-header">
-								<h4 class="modal-title" id="modalUsr">Novo Usuário</h4>
+								<h4 class="modal-title" id="modalCUsr">Novo Usuário Convidado</h4>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								  <span aria-hidden="true">&times;</span>
 								</button>
@@ -99,37 +72,36 @@ $stmt0 = null;
 								<form>
     <div class="form-row">			
 	  <div class="form-group col-12">
-		<label for="formUser">Nome: </label>
-		<input style="text-transform: uppercase;" type="text" class="form-control" id="formUser" placeholder="" name="Usuario">
+		<label for="formCUser">Nome: </label>
+		<input style="text-transform: uppercase;" type="text" class="form-control" id="formCUser" placeholder="" name="CUsuario">
 	  </div>
 	</div>
 	<div class="form-row">		
-	  <div class="form-group col-8">
-		<label for="formCPF">CPF:<span class='text-danger'>*</span></label>
-		<input type="text" class="form-control" id="formCPF" name="CPF" placeholder="000.000.000-00" max-length="14" >
+	  <div class="form-group col-12">
+		<label for="formCEmail">E-mail: </label>
+		<input type="text" class="form-control" id="formCEmail" name="CEmail">
 	  </div>
-	  <div class="form-group col-4">	
+	</div> 
+	<div class="form-row">		
+	  <div class="form-group col-7">
+		
+		<label for="formCTel">Contato: </label>
+		<input type="text" class="form-control" id="formCTel" name="CTelefone" placeholder="(00) 00000-0000" max-length="16" >
+	  </div>
+	  <div class="form-group col-5">	
 			<div class="form-group">
-				<label for="formCatuser">Tipo: </label>
-				<select class="form-control" id="formCatuser" name="Catuser">
-					<option value='0'>Administrador</option>
-					<option value='1'>Gerente</option>
-					<option selected value='2'>Base</option>
-					<option value='3'>Convidado</option>
-				</select>  
+				<label for="formCliente">Cliente: </label>
+				<select class="form-control" id="formCliente" name="Cliente">
+				<option selected hidden>Selecionar Cliente</option>
+			<?php 	$stmt = $conn->query("SELECT id_cliente, tx_nome FROM cliente ORDER BY tx_nome ASC");
+			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
+			  echo "<option value=".$row->id_cliente.">".$row->tx_nome."</option>";
+			}
+			  ?> 
 			 </div>
 		</div> 
 	</div> 
-	<div class="form-row">		
-	  <div class="form-group col-6">
-		<label for="formEmail">E-mail: </label>
-		<input type="text" class="form-control" id="formEmail" name="Email">
-	  </div>
-	  <div class="form-group col-6">
-		<label for="formTel">Contato: </label>
-		<input type="text" class="form-control" id="formTel" name="Telefone" placeholder="(00) 0.0000-0000" max-length="16" >
-	  </div>
-	</div> 
+	</select>
 	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
 			</h4></form><div id="process"></div>
 			  </div>
@@ -140,7 +112,7 @@ $stmt0 = null;
 			  </div>
 			</div>
 		  </div>
-
+	
 <!-- Modal Editar Usuário  -->		  
 		  <div class="modal" style="text-align: left" id="modalEdUsr" tabindex="-1" role="dialog" aria-labelledby="modalEdUsr" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
@@ -197,4 +169,4 @@ $stmt0 = null;
 			  </div>
 			</div>
 		  </div>
-		  
+

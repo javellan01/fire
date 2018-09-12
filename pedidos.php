@@ -7,7 +7,7 @@
 	</nav>
 	<div class="container-fluid">
 				<div class="card">
-					<div class='card-header'><div class="row mt-4"><div class="col-8 ">
+					<div class='card-header'><div class="row mt-1"><div class="col-8 ">
 						<h3>Pedidos por Cliente: </h3>
 							</div>
 							<div class='col-4'>
@@ -18,8 +18,6 @@
 					<div class='row'>
 						<div class='col-12'>	
 					<div class="card-body">
-						
-						<h2> </h2>
 <?php 
 	require("./DB/conn.php");
 

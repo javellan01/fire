@@ -1,5 +1,5 @@
  <?php
-$servername = "localhost:3306";
+$servername = "sql50.main-hosting.eu";
 $username = "u658453311_fire";
 $password = "fiream2014";
 $dbname = "u658453311_fire";

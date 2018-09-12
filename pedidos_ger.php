@@ -7,7 +7,7 @@
 	</nav>
 	<div class="container-fluid">
 				<div class="card">
-					<div class='card-header'><div class="row mt-4"><div class="col-8 ">
+					<div class='card-header'><div class="row mt-1"><div class="col-8 ">
 						<h3>Pedidos: </h3>
 							</div>
 							<div class='col-4'>

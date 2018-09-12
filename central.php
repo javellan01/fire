@@ -20,7 +20,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
-	<title>Central | FireSystems.online</title>
+	<title>Central | Admin</title>
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
@@ -95,7 +95,11 @@
 				  <i class="nav-icon cui-people"></i>Usuários
 				</a>
 			  </li>
-			  
+			  <li class="nav-item ">
+				<a class="nav-link text-warning" href="javascript:loadPhp('usuarios_cliente.php');">
+				  <i class="nav-icon cui-people"></i>Usuários Convidados
+				</a>
+			  </li>
 			</ul>
 		  </li>
 		  <li class="nav-item">
@@ -110,7 +114,7 @@
 	</div>
 
 <!-- Seção 0000, PARTE CENTRAL DOS DISPLAY DOS DADOS - USAR AJAX PARA DAR NAVEGAR SEM SAIR DA CENTRAL -->
-<main class="main" style="background-image:url('img/_f_back.jpg'); background-repeat: no-repeat; background-attachment: fixed; background-position: top;">
+<main class="main" style="background-image:url('img/back.jpg'); background-repeat: no-repeat; background-attachment: fixed; background-position: top;">
 	<div id="main">
 			<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
@@ -137,7 +141,7 @@
 					
 					<a class='btn btn-outline-danger ' href="javascript:loadPhp('usuarios.php');" role='button'><strong>Usuários</strong></a>
 					
-					<a class='btn btn-outline-danger ' href="javascript:loadPhp('');" role='button'><strong>Alocar Funcionário</strong></a>
+					<a class='btn btn-outline-danger ' href="javascript:loadPhp('usuarios_cliente.php');" role='button'><strong>Convidados</strong></a>
 				
 					</div>
 				</div>	

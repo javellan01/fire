@@ -222,6 +222,36 @@
 		if($e == null) echo "Usuário: ".$tx_name." cadastrado!";
 	}
 	
+	//'Usuarios_Cliente.php' ---	Processa para inserir novo USUARIO no database
+	if(isset($_GET['CUsuario']) && ($_GET['CUsuario']) != ''){
+		
+	$tx_nome = $tx_email = $tx_telefone = $id_cliente =  $tx_password = "";
+	
+	$tx_nome = strtoupper($_GET['CUsuario']);
+	if(isset($_GET['CTelefone'])){   	 $tx_telefone = $_GET['CTelefone'];}
+	if(isset($_GET['CEmail'])){   	 $tx_email = $_GET['CEmail'];}
+	if(isset($_GET['Cliente'])){   	 $id_cliente= $_GET['Cliente'];}
+	$tx_password = md5('123456');
+	
+		try{
+	$stmt = $conn->prepare("INSERT INTO cliente_usr (tx_nome, tx_contato, tx_email, tx_password, id_cliente) VALUES (:tx_nome, :tx_contato, :tx_email, :tx_password, :id_cliente)");
+	
+	$stmt->bindParam(':tx_nome', $tx_nome);
+	$stmt->bindParam(':tx_contato', $tx_telefone);
+	$stmt->bindParam(':tx_email', $tx_email);
+	$stmt->bindParam(':tx_password', $tx_password);
+	$stmt->bindParam(':id_cliente', $id_cliente);
+	
+	$stmt->execute();
+		}
+	catch(PDOException $e)
+		{
+		echo "Error User Proc.: " . $e->getMessage();
+		}
+		
+		if($e == null) echo "Convidado: ".$tx_nome." cadastrado!";
+	}
+	
 	//'Pedidos.php' ---	Processa para inserir novo PEDIDO no database
 	
 	if(isset($_GET['Pedido']) && ($_GET['Pedido']) != ''){
