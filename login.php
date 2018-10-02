@@ -268,64 +268,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 		    $('#usuario').mask('000.000.000-00');
-		
-
-		$('.error').hide();
-		$(".login-button").submit(function(event){
-
-
-			var name = $("input#usuario").val();
-			if(name == "") {
-				$("label#usuario_erro").show();
-			    $("input#usuario").focus().css('border', '2px solid orange');
-			    return false;
-		    } 
-
-			var passkey = $("input#senha").val();
-			if(passkey == "") {
-				$("label#senha_erro").show();
-			    $("input#senha").focus().css('border', '2px solid orange');
-			    return false;
-		    } 
-		   
-
-			var usuario = $("input#usuario").val();
-			var senha = $("input#senha").val();
-			
-	
-			
-			$.ajax({
-				type: "POST",
-			    url: "agent.php",
-	    		dataType: 'JSON',
-			    data: {
-					'usuario' : usuario,
-					'senha' : senha
-					
-					  }	,
-			    success: function(result) {
-//						
-						alert('OK!');
-			    	if(!result){
-
-			    		alert('algo de errado não está certo');
-					} else{
-						alert('FOI CERTO!');
-						$('form').fadeOut(500);
-						$('p').fadeOut(500);
-						$('.wrap').addClass('form-success');
-			//			$('acessoOnlinve').delay(500).submit();
-						$('h1').fadeOut(function() {
-							$(this).fadeIn(2000).text("Acesso Permitido !").css('margin-top', '120px');
-						});
-						setTimeout(function(){ window.location = 'central.php'; }, 5000); 
-			    	}
-
-			    }
-	  		});
-			return false;
-		});
-	});	
+		});	
 	</script>
 
 </body>

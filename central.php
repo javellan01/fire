@@ -3,7 +3,7 @@
 	session_start(); 
 	//echo session_status(); 
 	// Verifica se existe os dados da sessão de login 
-	if(!isset($_SESSION["login"]) && !isset($_SESSION["usuario"])) 
+	if(!isset($_SESSION["login"]) || !isset($_SESSION["usuario"])) 
 		{ 
 	// Usuário não logado! Redireciona para a página de login 
 		header("Location: login.php"); 
@@ -20,19 +20,27 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
-	<title>Central | Admin</title>
+	<title>Admin | FireSystems</title>
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
+	<link rel="stylesheet" href="./dist/css/jquery.filer.css">
+	<link rel="stylesheet" href="./dist/css/themes/jquery.filer-dragdropbox-theme.css">
 	<style>
-      .app-body {
-        overflow-x: initial;
-      }
+      .app-body { overflow-x: initial;}
+	  .fc-sat {background-color: #eee;}
+	  .fc-sun {background-color: #eee;}
+	  .fc-week-number {background-color: #09568d; color: white;}
+	  .fc-day-top {color: #09568d;}
+	  .fc-day-header {color: #09568d;}
+	  th {font-weight: normal;}
     </style>
 		<script src="./assets/js/jquery-3.3.1.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
+		<script src="./dist/js/jquery.validade.min.js"></script>
+		<script src="./dist/js/additional-methods.min.js"></script>
 		<script src="./assets/js/popper.min.js"></script>
 		<script src="./dist/js/bootstrap.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
@@ -40,7 +48,8 @@
 		<script src="./assets/js/docs.min.js"></script>
 		<script src="./assets/js/vue.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
-		
+		<script src="./assets/js/md5.min.js"></script>
+		<script src="./assets/js/jquery.filer.min.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
 </head>
@@ -81,23 +90,28 @@
 			</a>
 			<ul class="nav-dropdown-items">
 				<li class="nav-item">
-				<a class="nav-link text-warning" href="central.php">
+				<a class="nav-link text-light" href="central.php">
 				  <i class="nav-icon cui-home"></i>Central
 				</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link text-warning" href="javascript:loadPhp('pedidos.php');">
+				<a class="nav-link text-light" href="javascript:loadPhp('pedidos.php');">
 				  <i class="nav-icon cui-list"></i>Situação Pedidos
 				</a>
 			  </li>
 			  <li class="nav-item ">
-				<a class="nav-link text-warning" href="javascript:loadPhp('usuarios.php');">
+				<a class="nav-link text-light" href="javascript:loadPhp('usuarios.php');">
 				  <i class="nav-icon cui-people"></i>Usuários
 				</a>
 			  </li>
 			  <li class="nav-item ">
-				<a class="nav-link text-warning" href="javascript:loadPhp('usuarios_cliente.php');">
+				<a class="nav-link text-light" href="javascript:loadPhp('usuarios_cliente.php');">
 				  <i class="nav-icon cui-people"></i>Usuários Convidados
+				</a>
+			  </li>
+				<li class="nav-item ">
+				<a class="nav-link text-light" href="javascript:loadPhp('funcionarios.php');">
+				  <i class="nav-icon cui-people"></i>Funcionários
 				</a>
 			  </li>
 			</ul>

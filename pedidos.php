@@ -20,7 +20,9 @@
 					<div class="card-body">
 <?php 
 	require("./DB/conn.php");
-
+	function moeda($num){
+		return number_format($num,2,',','.');
+    }
 //Carrrga as empresas pra colocar no titulo dos cards
 $stmt0 = $conn->query("SELECT id_cliente,tx_nome,tx_cnpj FROM cliente ORDER BY tx_nome ASC");
 
@@ -64,7 +66,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 					echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . " (Encerrado)</strong></a></div>";
 			  $percent = ($row->medido_total / $row->nb_valor) * 100;
 			  echo "<div class='ml-auto'>Progresso: (" . round($percent) ."%) - ";
-			  echo " R$" . $row->medido_total . " / " . $row->nb_valor . "</div></div>";
+			  echo " R$" . moeda($row->medido_total) . " / " . moeda($row->nb_valor) . "</div></div>";
 			  echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
 			  echo "<div class='progress-bar progress-bar-striped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'>".round($percent)."%</div>
 			  </div>
@@ -86,7 +88,7 @@ $stmt0 = null;
 							<div class="modal-content">
 							  <div class="modal-header">
 								<h4 class="modal-title" id="modalCliente">Novo Cliente</h4>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 								  <span aria-hidden="true">&times;</span>
 								</button>
 							  </div>
@@ -95,13 +97,13 @@ $stmt0 = null;
     <div class="form-row">			
 	  <div class="form-group col-md-12">
 		<label for="formCliente">Razão Social: </label>
-		<input style="text-transform: uppercase;" type="text" class="form-control" id="formCliente" placeholder="Razação Social" name="Cliente">
+		<input style="text-transform: uppercase;" type="text" required class="form-control" id="formCliente" placeholder="Razação Social" name="Cliente">
 	  </div>
 	</div>
 	<div class="form-row">		
 	  <div class="form-group col-md-12">
 		<label for="formCNPJ">CNPJ: <h6><p class="text-muted"><cite> Somente Números</cite></p></h6></label>
-		<input type="text" class="form-control" id="formCNPJ" name="CNPJ" placeholder="00.000.000/0000-0" max-length="17" >
+		<input type="text" required  minlength="18" class="form-control" id="formCNPJ" name="CNPJ" placeholder="00.000.000/0000-0">
 	  </div>
 	</div> 
 	
@@ -135,11 +137,11 @@ $stmt0 = null;
 	  </div>
 	  <div class="form-group col-3">
 		<label for="formDataA">Ínicio:</label>
-		<input type="date" class="form-control" id="formDataA" name="iData" value="<?php echo date('d/m/Y');?>">
+		<input type="text" class="form-control" id="formDataA" name="iData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	  <div class="form-group col-3">
 		<label for="formDataB">Término:</label>
-		<input type="date" class="form-control" id="formDataB" name="tData" value="<?php echo date('d/m/Y');?>">
+		<input type="text" class="form-control" id="formDataB" name="tData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	</div>
 	

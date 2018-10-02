@@ -32,7 +32,12 @@
 <?php	
 	require("./DB/conn.php");
 	
-	$stmt0 = $conn->query("SELECT cu.*, c.tx_nome AS cnome FROM cliente_usr AS cu INNER JOIN cliente AS c ON cu.id_cliente = c.id_cliente ORDER BY cnome ASC");
+	function time_usql($data) {
+		$ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4).substr($data, 10, 9);
+		return $ndata;
+	}
+	
+	$stmt0 = $conn->query("SELECT cu.*, CONVERT_TZ(cu.last_access,'+00:00','-04:00') AS tz_last, c.tx_nome AS cnome FROM cliente_usr AS cu INNER JOIN cliente AS c ON cu.id_cliente = c.id_cliente ORDER BY cnome ASC");
 
 while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	$id = $row0->id_usuario;
@@ -44,7 +49,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 			<th class='utel'>$tel</th>
 			<th class='umail'>".$row0->tx_email."</th>
 			<th class='ucliente'>".$row0->cnome."</th>
-			<th class='uacesso'>".$row0->last_access."</th>
+			<th class='uacesso'>".time_usql($row0->tz_last)."</th>
 			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdCUsr' data-uid='$id'>Editar</button></th>
 		</tr>";	
 	

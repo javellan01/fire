@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	if(!isset($_SESSION["login"]) && !isset($_SESSION["usuario"]) && !isset($_SESSION["userid"])) 
+	if(!isset($_SESSION["login"]) || !isset($_SESSION["usuario"]) || !isset($_SESSION["userid"])) 
 		{ 
 	// Usuário não logado! Redireciona para a página de login 
 		header("Location: login.php"); 
@@ -27,7 +27,7 @@
 		$ndata = substr($data, 6, 4) ."-". substr($data, 3, 2) ."-".substr($data, 0, 2);
 		return $ndata;
 	}
-	//'Peril.php --- Processo para alterar senha
+	//'Perfil.php --- Processo para alterar senha
 	if(isset($_GET['ASenha']) && ($_GET['ASenha']) != ''){
 		$tx_password = md5($_GET['ASenha']);
 		$id_usuario = $_SESSION["userid"];
@@ -45,7 +45,7 @@
 				if($e == null) echo "Senha alterada com sucesso!";
 	}
 	
-	//'Peril.php --- Processo para alterar usuario
+	//'Perfil.php --- Processo para alterar usuario
 	if(isset($_GET['EdUsuario']) && ($_GET['EdUsuario']) != ''){
 		
 	$tx_name = $tx_telefone = $tx_email = "";
@@ -84,17 +84,22 @@
 	if(isset($_GET['Valor'])){  	 $nb_valor = (float)$_GET['Valor'];}
 	if(isset($_GET['Tipo'])){  		 strtoupper($tx_tipo  = $_GET['Tipo']);}
 	if(isset($_GET['Pid'])){   		 $pid = (int)$_GET['Pid'];}
+	if(isset($_GET['iData'])){   		 $idata = data_sql($_GET['iData']);}
+	if(isset($_GET['fData'])){   		 $fdata = data_sql($_GET['fData']);}
+	
 	$cid = $_GET['Categoria'];
 	
 		try{
-	$stmt = $conn->prepare("INSERT INTO atividade (tx_descricao, id_categoria, nb_qtd, nb_valor, tx_tipo, id_pedido)
-    VALUES (:tx_descricao, :id_categoria, :nb_qtd, :nb_valor, :tx_tipo, :id_pedido)");
+	$stmt = $conn->prepare("INSERT INTO atividade (tx_descricao, id_categoria, nb_qtd, nb_valor, tx_tipo, id_pedido, dt_inicio, dt_fim)
+    VALUES (:tx_descricao, :id_categoria, :nb_qtd, :nb_valor, :tx_tipo, :id_pedido, :dt_idata, :dt_fdata)");
 	$stmt->bindParam(':tx_descricao', $tx_nome);
 	$stmt->bindParam(':tx_tipo', $tx_tipo);
 	$stmt->bindParam(':id_categoria', $cid);
 	$stmt->bindParam(':nb_qtd', $nb_qtd);
 	$stmt->bindParam(':nb_valor', $nb_valor);
 	$stmt->bindParam(':id_pedido', $pid);
+	$stmt->bindParam(':dt_idata', $idata);
+	$stmt->bindParam(':dt_fdata', $fdata);
 	$stmt->execute();
 		}
 	catch(PDOException $e)
@@ -140,13 +145,15 @@
 	$tx_nome = $cnpj = "";
 	
 	$tx_nome = strtoupper( $_GET['Cliente']);
-	if(isset($_GET['CNPJ'])){   	 $cnpj = $_GET['CNPJ'];}
 	
+	if(isset($_GET['CNPJ'])){   	 $cnpj = $_GET['CNPJ'];}
+	$tx_password = md5('123456');
 		try{
-	$stmt = $conn->prepare("INSERT INTO cliente (tx_nome, tx_cnpj) VALUES (:tx_nome, :tx_cnpj)");
+	$stmt = $conn->prepare("INSERT INTO cliente (tx_nome, tx_cnpj, tx_password) VALUES (:tx_nome, :tx_cnpj, :tx_password)");
 	$stmt->bindParam(':tx_nome', $tx_nome);
 	$stmt->bindParam(':tx_cnpj', $cnpj);
-
+	$stmt->bindParam(':tx_password', $tx_password);
+	
 	$stmt->execute();
 		}
 	catch(PDOException $e)

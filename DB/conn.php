@@ -1,18 +1,48 @@
- <?php
-$servername = "sql50.main-hosting.eu";
-$username = "u658453311_fire";
-$password = "fiream2014";
-$dbname = "u658453311_fire";
-
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-catch(PDOException $e)
+<?php
+    class DB
     {
-    echo "Error: " . $e->getMessage();
+        private $_connection;
+        private static $_instance; 
+        private $_host = 'sql50.main-hosting.eu';
+        private $_username = 'u658453311_fire';
+        private $_password = 'fiream2014';
+        private $_database = 'u658453311_fire';
+    
+        public static function getInstance()
+        {
+            if (!self::$_instance) {
+                self::$_instance = new self();
+            }
+            return self::$_instance;
+        }
+    
+        private function __construct()
+        {
+            try {
+                $this->_connection = new PDO("mysql:host=$this->_host;dbname=$this->_database;charset=utf8", $this->_username, $this->_password); 
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
+        }
+    
+        private function __clone()
+        {
+        }
+    
+        public function getConnection()
+        {
+            return $this->_connection;
+        }
     }
+    
+    class Stmt extends DB {
+        public static function query($sql) {
+            return parent::getInstance()->getConnection()->query($sql);
+            }
+        }  
+
+        $db = DB::getInstance();
+        $conn = $db->getConnection();   
 
 
 ?> 

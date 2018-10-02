@@ -3,7 +3,7 @@
 session_start(); 
 
 // Verifica se existe os dados da sessão de login 
-if(!isset($_SESSION["login"]) && !isset($_SESSION["usuario"]) && !isset($_SESSION["userid"])) 
+if(!isset($_SESSION["login"]) || !isset($_SESSION["usuario"]) || !isset($_SESSION["userid"])) 
 		{ 
 	// Usuário não logado! Redireciona para a página de login 
 		header("Location: login.php"); 
@@ -22,7 +22,7 @@ if(!isset($_SESSION["login"]) && !isset($_SESSION["usuario"]) && !isset($_SESSIO
 <!DOCTYPE html>
 <html>
 <head>
-	<title>FireSystems.online</title>
+	<title>Admin | FireSystems</title>
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 

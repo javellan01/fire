@@ -107,7 +107,7 @@
 
 	<div class="wrap">
 		<div class="container">
-			<h1>FIRESYSTEMS.online</h1>
+			<h1>Admin FireSystems</h1>
 				<p>Login Inválido!</p>
 <?php 
 // session_start inicia a sessão
@@ -120,10 +120,7 @@ header("Pragma: no-cache"); // HTTP 1.0.
 header("Expires: 0"); //
 
 if(isset($_POST['usuario']) && isset($_POST['senha'])){
-/* 
-    $login = $_GET['usuario'];
-    $senha = $_GET['senha'];
- */
+
     $login = $_POST['usuario'];
     $senha = md5($_POST['senha']);
 // as próximas 1 linhas são responsáveis em se conectar com o bando de dados.
@@ -133,7 +130,7 @@ require("./DB/conn.php");
 $result = $conn->query("SELECT * FROM usuario WHERE tx_cpf = '".$login."' AND tx_password = '".$senha."'");
 /* Logo abaixo temos um bloco com if e else, verificando se a variável $result foi bem sucedida, ou seja se ela estiver encontrado algum registro idêntico o seu valor será igual a 1, se não, se não tiver registros seu valor será 0. Dependendo do resultado ele redirecionará para a pagina site.php ou retornara  para a pagina do formulário inicial para que se possa tentar novamente realizar o login */
 
-if($result->rowCount() == 1 )
+if($result)
 {
   while($row = $result->fetch(PDO::FETCH_OBJ)) {
      $var = Array(
