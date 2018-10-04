@@ -13,27 +13,17 @@
 					
 					
 <?php
-session_start();	
-$_SESSION['MAtiv'] = array();
 require("./DB/conn.php");
-
-function data_usql($data) {
-		$ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4);
-		return $ndata;
-	}
-function moeda($num){
-		return number_format($num,2,',','.');
-    }
-	
+require("./controller/atividadesController.php");
 $pid = $_REQUEST["pid"];
 $balance = array();
 $measure = 0.00;
 $mid = 0;	
+$pedido = getPedidoData($conn, $pid);
+
 //Carrega dados do pedido
-$stmt3 = $conn->query("SELECT p.*, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
-$row3 = $stmt3->fetch(PDO::FETCH_OBJ);
-	$retencao = ($row3->nb_retencao * $row3->nb_valor) / 100;
-echo"					".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h3>
+
+echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 							</div>
 							<div class='col-3'>
 								<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalCliente'>Gerenciar Categorias</button>
@@ -43,19 +33,19 @@ echo"					".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h3>
 		<div class='card-body border border-primary rounded-top'>
 			<div class='row justify-content-between'>
 						<div class='col-8'>
-				<h4>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".moeda($row3->nb_valor)."</label> - Retenção: <label class='border border-secondary rounded p-1'>R$ ".moeda($retencao)." (".$row3->nb_retencao."%)</label>
+				<h4>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".moeda($pedido->nb_valor)."</label> - Retenção: <label class='border border-secondary rounded p-1'>R$ ".moeda($pedido->retencao)." (".$pedido->nb_retencao."%)</label>
 						</div>
 						<div class='col-4'>
-						<h4>Data Ínicio: <label class='border border-secondary rounded p-1'>".data_usql($row3->dt_idata)."</label>
+						<h4>Data Ínicio: <label class='border border-secondary rounded p-1'>".data_usql($pedido->dt_idata)."</label>
 							</h4>
 						</div>
 						</div>
 		<div class='row'>
 			<div class='col-8'>
-			<h4>Área: <label class='border border-secondary rounded p-1'>".$row3->tx_local."</label></h4>
+			<h4>Área: <label class='border border-secondary rounded p-1'>".$pedido->tx_local."</label></h4>
 			</div>
 			<div class='col-4'>
-				<h4>Data Término: <label class='border border-secondary rounded p-1'>".data_usql($row3->dt_tdata)."</label>
+				<h4>Data Término: <label class='border border-secondary rounded p-1'>".data_usql($pedido->dt_tdata)."</label>
 					</h4>
 		</div>
 		</div>	
@@ -63,24 +53,21 @@ echo"					".$row3->tx_codigo." - <cite>".$row3->tx_nome."</cite></h3>
 			<div class='col-12 border border-secondary'>
 			<h4>Informações Relacionadas: </h4>
 			
-				<p class='m-2'>".$row3->tx_descricao."</p><br><br>
+				<p class='m-2'>".$pedido->tx_descricao."</p><br><br>
 			</div>	
 		</div>			
 		</div>
+		
 	<div class='card-body'>";
 
 // Carrega as somas result das medições
-
-$stmt0 = $conn->query("SELECT SUM(am.nb_valor) AS v_medido, m.id_usuario, m.*, u.tx_name  FROM atividade_medida am 
-			LEFT JOIN medicao m ON am.id_pedido=m.id_pedido AND am.nb_ordem = m.nb_ordem 
-			INNER JOIN usuario u ON m.id_usuario = u.id_usuario 
-			WHERE m.id_pedido = $pid GROUP BY m.nb_ordem ASC;");
+$medicoes = getMedicoes($conn, $pid);
 
 echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'>
 		<div class='card mb-0'>
 			<div class='card-header' id='headingMedicao'>
 				<h5 class='mb-0'>
-				<button type='button' class='btn btn-outline-danger float-left'  data-toggle='collapse' data-target='#collapseMedicao' aria-expanded='true' aria-controls='collapseMedicao'>Medições Cadastradas
+				<button type='button' class='btn btn-outline-danger float-left'  data-toggle='collapse' data-target='#collapseMedicao' aria-expanded='true' aria-controls='collapseMedicao'>Medições Cadastradas 
 				</button>
 				<button type='button' class='btn btn-outline-primary float-right' data-toggle='modal' data-target='#modalVMedir'>+ Nova Medição
 				</button>
@@ -90,18 +77,18 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 			<div id='collapseMedicao' class='collapse' aria-labelledby='headingMedicao' data-parent='#accordion'>
 				<div class='card-body'>";
 	
-if($stmt0->rowCount() == 0){
+if(count($medicoes) == 0){
 		echo"<div class='card border border-light'><h4>Não há medições cadastradas para este pedido. Tenha um bom dia e obrigado.</h4></div>";}
 	else{					
-while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
+foreach($medicoes as $medicao){
 
-	$mid=$row0->nb_ordem;	
+	$mid=$medicao->nb_ordem;	
 	echo"		  
 		<div class='card border border-light mb-3'>
-		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($row0->dt_data)."</h5>
+		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."</h5>
 		  <div class='card-body'>
-			<h5 class='card-title'>Valor Medido: R$ ".moeda($row0->v_medido)." - Reponsável: ".$row0->tx_name."</h5>
-			<p class='card-text'>Nota: ".$row0->tx_nota." - Vencimento: ".$row0->dt_vencimento."</p>
+			<h5 class='card-title'>Valor Medido: R$ ".moeda($medicao->v_medido)." - Reponsável: ".$medicao->tx_name."</h5>
+			<p class='card-text'>Nota: ".$medicao->tx_nota." - Vencimento: ".$medicao->dt_vencimento."</p>
 			<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalLAtv$mid'>Listar Atividades Medidas</button>
 			</div>
 		</div>
@@ -109,7 +96,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 			  <div class='modal-dialog modal-lg' role='document'>
 				<div class='modal-content'>
 				  <div class='modal-header border border-danger rounded-top'>
-					<h5 class='modal-title' id='modalLAtv$mid'><cite>".$row3->tx_codigo."</cite> - Medição ".$mid."</h5>
+					<h5 class='modal-title' id='modalLAtv$mid'><cite>".$pedido->tx_codigo."</cite> - Medição ".$mid."</h5>
 					<button type='button' class='close' data-dismiss='modal' aria-label='Close'>
 					  <span aria-hidden='true'>&times;</span>
 					</button>
@@ -126,16 +113,15 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 						</tr>
 					</thead>
 					<tbody>";
-			
-		$stmt4 = $conn->query("SELECT a.id_categoria, a.tx_descricao, cat.tx_nome, am.nb_valor AS nb_valor, ((am.nb_valor/a.nb_valor)*100) AS percent FROM atividade_medida AS am INNER JOIN atividade AS a ON am.id_atividade = a.id_atividade INNER JOIN categoria AS cat ON a.id_categoria = cat.id_categoria WHERE am.id_pedido = ".$pid." AND am.nb_ordem = ".$mid." ORDER BY a.id_categoria ASC;");	
+				$medidas = getMedicaoResume($conn,$pid,$mid);
 				$item = 1;
-				while($row4 = $stmt4->fetch(PDO::FETCH_OBJ)){
+				foreach($medidas as $medida){
 					echo"<tr>
 							<th>".$item.".</th>
-							<th>".$row4->tx_descricao."</th>
-							<th>".$row4->tx_nome."</th>
-							<th>".moeda($row4->percent)."%</th>
-							<th>R$ ".moeda($row4->nb_valor)."</th>
+							<th>".$medida->tx_descricao."</th>
+							<th>".$medida->tx_nome."</th>
+							<th>".moeda($medida->percent)."%</th>
+							<th>R$ ".moeda($medida->nb_valor)."</th>
 						</tr>";
 					$item += 1;	
 					}
@@ -148,7 +134,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 						<th></th>
 						<th></th>
 						<th>Total:</th>
-						<th style='font-weight: 500;'>R$ ".moeda($row0->v_medido)."
+						<th style='font-weight: 500;'>R$ ".moeda($medicao->v_medido)."
 					</tr>		
 					</tbody>
 					</table>		
@@ -173,31 +159,21 @@ echo"</div></div></div></div>";
 			";
 			
 // Carrega as categorias
-$stmt1 = $conn->query("SELECT c.* FROM atividade a  
-		INNER JOIN categoria c ON a.id_categoria=c.id_categoria
-		WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
+$categorias = getCategoria($conn,$pid);
 		
-if($stmt1->rowCount() == 0){
-		echo"<h4 class='danger'>Não há atividades cadastradas para este pedido. Tenha um bom dia e obrigado.</h4>";}
+if(count($categorias) == 0){
+		echo"<h4 class='danger'>Ainda não há atividades cadastradas para este pedido!</h4>";}
 	else{	
 
 //Inicia card para organização das Categorias
 
-while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){	
+foreach($categorias as $categoria){	
 
-	$cid = $row1->id_categoria;
-	$cpercent = $count = $execpercent = $medpercent = $balpercent = 0;	
+	$cid = $categoria->id_categoria;
+	$cat = getCategoriaSum($conn,$pid,$cid);
+	$atividades = getAtividades($conn,$pid,$cid);
 
-	$stmt2 = $conn->query("SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, SUM(progresso) AS  progresso, v_unit FROM v_categoria_sums WHERE id_pedido = $pid AND id_categoria = $cid GROUP BY id_categoria");
-	
-	$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
-		
-	$execpercent = ($row2->progresso / $row2->nbvalor) * 100;
-	$execpercent = round($execpercent,1);
-	
-	$medpercent = ($row2->valorsum / $row2->nbvalor) * 100;
-	$medpercent = round($medpercent,1);	
-	
+	$cpercent = $count = $execpercent = $medpercent = $balpercent = 0;
 	
 		//Inicia accordion para cada categoria
 	echo"
@@ -209,22 +185,22 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		
 		<div class='col-5'>";
 		echo"<button class='btn btn-outline-success float-left' type='button' data-toggle='collapse' data-target='#collapseCat$cid' aria-expanded='true' aria-controls='collapseCat$cid'><strong>";
-		echo $row1->tx_nome;
+		echo $categoria->tx_nome;
 		echo"</strong></button>
 		</div>
 		 
 		<div class='col-7'>";
 				
-				if( $row2->progresso > $row2->nbvalor){
+				if( $cat->progresso > $cat->nbvalor){
 					
 				echo"  <div class='callout callout-danger m-0'>
 							<small class='text-muted text-danger'>Progresso Categoria</small><br>
-							<strong class='h5 text-danger text-nowrap'>".$execpercent."% - (R$ ".moeda($row2->progresso)."/".moeda($row2->nbvalor).")</strong>";
+							<strong class='h5 text-danger text-nowrap'>".$cat->execpercent."% - (R$ ".moeda($cat->progresso)."/".moeda($cat->nbvalor).")</strong>";
 				}
 				else{
 				echo"  <div class='callout callout-success m-0'>
 							<small class='text-muted text-success'>Progresso Categoria</small><br>
-							<strong class='h5 text-success text-nowrap'>".$execpercent."% - (R$ ".moeda($row2->progresso)."/".moeda($row2->nbvalor).")</strong>";
+							<strong class='h5 text-success text-nowrap'>".$cat->execpercent."% - (R$ ".moeda($cat->progresso)."/".moeda($cat->nbvalor).")</strong>";
 				}
 		echo"		
 			</div>
@@ -240,77 +216,49 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	  <!-- MAIN WHILE FOR ATIVIDADE CATEGORIA -->";
 		$encerradas = 0;
 		$subtotal = 0.00;
-        $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum, v1.progresso, v1.nb_valor, v1.valor_sum FROM atividade a 
-		LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
-		WHERE a.id_pedido = $pid AND a.id_categoria = $cid");
-		
-		
-		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
-		if($row->cs_finalizada	== 1) $encerradas += 1;	
-		if($row->valor_sum == null) $row->valor_sum = 0;
-		$execpercent = ($row->progresso / $row->nb_valor) * 100;
-		$execpercent = round($execpercent,1);
-		
-		$medpercent = ($row->valor_sum / $row->nb_valor) * 100;
-		$medpercent = round($medpercent,1);	
+foreach($atividades AS $atividade)  {
+		if($atividade->cs_finalizada	== 1) $encerradas += 1;	
+		if($atividade->valor_sum == null) $atividade->valor_sum = 0;
 	
-		$balpercent = $execpercent - $medpercent;
+		$balpercent = $atividade->execpercent - $atividade->medpercent;
 		
 		if($balpercent < 0) $balpercent = 0;
 		if($balpercent > 100) $balpercent = 100;
-		$balance[$row->id_atividade] = round(($row->progresso - $row->valor_sum),2);
-		if($balance[$row->id_atividade] < 0) $balance[$row->id_atividade] = 0;	
-		if($balance[$row->id_atividade] > $row->nb_valor) $balance[$row->id_atividade] = $row->nb_valor;
+		$balance[$atividade->id_atividade] = round(($atividade->progresso - $atividade->valor_sum),2);
+		if($balance[$atividade->id_atividade] < 0) $balance[$atividade->id_atividade] = 0;	
+		if($balance[$atividade->id_atividade] > $atividade->nb_valor) $balance[$atividade->id_atividade] = $atividade->nb_valor;
 		echo"	
 		<div class='row align-items-center'>
 						
 						
-		<div class='col-10 p-1'>
+		<div class='col-12 p-1'>
 			<div class='callout callout-success b-t-1 b-r-1 b-b-1 m-1 col-12 float-left'>
 			
 			<div class='progress-group-prepend'>";
-		  if($row->cs_finalizada == 0) 
-					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $row->tx_descricao . "</strong></div>";
-		  if($row->cs_finalizada == 1) 
-					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong>" . $row->tx_descricao . " (Encerrada)</strong></div>";
-		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
+		  if($atividade->cs_finalizada == 0) 
+					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong>" . $atividade->tx_descricao . "</strong></div>";
+		  if($atividade->cs_finalizada == 1) 
+					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong>" . $atividade->tx_descricao . " (Encerrada)</strong></div>";
+		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
 		  $percent = round($percent,1);
-		  echo "<div class='ml-auto'>Progresso: " . $row->qtd_sum . " / " . $row->nb_qtd ." ". $row->tx_tipo . "</div>";
+		  echo "<div class='ml-auto'>Progresso: " . $atividade->qtd_sum . " / " . $atividade->nb_qtd ." ". $atividade->tx_tipo . "</div>";
 		  echo"	  
 		  <div class='progress-group-bars mb-1'>
 			<div class='progress progress'>
-			  <div class='progress-bar bg-orange' role='progressbar' style='width: ".$percent."%' aria-valuenow='".$percent."' aria-valuemin='0' aria-valuemax='100'>".$percent."% Executados</div>
+			  <div class='progress-bar bg-orange' role='progressbar' style='width: ".$atividade->percent."%' aria-valuenow='".$atividade->percent."' aria-valuemin='0' aria-valuemax='100'>".$atividade->percent."% Executados</div>
 			</div>
 		  </div>
 		  <div class='progress-group-bars mb-1'>
 			<div class='progress progress'>
-			  <div class='progress-bar bg-primary' role='progressbar' style='width: ".$medpercent."%' aria-valuenow='".$medpercent."' aria-valuemin='0' aria-valuemax='100'>".$medpercent."% Medidos</div>
+			  <div class='progress-bar bg-primary' role='progressbar' style='width: ".$atividade->medpercent."%' aria-valuenow='".$atividade->medpercent."' aria-valuemin='0' aria-valuemax='100'>".$atividade->medpercent."% Medidos</div>
 			</div>
 		  </div>
 		</div>
 		</div><!--/.callout-->
-				</div><!--/.col-->
-							
-				<div class='col-2 p-1'>	
-			
-				<div class='custom-control custom-checkbox form-control-sm'>
-					<input type='checkbox' class='custom-control-input' id='checkMedicao".$row->id_atividade."'/>
-					<label class='custom-control-label' for='checkMedicao".$row->id_atividade."'>Medir</label>
-					<div class='text-muted float-right' id='balance".$row->id_atividade."'>R$ ".moeda($balance[$row->id_atividade])."</div>
-				 </div>
-				
-				  <div class='input-group input-group-sm'>
-					<div class='input-group-prepend'>
-					  <span class='input-group-text'>%</span>
-					</div>
-					<input type='text' class='form-control form-control-sm' id='validMedicao".$row->id_atividade."' placeholder='".$balpercent."' aria-describedby='inputGroupPrepend' /> 
-					</div>
-				</div><!--/.col-->
-				
-		</div><!--/.BAR CALLOUT INFO GROUP END ROW -->";
-		$subtotal +=  $balance[$row->id_atividade];
-		$pendentes = $stmt2->rowCount() - $encerradas;
-		echo"<div class='row'>Id:".$row->id_atividade.",Sub:".$subtotal.",Bal:".$balance[$row->id_atividade]."<h6></h6></div>";
+				</div><!--/.col--></div>";
+		$subtotal +=  $balance[$atividade->id_atividade];
+		$pendentes = count($atividades) - $encerradas;
+		echo"<div class='row'><h6></h6></div>";
 		}
 		$measure += $subtotal;
 	echo"	
@@ -322,7 +270,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 				<h5 class='mb-0'><label class='border border-danger rounded p-1'>Ativas: ".$pendentes."</label> / <label class='border border-success rounded p-1'>Encerradas: ".$encerradas.".</label></h5>
 			</div>
 			<div class='col-6 text-right'>
-				<h5 class='mb-0'><label class='border border-primary rounded p-1'>Total Atividades: ".$stmt2->rowCount()."</label>    -  Saldo: R$ ".moeda($subtotal)."</h5>
+				<h5 class='mb-0'><label class='border border-primary rounded p-1'>Total Atividades: ".count($atividades)."</label>    -  Saldo: R$ ".moeda($subtotal)."</h5>
 			</div>
 		</div>	
 		
@@ -423,7 +371,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 							  <div class="modal-footer">
 								<h6 id="success"><small></small></h6>
 								<div class="alert alert-secondary mr-auto" role="alert">
-								<h6><?php echo"Pedido: ".$row3->tx_codigo." - ".$row3->tx_nome;?> </h6>
+								<h6><?php echo"Pedido: ".$pedido->tx_codigo." - ".$pedido->tx_nome;?> </h6>
 								</div>
 								
 							  </div>
@@ -472,7 +420,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 							  <div class="modal-footer">
 								<h6 id="success"><small></small></h6>
 								<div class="alert alert-secondary mr-auto" role="alert">
-								<h6><?php echo"Obra: ".$row3->tx_nome.", ".$row3->tx_local.".";?> </h6>
+								<h6><?php echo"Obra: ".$pedido->tx_nome.", ".$pedido->tx_local.".";?> </h6>
 								</div>
 								
 							  </div>
@@ -494,7 +442,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
 							  <div class="modal-header border border-danger rounded-top">
-								<h5 class="modal-title" id="modalVMedir">Medição <?php echo $mid." - ".$row3->tx_nome;?></h5>
+								<h5 class="modal-title" id="modalVMedir">Medição <?php echo $mid." - ".$pedido->tx_nome;?></h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								  <span aria-hidden="true">&times;</span>
 								</button>
@@ -504,7 +452,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
     <div class="form-row">			
 	  <div class="form-group col-6">
 			<label for="formMPed">Pedido</label>	
-			<input type="text" class="form-control" value="<?php echo $row3->tx_nome." - ".$row3->tx_codigo;?>" disabled>
+			<input type="text" class="form-control" value="<?php echo $pedido->tx_nome." - ".$pedido->tx_codigo;?>" disabled>
 			<input type="text" class="form-control" id="formMPed" value="<?php echo $pid;?>" name="idPedido" hidden>
 			<input type="text" class="form-control" id="formMPed" value="<?php echo $mid;?>" name="nbOrdem" hidden>
 	  </div>

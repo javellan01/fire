@@ -24,8 +24,7 @@
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
-	<link rel="stylesheet" href="./dist/css/jquery.filer.css">
-	<link rel="stylesheet" href="./dist/css/themes/jquery.filer-dragdropbox-theme.css">
+	<link rel="stylesheet" href="./dist/css/fullcalendar.min.css">
 	<style>
       .app-body { overflow-x: initial;}
 	  .fc-sat {background-color: #eee;}
@@ -39,23 +38,27 @@
 		<script src="./assets/js/jquery-ui.min.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
-		<script src="./dist/js/jquery.validade.min.js"></script>
-		<script src="./dist/js/additional-methods.min.js"></script>
 		<script src="./assets/js/popper.min.js"></script>
+		<script src="./assets/js/moment.min.js"></script>
+		<script src="./assets/js/docs.min.js"></script>
 		<script src="./dist/js/bootstrap.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
 		<script src="./assets/js/docs.min.js"></script>
 		<script src="./assets/js/vue.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
-		<script src="./assets/js/md5.min.js"></script>
-		<script src="./assets/js/jquery.filer.min.js"></script>
+		<script src="./dist/js/fullcalendar.min.js"></script>
+		<script src="./dist/js/locale/pt-br.js"></script>
+		
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
+	
+
 </head>
 <?php
 
-	
+require("./DB/conn.php");	
+require("./controller/centralController.php");	
 
 ?>
 <body class="app header-fixed sidebar-md-show sidebar-fixed">
@@ -138,9 +141,9 @@
 	<div class="container-fluid">
 		<div class="card">
 			<div class='card-header'>
-			<div class="row mt-4">
+			<div class="row mt-1">
 				<div class="col-7">
-				<h3>Sistema FireSystems:</h3>
+				<h3><cite>Sistema FireSystems</cite> - Calendário de Atividades:</h3>
 					</div>
 					<div class='col-5'>
 						<h3 class='btn btn-outline-success float-right'>Administrador - <?php echo "Data Atual: ".date("d/m/Y", $_SERVER['REQUEST_TIME']);?></h3>
@@ -149,16 +152,8 @@
 			</div> 	
 			
 			<div class="card-body">
-				<div class='row justify-content-center'>
-					<div class='col-6'>
-					<a class='btn btn-outline-danger ' href="javascript:loadPhp('pedidos.php');" role='button'><strong>Situação dos Pedidos</strong></a>
-					
-					<a class='btn btn-outline-danger ' href="javascript:loadPhp('usuarios.php');" role='button'><strong>Usuários</strong></a>
-					
-					<a class='btn btn-outline-danger ' href="javascript:loadPhp('usuarios_cliente.php');" role='button'><strong>Convidados</strong></a>
-				
-					</div>
-				</div>	
+				<h4><cite>Visão Geral por Pedidos:</cite></h4>
+					<div class="m-4" id="calendar"></div>
 			</div>
 		</div>
     </div>			
@@ -180,7 +175,25 @@
 		
 		</div>
 	</footer>
-		<!-- jQuery (necessary for Boot strap's JavaScript plugins) -->
-		
+		<!-- fullCallendar ----------------------------------------------------->
+		<script>
+		$(document).ready(function() {
+			
+			$('#calendar').fullCalendar({
+				
+			
+				aspectRatio: 1.8,
+			  defaultDate: '<?php echo date("Y-m-d", $_SERVER['REQUEST_TIME']);?>',
+			  editable: false,
+			  eventLimit: true,
+			  events: <?php echo getEvents($conn);?>,
+			  weekNumbers: true,
+			  weekNumberTitle: 'W',
+			  weekNumberCalculation: 'ISO'
+			});
+
+			});
+		</script>
  </body> 
+ 
 </html> 
