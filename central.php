@@ -97,6 +97,11 @@ require("./controller/centralController.php");
 				  <i class="nav-icon cui-home"></i>Central
 				</a>
 			  </li>
+			  <li class="nav-item ">
+				<a class="nav-link text-light" href="javascript:loadPhp('clientes.php');">
+				  <i class="nav-icon cui-people"></i>Clientes
+				</a>
+			  </li>
 			  <li class="nav-item">
 				<a class="nav-link text-light" href="javascript:loadPhp('pedidos.php');">
 				  <i class="nav-icon cui-list"></i>Situação Pedidos
@@ -105,11 +110,6 @@ require("./controller/centralController.php");
 			  <li class="nav-item ">
 				<a class="nav-link text-light" href="javascript:loadPhp('usuarios.php');">
 				  <i class="nav-icon cui-people"></i>Usuários
-				</a>
-			  </li>
-			  <li class="nav-item ">
-				<a class="nav-link text-light" href="javascript:loadPhp('usuarios_cliente.php');">
-				  <i class="nav-icon cui-people"></i>Usuários Convidados
 				</a>
 			  </li>
 				<li class="nav-item ">
@@ -149,10 +149,21 @@ require("./controller/centralController.php");
 						<h3 class='btn btn-outline-success float-right'>Administrador - <?php echo "Data Atual: ".date("d/m/Y", $_SERVER['REQUEST_TIME']);?></h3>
 					</div>
 				</div>
-			</div> 	
-			
-			<div class="card-body">
-				<h4><cite>Visão Geral por Pedidos:</cite></h4>
+			</div> 
+			<div class="card-body">	
+			<div class='row'>
+				<div class='col-7'>
+					<h4><cite>Visão Geral por Pedidos:</cite></h4>
+				</div>
+				<div class='col-5'>
+				<label for="formPedido">Detalhar Pedido:</label>
+			<select class="form-control" id="formPedido" name="selectPedido">
+			<option selected value=0>Visão Geral</option>
+				<?php 	selectPedidos($conn);					?>
+						</select>
+				</div>
+			</div>	
+			</div>
 					<div class="m-4" id="calendar"></div>
 			</div>
 		</div>
@@ -178,15 +189,14 @@ require("./controller/centralController.php");
 		<!-- fullCallendar ----------------------------------------------------->
 		<script>
 		$(document).ready(function() {
-			
+
 			$('#calendar').fullCalendar({
-				
-			
+
 				aspectRatio: 1.8,
-			  defaultDate: '<?php echo date("Y-m-d", $_SERVER['REQUEST_TIME']);?>',
+			  defaultDate: '<?php echo date('Y-m-d', $_SERVER['REQUEST_TIME']);?>',
 			  editable: false,
 			  eventLimit: true,
-			  events: <?php echo getEvents($conn);?>,
+			  events:	<?php echo getEvents($conn);?>,
 			  weekNumbers: true,
 			  weekNumberTitle: 'W',
 			  weekNumberCalculation: 'ISO'

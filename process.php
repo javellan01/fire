@@ -12,6 +12,7 @@
 	header("Expires: 0");
 	
 	require("./DB/conn.php");
+    require("./controller/clientesController.php");
 	$e = null;
 	$stmt = null;
 	
@@ -143,25 +144,13 @@
 	if(isset($_GET['Cliente']) && ($_GET['Cliente']) != ''){
 		
 	$tx_nome = $cnpj = "";
+	$data = array();
+	$data[0] = strtoupper( $_GET['Cliente']);
 	
-	$tx_nome = strtoupper( $_GET['Cliente']);
-	
-	if(isset($_GET['CNPJ'])){   	 $cnpj = $_GET['CNPJ'];}
-	$tx_password = md5('123456');
-		try{
-	$stmt = $conn->prepare("INSERT INTO cliente (tx_nome, tx_cnpj, tx_password) VALUES (:tx_nome, :tx_cnpj, :tx_password)");
-	$stmt->bindParam(':tx_nome', $tx_nome);
-	$stmt->bindParam(':tx_cnpj', $cnpj);
-	$stmt->bindParam(':tx_password', $tx_password);
-	
-	$stmt->execute();
-		}
-	catch(PDOException $e)
-		{
-		echo "Error Cliente Proc.: " . $e->getMessage();
-		}
-		
-		if($e == null) echo "Cliente: ".strtoupper($tx_nome)." - ".$cnpj.", cadastrado!";
+	if(isset($_GET['CNPJ'])){   	 $data[1] = $_GET['CNPJ'];}
+	$data[2] = md5('123456');
+		 
+	newCliente($conn,$data);
 	}
 	
 		//'Usuarios.php' ---	Processa para Editar Usuario ADMIN Mode

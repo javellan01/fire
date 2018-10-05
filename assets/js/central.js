@@ -206,4 +206,65 @@
 		
 		xhttp.open("GET", "detfuncionario.php?fid="+str, true);
 		xhttp.send();
-	}			
+	}	
+	
+	function loadCData(str) {
+		var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		document.getElementById("main").innerHTML = this.responseText;
+		
+		$('#formData').mask('00/00/0000', {reverse: false});
+		$('#formQtdin').mask('###0', {reverse: false});
+		$('#formCNPJ').mask('00.000.000/0000-00', {reverse: false});
+
+		$('.modal').on('hide.bs.modal', function (){
+			loadCData(str);
+		});
+		
+		}
+			
+		};
+		
+		xhttp.open("GET", "detcliente.php?cid="+str, true);
+		xhttp.send();
+	}	
+
+	function loadUCData(str,str2) {
+		var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		document.getElementById("main").innerHTML = this.responseText;
+		
+		$('#formData').mask('00/00/0000', {reverse: false});
+		$('#formQtdin').mask('###0', {reverse: false});
+		$('#formCPF').mask('000.000.000-00', {reverse: false});
+
+		$('.modal').on('hide.bs.modal', function (){
+			loadUCData(str,str2);
+		});
+		
+		}
+			
+		};
+		
+		xhttp.open("GET", "detucliente.php?cuid="+str+"&cid="+str2, true);
+		xhttp.send();
+	}	
+
+	function formCProc() {
+		var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		document.getElementById("process").innerHTML = this.responseText;
+		}
+		};
+
+		var formData = $('form').serialize();
+		
+		toastr.info(formData);
+		toastr.options.progressBar = true;
+		
+		xhttp.open("GET", "ucprocess.php?"+formData, true);
+		xhttp.send();
+	}

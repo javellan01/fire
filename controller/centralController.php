@@ -58,5 +58,20 @@
 
         return $data;
     }
-		
+    
+    function selectPedidos($conn){
+        $stmt = $conn->query("SELECT c.tx_nome, p.tx_codigo, p.tx_local, p.id_pedido FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente");
+        $obj = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        $data = '';
+        foreach($obj as $pedido){
+            $data .= '<option value='.$pedido->id_pedido.'>';
+            $data .= $pedido->tx_nome.' - '.$pedido->tx_codigo.' - '.$pedido->tx_local;        
+            $data .= '</option>';
+
+            
+        }
+        
+        echo $data;
+    }
 ?>

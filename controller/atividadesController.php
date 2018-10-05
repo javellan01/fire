@@ -17,6 +17,7 @@ function moeda($num){
     return number_format($num,2,',','.');
 }
 
+
 function getPedidoData($conn, $pid){
     $stmt = $conn->query("SELECT p.*, (( p.nb_valor / 100) * p.nb_retencao) AS retencao, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
 

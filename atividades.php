@@ -8,13 +8,14 @@
 	</nav>
 	<div class="container-fluid">
 		<div class="card">
-		<div class='card-header'><div class="row mt-4"><div class="col-9">
+		<div class='card-header'><div class="row mt-1"><div class="col-9">
 			<h3>Detalhes do Pedido: 
 					
 					
 <?php
 require("./DB/conn.php");
 require("./controller/atividadesController.php");
+
 $pid = $_REQUEST["pid"];
 $balance = array();
 $measure = 0.00;
@@ -478,9 +479,12 @@ foreach($atividades AS $atividade)  {
 		$aid = $row5->id_atividade;
 		if($balance[$aid] == 0)	continue;	 
 		
-		echo"<div class='form-group form-group-row mb-1'>
+		echo"<div class='input-group mb-1'>
 				<label class='col-12' for='formMAtiv'><small>".$row5->tx_descricao."<cite> (".$row5->tx_nome.") </cite></small></label>
-				<input type='text' class='form-control col-12' id='formMAtiv' value='".$balance[$aid]."' name='nbVal[$aid]'>
+				<div class='input-group-prepend'>
+					<span class='input-group-text'>R$</span>
+				</div>
+				<input type='text' class='form-control col-12' id='formMAtiv' value='".number_format($balance[$aid],2,'.','')."' name='nbVal[$aid]'>
 				<input type='text' class='form-control' id='formMAtiv' value='".$aid."' name='idAtiv[$aid]' hidden='true'>	
 			</div>";
 			

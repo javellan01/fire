@@ -82,41 +82,7 @@ $stmt0 = null;
 ?>
 </div>
 
-<!-- Modal Novo Cliente  -->
-<div class="modal" style="text-align: left" id="modalCliente" tabindex="-1" role="dialog" aria-labelledby="modalCliente" aria-hidden="true">
-						  <div class="modal-dialog" role="document">
-							<div class="modal-content">
-							  <div class="modal-header">
-								<h4 class="modal-title" id="modalCliente">Novo Cliente</h4>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-								  <span aria-hidden="true">&times;</span>
-								</button>
-							  </div>
-							  <div class="modal-body"><h4>
-								<form>
-    <div class="form-row">			
-	  <div class="form-group col-md-12">
-		<label for="formCliente">Razão Social: </label>
-		<input style="text-transform: uppercase;" type="text" required class="form-control" id="formCliente" placeholder="Razação Social" name="Cliente">
-	  </div>
-	</div>
-	<div class="form-row">		
-	  <div class="form-group col-md-12">
-		<label for="formCNPJ">CNPJ: <h6><p class="text-muted"><cite> Somente Números</cite></p></h6></label>
-		<input type="text" required  minlength="18" class="form-control" id="formCNPJ" name="CNPJ" placeholder="00.000.000/0000-0">
-	  </div>
-	</div> 
-	
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
-			</h4></form><div id="process"></div>
-			  </div>
-			    <div class="modal-footer">
-				
-				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-			  </div>
-			</div>
-		  </div>
+
 		  
 <!-- Modal Novo Pedido  -->
 <div class="modal" style="text-align: left" id="modalPedido" tabindex="-1" role="dialog" aria-labelledby="modalPedido" aria-hidden="true">
