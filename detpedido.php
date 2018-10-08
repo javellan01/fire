@@ -51,20 +51,18 @@
 		<div class="form-group col-4">
 			<label for="formCodigo">Código:</label>
 			<input style="text-transform: uppercase;" type="text" required  minlength="4" class="form-control" id="formCodigo" value="<?php echo $pedido->tx_codigo;?>" name="Codigo">
-			<input type="text" class="form-control" value="1" name="processMode" hidden>
-			<input type="text" class="form-control" value="<?php echo $pid;?>" name="pid" hidden>
 		</div>
 		<div class="form-group col-3">
-			<label for="formData">Início: </label>
-			<input type="text" require class="form-control" id="formData" name="idata" value="<?php echo data_usql($pedido->dt_idata);?>" minlength="18" >
+			<label for="formiData">Início: </label>
+			<input type="text" require class="form-control" id="formiData" name="idata" value="<?php echo data_usql($pedido->dt_idata);?>" minlength="18" >
 		</div>	
         <div class="form-group col-3">
-			<label for="formData">Término: </label>
-			<input type="text" require class="form-control" id="formData" name="tdata" value="<?php echo  data_usql($pedido->dt_tdata);?>" minlength="18" >
+			<label for="formtData">Término: </label>
+			<input type="text" require class="form-control" id="formtData" name="tdata" value="<?php echo  data_usql($pedido->dt_tdata);?>" minlength="18" >
 		</div>	
         <div class="form-group col-2">
         <label for="formStatus">Status:</label>
-			<select class="form-control" id="formStatus" name="status">
+			<select class="form-control" id="formStatus" name="Status">
             <?php 
                 if($pedido->cs_estado == 0){
                     echo "<option selected value='0' class='text-success'>Ativo</option>
@@ -81,21 +79,21 @@
      <div class='row'>
         <div class="form-group col-4">
 			<label for="formLocal">Local: </label>
-			<input type="text" require class="form-control" id="formLocal" name="local" value="<?php echo $pedido->tx_local;?>">
+			<input type="text" require class="form-control" id="formLocal" name="Local" value="<?php echo $pedido->tx_local;?>">
 		</div>	
         <div class="form-group col-3">
 			<label for="formValor">Valor Total: </label>
-			<input type="text" require class="form-control" id="formValor" name="valor" value="<?php echo $pedido->nb_valor;?>">
+			<input type="text" require class="form-control" id="formValor" name="Valor" value="<?php echo $pedido->nb_valor;?>">
 		</div>	
         <div class="form-group col-2">
 			<label for="formRetencao">Retenção: </label>
-			<input type="text" require class="form-control" id="formRetencao" name="retencao" value="<?php echo $pedido->nb_retencao;?>">
+			<input type="text" require class="form-control" id="formRetencao" name="Retencao" value="<?php echo $pedido->nb_retencao;?>">
 		</div>	
      </div>
      <div class='row'>
      <div class="form-group col-6">
         <label for="formCUser">Responsável no Cliente:</label>
-			<select class="form-control" id="formCUser" name="cuser">
+			<select class="form-control" id="formCUser" name="Cuser">
             <?php 
             foreach($cusers as $cuser){
                 if($cuser->id_usuario == $pedido->id_cliente_usr) echo "<option selected value=".$cuser->id_usuario.">".$cuser->tx_nome."</option>";
@@ -106,7 +104,7 @@
 		</div>	
         <div class="form-group col-6">
         <label for="formUser">Responsável:</label>
-			<select class="form-control" id="formUser" name="user">
+			<select class="form-control" id="formUser" name="User">
             <?php 
             foreach($users as $user){
                 if($user->id_usuario == $pedido->id_usu_resp) echo "<option selected value=".$user->id_usuario.">".$user->tx_name."</option>";
@@ -130,7 +128,7 @@
 			<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalRPedido'>Remover Pedido</a>		
 		</div>
 		<div class='col-2'>
-				<a class='btn btn-primary float-right' href="javascript:formPProc();" role='button'>Atualizar Cadastro</a>		
+		<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalUPedido'>Atualizar Cadastro</a>		
 		</div>
 	</div>
     </form>
@@ -257,6 +255,38 @@ foreach($categorias as $categoria){
 	<div class='row'>
 		<div class='col-6'>
 	<button type="button" class="btn btn-danger float-right" value="1" id="removeButton">OK</button>
+		</div>
+		<div class='col-6'>
+	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>
+		</div>
+			</div>
+			  </div>
+			    <div class="modal-footer">
+					<div id="process"></div>
+				</div>
+				
+			  </div>
+			</div>
+		  </div>
+
+		  <!-- Modal Autalizar Pedido ------------------------->
+<div class="modal" style="text-align: left" id="modalUPedido" tabindex="-1" role="dialog" aria-labelledby="modalUPedido" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title" id="modalUPedido">Atualizar Pedido <cite><?php echo$pedido->tx_codigo;?></cite></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body">
+	<h4>Deseja atualizar os dados do pedido no sistema?</h4>
+	<form>
+		<input type="text" class="form-control" value="<?php echo$pedido->id_pedido;?>" id="Pid" hidden>
+	</form>
+	<div class='row'>
+		<div class='col-6'>
+	<button type="button" class="btn btn-danger float-right" value="1" id="updateButton">OK</button>
 		</div>
 		<div class='col-6'>
 	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>

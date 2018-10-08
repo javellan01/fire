@@ -85,7 +85,33 @@ function removePedido($conn,$pid){
     $stmt = $conn->prepare("UPDATE pedido SET id_cliente = 0 WHERE id_pedido = :pid");
     $stmt->bindParam(':pid', $pid);
     $stmt->execute();
+}
 
-    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Pedido Removido com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-        <span aria-hidden='true'>&times;</span></button></div>";
+function updatePedido($conn,$data){
+    $e = null;
+    try{
+		$stmt = $conn->prepare("UPDATE pedido SET tx_codigo = :tx_codigo, tx_local = :tx_local, tx_descricao = :tx_descricao, nb_valor = :nb_valor, nb_retencao = :nb_retencao, cs_estado = :cs_estado, dt_idata = :dt_idata, dt_tdata = :dt_tdata, id_usu_resp = :id_usu_resp, id_cliente_usr = :id_cliente_usr WHERE id_pedido = :id_pedido");
+		$stmt->bindParam(':tx_codigo', $data[0]);
+		$stmt->bindParam(':tx_local', $data[1]);
+        $stmt->bindParam(':tx_descricao', $data[2]);
+        $stmt->bindParam(':nb_valor', $data[3]);
+        $stmt->bindParam(':nb_retencao', $data[4]);
+        $stmt->bindParam(':cs_estado', $data[5]);
+        $stmt->bindParam(':dt_idata', $data[6]);
+        $stmt->bindParam(':dt_tdata', $data[7]);
+        $stmt->bindParam(':id_usu_resp', $data[8]);
+        $stmt->bindParam(':id_cliente_usr', $data[9]);
+        $stmt->bindParam(':id_pedido', $data[10]);
+
+		$stmt->execute();
+				}
+			catch(PDOException $e)
+				{
+				echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao editar pedido! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
+                <span aria-hidden='true'>&times;</span></button></div>";
+				}
+				
+			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Pedido Editado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
+            <span aria-hidden='true'>&times;</span></button></div>";
+
 }

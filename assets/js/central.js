@@ -248,6 +248,53 @@
 				}
 			});
 		});
+		$("#updateButton").click(function(e) {
+			e.preventDefault();
+			
+				
+			console.log($(this).val());
+			console.log($('#formCodigo').val());
+			console.log($('#Pid').val());
+			console.log($('#formiData').val());
+			console.log($('#formtData').val());
+			console.log($('#formStatus').val());
+			console.log($('#formLocal').val());
+			console.log($('#formValor').val());
+			console.log($('#formRetencao').val());
+			console.log($('#formCUser').val());
+			console.log($('#formUser').val());	
+			console.log($('#formControlTextarea').val());
+			
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					removePedido: '0',
+					updatePedido: $(this).val(),
+					Codigo: $('#formCodigo').val(),
+					pid: $('#Pid').val(),
+					idata: $('#formiData').val(),
+					tdata: $('#formtData').val(),
+					Status: $('#formStatus').val(),
+					Local: $('#formLocal').val(),
+					Valor: $('#formValor').val(),
+					Retencao: $('#formRetencao').val(),
+					Cuser: $('#formCUser').val(),
+					User: $('#formUser').val(),
+					pdDescricao: $('#formControlTextarea').val()
+				},
+				
+				success: function(data) {
+					console.log(data);
+					$('#modalUPedido').modal('hide');
+					loadCData( $("#Cid").val() );
+					
+				},
+				error: function(result) {
+					alert('error');
+				}
+			});
+		});
 
 		});
 		

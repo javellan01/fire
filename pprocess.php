@@ -31,8 +31,19 @@
 	}
 
     if(($_GET['updatePedido']) == 1){
-		if(isset($_GET['Pid'])){
-            $data = $_GET['Pid'];
+		if(isset($_GET['pid']) && ($_GET['Codigo']) != ''){
+			$data = array();
+			$data[0] = $_GET['Codigo'];
+			$data[1] = $_GET['Local'];
+			$data[2] = $_GET['pdDescricao'];
+			$data[3] = $_GET['Valor'];
+			$data[4] = $_GET['Retencao'];
+			$data[5] = $_GET['Status'];
+			$data[6] = data_sql($_GET['idata']);
+			$data[7] = data_sql($_GET['tdata']);
+			$data[8] = $_GET['User'];
+			$data[9] = $_GET['Cuser'];
+            $data[10] = $_GET['pid'];
             
             updatePedido($conn,$data);
            
