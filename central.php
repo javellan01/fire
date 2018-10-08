@@ -97,14 +97,14 @@ require("./controller/centralController.php");
 				  <i class="nav-icon cui-home"></i>Central
 				</a>
 			  </li>
-			  <li class="nav-item ">
-				<a class="nav-link text-light" href="javascript:loadPhp('clientes.php');">
-				  <i class="nav-icon cui-people"></i>Clientes
-				</a>
-			  </li>
-			  <li class="nav-item">
+				<li class="nav-item">
 				<a class="nav-link text-light" href="javascript:loadPhp('pedidos.php');">
 				  <i class="nav-icon cui-list"></i>Situação Pedidos
+				</a>
+			  </li>
+			  <li class="nav-item ">
+				<a class="nav-link text-light" href="javascript:loadPhp('clientes.php');">
+				  <i class="nav-icon cui-briefcase"></i>Clientes
 				</a>
 			  </li>
 			  <li class="nav-item ">

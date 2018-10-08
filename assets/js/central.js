@@ -1,20 +1,5 @@
 // Central de funções JScript Javell_2018
 
-	function require(file,callback){
-		var head=document.getElementsByTagName("head")[0];
-		var script=document.createElement('script');
-		script.src=file;
-		script.type='text/javascript';
-		//real browsers
-		script.onload=callback;
-		//Internet explorer
-		script.onreadystatechange = function() {
-			if (_this.readyState == 'complete') {
-				callback();
-			}
-		}
-		head.appendChild(script);
-	}
 	function loadPhp(str) {
 		var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
@@ -210,7 +195,8 @@
 	
 	function loadCData(str) {
 		var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
+
+		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 		document.getElementById("main").innerHTML = this.responseText;
 		
@@ -229,6 +215,66 @@
 		xhttp.open("GET", "detcliente.php?cid="+str, true);
 		xhttp.send();
 	}	
+
+	function loadPData(str,str2) {
+		var xhttp = new XMLHttpRequest();
+
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		document.getElementById("main").innerHTML = this.responseText;
+		
+		$('#formData').mask('00/00/0000', {reverse: false});
+		$('#formQtdin').mask('###0', {reverse: false});
+		$('#formCNPJ').mask('00.000.000/0000-00', {reverse: false});
+				
+		$('.modal').on('hide.bs.modal', function (){	loadPData(str,str2);	});
+		$(document).ready(function(){
+		$("#removeButton").click(function(e) {
+			e.preventDefault();
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					Pid: $("#Pid").val(), // < note use of 'this' here
+					removePedido: $(this).val()
+				},
+				success: function(result) {
+					$('#modalRPedido').modal('hide');
+					loadCData( $("#Cid").val() );
+					
+				},
+				error: function(result) {
+					alert('error');
+				}
+			});
+		});
+
+		});
+		
+		}
+
+		};
+		
+		xhttp.open("GET", "detpedido.php?pid="+str+"&cid="+str2, true);
+		xhttp.send();
+	}	
+
+	function formPProc() {
+		var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		document.getElementById("process").innerHTML = this.responseText;
+		}
+		};
+
+		var formData = $('form').serialize();
+		
+		toastr.info(formData);
+		toastr.options.progressBar = true;
+		
+		xhttp.open("GET", "pprocess.php?"+formData, true);
+		xhttp.send();
+	}
 
 	function loadUCData(str,str2) {
 		var xhttp = new XMLHttpRequest();

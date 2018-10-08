@@ -63,10 +63,10 @@ foreach($data as $cliente){
 	echo"<tr>
 			<th><a class='btn btn-ghost-primary' href='javascript:loadCData(".$cid.");' role='button'>".$cliente->tx_nome."</a></th>
 			<th>".$cliente->tx_cnpj."</th>
-			<th>".$pnb."</th>
-			<th>".$pnbt."</th>";
+			<th class='text-center'>".$pnb."</th>
+			<th class='text-center'>".$pnbt."</th>";
 			if($cunb == 0) echo "<th>Favor Cadastrar Usuário</th>";
-			else echo "<th>".$cunb."</th>";
+			else echo "<th class='text-center'>".$cunb."</th>";
       
 	echo" </tr>";	
 	

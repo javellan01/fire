@@ -87,7 +87,7 @@ foreach($cusers AS $user){
 			<th><a class='btn btn-ghost-primary' href='javascript:loadUCData(".$cuid.",".$cid.");' role='button'>".$user->tx_nome."</a></th>
 			<th>".$user->tx_contato."</th>
 			<th>".$user->tx_email."</th>
-			<th>".getUsrPedidosAtivos($conn,$cuid)."</th>
+			<th class='text-center'>".getUsrPedidosAtivos($conn,$cuid)."</th>
 			<th>".time_usql($user->tz_last)."</th>
 			</tr>";	
 	
@@ -122,10 +122,10 @@ foreach($pedidos as $pedido){
 	
 	// Aloca os users e cria a list
 	echo"<tr>
-			<th><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'>".$pedido->tx_codigo."</a></th>
+			<th><a class='btn btn-ghost-primary' href='javascript:loadPData(".$pedido->id_pedido.",".$cid.");' role='button'>".$pedido->tx_codigo."</a></th>
 			<th>".$pedido->tx_local."</th>";
-			if($pedido->cs_estado == 0) echo"<th class='text-success'>Ativo</th>";
-			else echo"<th class='text-danger'>Encerrado</th>";
+			if($pedido->cs_estado == 0) echo"<th class='text-success text-center'>Ativo</th>";
+			else echo"<th class='text-danger text-center'>Encerrado</th>";
 			echo "<th>".data_usql($pedido->dt_idata)."</th>
 			<th>".data_usql($pedido->dt_tdata)."</th>";
 			if($pedido->total_atividade == null) echo"<th> R$ 0,00</th>";

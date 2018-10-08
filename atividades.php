@@ -16,6 +16,10 @@
 require("./DB/conn.php");
 require("./controller/atividadesController.php");
 
+session_start();
+
+$_SESSION['MAtiv'] = array();
+
 $pid = $_REQUEST["pid"];
 $balance = array();
 $measure = 0.00;
@@ -27,7 +31,7 @@ $pedido = getPedidoData($conn, $pid);
 echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 							</div>
 							<div class='col-3'>
-								<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalCliente'>Gerenciar Categorias</button>
+								
 							</div>
 						</div>
 					</div> 	
@@ -370,8 +374,7 @@ foreach($atividades AS $atividade)  {
 			</h4></form><div id="process"></div>
 							  </div>
 							  <div class="modal-footer">
-								<h6 id="success"><small></small></h6>
-								<div class="alert alert-secondary mr-auto" role="alert">
+								<div class="alert alert-secondary mx-auto" role="alert">
 								<h6><?php echo"Pedido: ".$pedido->tx_codigo." - ".$pedido->tx_nome;?> </h6>
 								</div>
 								
@@ -419,8 +422,7 @@ foreach($atividades AS $atividade)  {
 			</h4></form><div id="process"></div>
 							  </div>
 							  <div class="modal-footer">
-								<h6 id="success"><small></small></h6>
-								<div class="alert alert-secondary mr-auto" role="alert">
+								<div class="alert alert-secondary mx-auto" role="alert">
 								<h6><?php echo"Obra: ".$pedido->tx_nome.", ".$pedido->tx_local.".";?> </h6>
 								</div>
 								

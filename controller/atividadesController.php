@@ -1,8 +1,4 @@
 <?php
-session_start();
-
-$_SESSION['MAtiv'] = array();
-
 function data_usql($data) {
     $ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4);
     return $ndata;
@@ -16,7 +12,6 @@ function time_usql($data) {
 function moeda($num){
     return number_format($num,2,',','.');
 }
-
 
 function getPedidoData($conn, $pid){
     $stmt = $conn->query("SELECT p.*, (( p.nb_valor / 100) * p.nb_retencao) AS retencao, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
@@ -70,4 +65,27 @@ function getAtividades($conn,$pid,$cid){
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     return $data;
+}
+
+function getUsersCliente($conn,$cid){
+    $stmt = $conn->query("SELECT tx_nome,id_usuario FROM cliente_usr WHERE id_cliente = $cid");
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+
+function getUsers($conn){
+    $stmt = $conn->query("SELECT tx_name,id_usuario FROM usuario");
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+
+function removePedido($conn,$pid){
+    $stmt = $conn->prepare("UPDATE pedido SET id_cliente = 0 WHERE id_pedido = :pid");
+    $stmt->bindParam(':pid', $pid);
+    $stmt->execute();
+
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Pedido Removido com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
+        <span aria-hidden='true'>&times;</span></button></div>";
 }
