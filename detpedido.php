@@ -121,14 +121,14 @@
 		</div>
 	</div>
 	<div class='row'>
-		<div class="col-8">
+		<div class="col-6">
 			
 		</div>
-		<div class='col-2'>
-			<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalRPedido'>Remover Pedido</a>		
+		<div class='col-3'>
+		<button type='button' class='btn btn-danger float-left' data-toggle='modal' data-target='#modalRPedido'>Remover Pedido</a>	
 		</div>
-		<div class='col-2'>
-		<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalUPedido'>Atualizar Cadastro</a>		
+		<div class='col-3'>
+		<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalUPedido'>Atualizar Dados do Pedido</a>		
 		</div>
 	</div>
     </form>
@@ -138,7 +138,7 @@
 <!------ LISTAGEM GERAL DAS MEDIÇÕES --------------------------------------->
   <div class="row m-auto">
 	<h4><cite>Medições Cadastradas: </h4>
-	<table class='table table-responsive-xl table-striped'>
+	<table class='table table-striped'>
 		<thead>
 			<tr>
 				<th>Medição</th>
@@ -179,7 +179,7 @@ foreach($medicoes AS $medicao){
 <!------ LISTAGEM DAS ATIVIDADES --------------------------------------->			        
 <div class='row m-auto'>  
 	<h4><cite>Pedidos Cadastrados:</h4>
-	<table class='table table-responsive-xl table-striped'>
+	<table class='table table-striped'>
 		<thead>
 			<tr>
 				<th>Atividade</th>
@@ -254,9 +254,10 @@ foreach($categorias as $categoria){
 	</form>
 	<div class='row'>
 		<div class='col-6'>
-	<button type="button" class="btn btn-danger float-right" value="1" id="removeButton">OK</button>
+	
 		</div>
 		<div class='col-6'>
+	<button type="button" class="btn btn-danger float-left" value="1" id="removeButton">Remover</button>
 	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>
 		</div>
 			</div>

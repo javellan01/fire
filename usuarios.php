@@ -16,7 +16,7 @@
 					</div>	
 					<div class="card-body">
 	<h4><cite> Usuários FireSystems: </h4>					
-	<table class='table table-responsive-xl table-striped'>
+	<table class='table table-striped'>
 		<thead>
 			<tr>
 				<th>Nome</th>

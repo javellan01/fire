@@ -37,7 +37,7 @@
                         <h5><cite> <?php echo $data->tx_nome;?></cite> - <?php echo $data->tx_cnpj;?></h5>
                         </div>
 						<div class='col-4'>    
-						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalNCUser'>+ Novo Usuário Convidado</button>
+						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalNCuser'>+ Novo Usuário Convidado</button>
 						</div>
 						</div>
 					</div>	
@@ -47,25 +47,24 @@
   <div class='row'>
 		<div class="form-group col-5">
 			<label for="formCNome">Razão Social:</label>
-			<input style="text-transform: uppercase;" type="text" required  minlength="4" class="form-control" id="formCNome" value="<?php echo $data->tx_nome;?>" name="CNome">
-			<input type="text" class="form-control" value="1" name="processMode" hidden>
-			<input type="text" class="form-control" value="<?php echo $cid;?>" name="CId" hidden>
+			<input style="text-transform: uppercase;" type="text" required  minlength="4" class="form-control" id="formCNome" value="<?php echo $data->tx_nome;?>">
+			<input type="text" class="form-control" value="<?php echo $cid;?>" id="CId" hidden>
 		</div>
 		<div class="form-group col-4">
-			<label for="formCNPJ">CNPJ: </label>
-			<input type="text" require class="form-control" id="formCNPJ" name="CNPJ" value="<?php echo $data->tx_cnpj;?>" minlength="18" >
+			<label for="formCNPJ">CNPJ:</label>
+			<input type="text" require class="form-control" id="formCNPJ" value="<?php echo $data->tx_cnpj;?>" minlength="18" >
 		</div>	
     </form>
-			<div class='col-2'>
-			<div class='mt-4'>
-				<a class='btn btn-primary float-right' href="javascript:formFProc();" role='button'>Atualizar Cadastro</a>
+			<div class='col-2 m-auto'>
+			<div class='mt-3'>
+			<button type='button' class='btn btn-primary float-right' value='1' id='updateButton'>Atualizar Dados do Cliente</button>
 			</div>		
 			</div>
 	</div>
 <!------ LISTAGEM DE USUARIOS CONVIDADOS --------------------------------------->
   <div class="row m-auto">
 	<h4><cite>Usuários Convidados: </h4>
-	<table class='table table-responsive-xl table-striped'>
+	<table class='table table-striped'>
 		<thead>
 			<tr>
 				<th>Nome</th>
@@ -99,7 +98,7 @@ foreach($cusers AS $user){
 <!------ LISTAGEM DE PEDIDOS CADASTRADOS --------------------------------------->			        
 <div class='row m-auto'>  
 	<h4><cite>Pedidos Cadastrados:</h4>
-	<table class='table table-responsive-xl table-striped'>
+	<table class='table table-striped'>
 		<thead>
 			<tr>
 				<th>Código do Pedido</th>
@@ -137,7 +136,7 @@ foreach($pedidos as $pedido){
 	
 	}	
 	echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
-	<tr><th></th><th></th><th></th><th></th><th>Totais:</th><th>R$ ".moeda($sumatv)."</th><th>R$ ".moeda($summed)."</th><th>R$ ".moeda($sumtotal)."</th></tr>";
+	<tr><th></th><th></th><th></th><th></th><th>Totais:</th><th>R$ ".moeda($sumatv)."</th><th>R$ ".moeda($summed)."</th><th class='text-primary'>R$ ".moeda($sumtotal)."</th></tr>";
 
 
 ?>
@@ -151,11 +150,11 @@ foreach($pedidos as $pedido){
         </div>
     </div>
 <!-- Modal Novo Cliente Usuario  -->
-<div class="modal" style="text-align: left" id="modalNCUser" tabindex="-1" role="dialog" aria-labelledby="modalNCUser" aria-hidden="true">
+<div class="modal" style="text-align: left" id="modalNCuser" tabindex="-1" role="dialog" aria-labelledby="modalNCuser" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
 							  <div class="modal-header">
-								<h4 class="modal-title" id="modalNCUser">Novo Usuário Convidao</h4>
+								<h4 class="modal-title" id="modalNCuser">Novo Usuário Convidao</h4>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								  <span aria-hidden="true">&times;</span>
 								</button>
@@ -166,8 +165,7 @@ foreach($pedidos as $pedido){
 	  <div class="form-group col-12">
 		<label for="formNome">Nome: </label>
 		<input style="text-transform: uppercase;" type="text" required  minlength="4" class="form-control" id="formNome" placeholder="" name="Nome">
-		<input type="text" class="form-control" value="0" name="uprocessMode" hidden>
-		<input type="text" class="form-control" value="<?php echo $cid;?>" name="cid" hidden>
+		<input type="text" class="form-control" value="<?php echo $cid;?>" id="Cid" hidden>
 	  </div>
 		<div class="form-group col-6">
 		<label for="formEmail">Email: </label>
@@ -177,11 +175,11 @@ foreach($pedidos as $pedido){
 	<div class="form-row">		
 	  <div class="form-group col-7">
 		<label for="formTel">Contato: </label>
-		<input type="text" class="form-control" id="formFTel" name="Tel" placeholder="(00)00000-0000" max-length="16" >
+		<input type="text" class="form-control" id="formTel" name="Tel" placeholder="(00)00000-0000" max-length="16" >
 	  </div>
 	</div>
 
-	<a class='btn btn-primary float-right' href="javascript:formCProc();" role='button'>Cadastrar</a>
+	<button type="button" class="btn btn-primary float-right" value="1" id="newButton">Cadastrar</button>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">

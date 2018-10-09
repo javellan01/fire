@@ -112,75 +112,16 @@
 <?php 
 // session_start inicia a sessão
 session_start();
-$login = $senha = $user = $catu = $uid = '';
 // as variáveis login e senha recebem os dados digitados na página anterior
 
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 header("Pragma: no-cache"); // HTTP 1.0.
 header("Expires: 0"); //
 
-if(isset($_POST['usuario']) && isset($_POST['senha'])){
-
-    $login = $_POST['usuario'];
-    $senha = md5($_POST['senha']);
-// as próximas 1 linhas são responsáveis em se conectar com o bando de dados.
 require("./DB/conn.php");
+require("./controller/agentController.php");
 
-// A variavel $result pega as varias $login e $senha, faz uma pesquisa na tabela de usuarios
-$result = $conn->query("SELECT * FROM usuario WHERE tx_cpf = '".$login."' AND tx_password = '".$senha."'");
-/* Logo abaixo temos um bloco com if e else, verificando se a variável $result foi bem sucedida, ou seja se ela estiver encontrado algum registro idêntico o seu valor será igual a 1, se não, se não tiver registros seu valor será 0. Dependendo do resultado ele redirecionará para a pagina site.php ou retornara  para a pagina do formulário inicial para que se possa tentar novamente realizar o login */
-
-if($result)
-{
-  while($row = $result->fetch(PDO::FETCH_OBJ)) {
-     $var = Array(
-        'usuario' =>   $row->tx_name,
-        'email' =>     $row->tx_email,
-        'categoria' => $row->nb_category_user,
-		'contato' => $row->tx_telefone
-	  
-    );
-	$uid = $row->id_usuario;
-	$catu = $row->nb_category_user;
-	$user = $row->tx_name;
-    header('Content-Type: application/json');
-    echo json_encode($var);
-	echo 'Json encode OK!';
-    /*
-    echo "<script>var id_user=".$row['id_usuario']."</script>";
-    echo "<script>var category_user=".$row['nb_category_user']."</script>";
-    echo "<script>var name_user=".$row['tx_name']."</script>";
-    echo "<script>var user_password=".$row['tx_password']."</script>";
-    echo "<script>var user_email=".$row['tx_email']."</script>";
-    */
-  };
-	$_SESSION['login'] = $login;
-	$_SESSION['usuario'] = $user;
-	$_SESSION['catuser'] = $catu;
-	$_SESSION['userid'] = $uid;
-	
-	if($_SESSION['catuser'] == 0) header('Location: central.php');
-	if($_SESSION['catuser'] == 1) header('Location: central_ger.php');
-	if($_SESSION['catuser'] == 2) header('Location: central_usr.php');
-	if($_SESSION['catuser'] == 3) header('Location: central_gst.php');
-  
-	}
-}	
-else{
-	
-unset ($_SESSION['login']);
-unset ($_SESSION['usuario']);
-unset ($_SESSION['catuser']);
-unset ($_SESSION['userid']);
-session_destroy();
-echo "<p>Login Inválido!</p>";
-
-
-header('Location: login.php');
-sleep(1);
-exit();
-
-}
+Auth::validateUser($conn);
  
 ?>
 		</div>

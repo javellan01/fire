@@ -20,7 +20,7 @@
 		return $ndata;
     }
 
-	//CLIENTE_USER.php --- Processo para NOVO Usuario Convidado
+	//detpedido.php REMOVER PEDIDO apenas fica inacessivel para o sistema, mas não é removido do banco
 	if(($_GET['removePedido']) == 1){
 		if(isset($_GET['Pid'])){
             $data = $_GET['Pid'];

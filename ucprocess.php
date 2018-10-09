@@ -31,13 +31,13 @@
     }
 
 	//CLIENTE_USER.php --- Processo para NOVO Usuario Convidado
-	if(($_GET['uprocessMode']) == 0){
+	if(($_GET['newCuser']) == 1){
 		if(isset($_GET['Nome']) && ($_GET['Nome']) != '' && ($_GET['Email']) != ''){
 			$data = array();
 			$data[0] = strtoupper($_GET['Nome']);
 			$data[1] = ($_GET['Email']);
 			$data[2] = ($_GET['Tel']);
-			$data[3] = ($_GET['cid']);
+			$data[3] = ($_GET['Cid']);
 			$data[4] = md5('123456');
 
 			newClienteUser($conn,$data);
@@ -47,7 +47,7 @@
 
 	
 	//CLIENTE_USER.php --- Processo para Editar Usuario Convidado
-	if(($_GET['processMode']) == 1){
+	if(($_GET['updateCuser']) == 1){
 		if(isset($_GET['Nome']) && ($_GET['Nome']) != '' && ($_GET['Email']) != ''){
 			$data = array();
 			$data[0] = strtoupper($_GET['Nome']);
@@ -58,4 +58,10 @@
 			updateClienteUser($conn,$data);		
 		}
 	}
+
+	if(($_GET['removeCuser']) == 1){
+		
+		removeClienteUser($conn,($_GET['cuid']));
+	}
+
 ?>

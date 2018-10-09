@@ -63,11 +63,25 @@ function newCliente($conn,$data){
             }
         catch(PDOException $e)
             {
-            echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao criar novo clinte! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-            <span aria-hidden='true'>&times;</span></button></div>";
+            $e->getMessage();
             }    
-            if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Cliente ".$data[0]." Cadastrado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-        <span aria-hidden='true'>&times;</span></button></div>";
+           
+}  
+    
+function updateCliente($conn,$data){
+    try{
+        $stmt = $conn->prepare("UPDATE cliente SET tx_nome = :tx_nome, tx_cnpj = :tx_cnpj WHERE id_cliente = :id_cliente");
+        $stmt->bindParam(':tx_nome', $data[0]);
+        $stmt->bindParam(':tx_cnpj', $data[1]);
+        $stmt->bindParam(':id_cliente', $data[2]);
+        
+        $stmt->execute();
+            }
+        catch(PDOException $e)
+            {
+            $e->getMessage();
+            }  
 
-    }   
+
+}
 ?>

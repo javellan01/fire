@@ -207,7 +207,52 @@
 		$('.modal').on('hide.bs.modal', function (){
 			loadCData(str);
 		});
+		$(document).ready(function(){
+			$("#newButton").click(function(e) {
+				e.preventDefault();
+				$.ajax({
+					type: "GET",
+					url: "ucprocess.php",
+					data: { 
+						Cid: $('#Cid').val(), 
+						newCuser: $(this).val(),
+						Nome: $('#formNome').val(),
+						Email: $('#formEmail').val(),
+						Tel: $('#formTel').val(),
+						processMode: '0'
+					},
+					success: function(result) {
+						$('#modalNCuser').modal('hide');
+						
+					},
+					error: function(result) {
+						alert('error');
+					}
+				});
+			});
+			$("#updateButton").click(function(e) {
+				e.preventDefault();
+				$.ajax({
+					type: "GET",
+					url: "process.php",
+					data: { 
+						Cid: $('#CId').val(), 
+						updateCliente: $(this).val(),
+						CNome: $('#formCNome').val(),
+						CNPJ: $('#formCNPJ').val(),
+						
+					},
+					success: function(result) {
+						loadCData(str);						
+					},
+					error: function(result) {
+						alert('error');
+					}
+				});
+			});
 		
+		});
+
 		}
 			
 		};
@@ -251,20 +296,6 @@
 		$("#updateButton").click(function(e) {
 			e.preventDefault();
 			
-				
-			console.log($(this).val());
-			console.log($('#formCodigo').val());
-			console.log($('#Pid').val());
-			console.log($('#formiData').val());
-			console.log($('#formtData').val());
-			console.log($('#formStatus').val());
-			console.log($('#formLocal').val());
-			console.log($('#formValor').val());
-			console.log($('#formRetencao').val());
-			console.log($('#formCUser').val());
-			console.log($('#formUser').val());	
-			console.log($('#formControlTextarea').val());
-			
 			$.ajax({
 				type: "GET",
 				url: "pprocess.php",
@@ -285,7 +316,6 @@
 				},
 				
 				success: function(data) {
-					console.log(data);
 					$('#modalUPedido').modal('hide');
 					loadCData( $("#Cid").val() );
 					
@@ -337,6 +367,52 @@
 			loadUCData(str,str2);
 		});
 		
+		$(document).ready(function(){
+			$("#removeButton").click(function(e){
+				e.preventDefault();
+				$.ajax({
+					type: "GET",
+					url: "ucprocess.php",
+					data:{
+						cuid: $('#cuid').val(),
+						removeCuser: $(this).val(),
+						newCuser: '0',
+						updateCuser: '0'
+					},
+					success: function(result){
+						$('#modalRCuser').modal('hide');
+						loadCData($("#Cid").val());
+
+					},
+					error: function(result) {
+						alert('error');
+					}
+				});
+			});
+			$("#updateButton").click(function(e) {
+				e.preventDefault();
+				$.ajax({
+					type: "GET",
+					url: "ucprocess.php",
+					data: { 
+						cuid: $('#cuid').val(), 
+						updateCuser: $(this).val(),
+						Nome: $('#formNome').val(),
+						Email: $('#formEmail').val(),
+						Tel: $('#formTel').val(),
+						newCuser: '0',
+						removeCuser: '0'
+					},
+					success: function(result) {
+						loadUCData(str,str2);						
+					},
+					error: function(result) {
+						alert('error');
+					}
+				});
+			});
+		});
+
 		}
 			
 		};

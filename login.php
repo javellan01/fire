@@ -237,16 +237,16 @@
 			
 			<form class="acessoOnline" autocomplete="off" method="POST" action="agent.php">
 				<div>
-					<label class="error" id="usuario_erro" for="usuario">!</label>
+				
 					<input type="text" name="usuario" id="usuario" placeholder="Identificação de Usuário" autocomplete="nope" />
 					<input type="text" name="fakeusernameremembered" style="display:none" />
-					<label class="error" id="usuario_erro" for="usuario"/>!</label>
+					
 				</div>
 				<div>
-					<label class="error" id="senha_erro" for="senha">!</label>
+					
 					<input type="password" name="senha" id="senha" placeholder="Entrar Senha" autocomplete="new-password" />
 					<input type="text" name="fakepasswordremembered" style="display:none" />
-					<label class="error" id="senha_erro" for="senha">!</label>
+					
 					<br />
 <!--
 			<input type="text" id="teste" name="usuario" placeholder="eg. 000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" max-lenght="14" /> 
@@ -268,6 +268,13 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 		    $('#usuario').mask('000.000.000-00');
+		
+		$(".login-button").submit(function(event){
+
+			var usuario = $("input#usuario").val();
+			var senha = $("input#senha").val();
+			return false;
+			});
 		});	
 	</script>
 
