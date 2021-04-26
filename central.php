@@ -179,7 +179,7 @@ require("./controller/centralController.php");
 	<footer class="app-footer">
 		<div>
 		<a href="http://www.firesystems-am.com.br">FireSystems</a>
-		<span>© 2018 Produtos e Serviços Contra Incêndio </span>
+		<span>© 2018-2021 Produtos e Serviços Contra Incêndio </span>
 		</div>
 		<div class="ml-auto">
 		<span>Sistemas de Gerenciamento Online</span>

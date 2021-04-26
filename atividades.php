@@ -224,7 +224,14 @@ foreach($categorias as $categoria){
 foreach($atividades AS $atividade)  {
 		if($atividade->cs_finalizada	== 1) $encerradas += 1;	
 		if($atividade->valor_sum == null) $atividade->valor_sum = 0;
-	
+
+		if(is_null($atividade->medpercent)){
+			$atividade->medpercent = '0.0';
+		}
+		if(is_null($atividade->execpercent)){
+			$atividade->execpercent = '0.0';
+		}
+
 		$balpercent = $atividade->execpercent - $atividade->medpercent;
 		
 		if($balpercent < 0) $balpercent = 0;
@@ -305,7 +312,7 @@ foreach($atividades AS $atividade)  {
     <div class="form-row">			
 	  <div class="form-group col-md-8">
 		<label for="formAtividade">Atividade:</label>
-		<input style="text-transform: uppercase;" type="text" class="form-control" id="formAtividade" placeholder="Descrição Atividade" name="Atividade">
+		<input type="text" class="form-control" id="formAtividade" placeholder="Descrição Atividade" name="Atividade">
 	  </div>
 	  <div class="form-group col-md-4">
 		<label for="formTubo">Ø:<small class='text-muted'><cite>(Diâmetro)</cite></small></label>
@@ -364,7 +371,7 @@ foreach($atividades AS $atividade)  {
 			<input type="text" class="form-control" id="formiData" value="<?php echo date('d/m/Y');?>" name="iData">
 	  </div>
 		<div class="form-group col-6">
-			<label for="formiData">Data Fim:</label>
+			<label for="formfData">Data Fim:</label>
 			<input type="text" class="form-control" id="formfData" value="<?php echo date('d/m/Y');?>" name="fData">
 	  </div>
 		</div>

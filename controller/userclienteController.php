@@ -21,7 +21,7 @@ function getUserCliente($conn,$cuid){
 }
 
 function getCUPedidos($conn,$cuid){
-    $stmt = $conn->query("SELECT p.id_pedido, p.tx_codigo, p.tx_local, p.nb_valor, p.cs_estado, vp.medido_total FROM pedido AS p INNER JOIN v_sum_pedido_total AS vp ON p.id_pedido = vp.id_pedido WHERE id_cliente_usr = $cuid ORDER BY id_pedido ASC");
+    $stmt = $conn->query("SELECT p.id_pedido, p.tx_codigo, p.tx_local, p.nb_valor, p.cs_estado, vp.medido_total FROM pedido AS p INNER JOIN v_sum_pedido_total AS vp ON p.id_pedido = vp.id_pedido WHERE id_cliente_usr = $cuid AND id_cliente != 0 ORDER BY id_pedido ASC");
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     return $data;

@@ -273,6 +273,7 @@
 		$('#formCNPJ').mask('00.000.000/0000-00', {reverse: false});
 				
 		$('.modal').on('hide.bs.modal', function (){	loadPData(str,str2);	});
+
 		$(document).ready(function(){
 		$("#removeButton").click(function(e) {
 			e.preventDefault();
@@ -302,6 +303,7 @@
 				data: { 
 					removePedido: '0',
 					updatePedido: $(this).val(),
+					updateAtividade: '0',
 					Codigo: $('#formCodigo').val(),
 					pid: $('#Pid').val(),
 					idata: $('#formiData').val(),
@@ -324,6 +326,40 @@
 					alert('error');
 				}
 			});
+		});
+
+		$(".button-update").click(function(event) {
+			event.preventDefault();
+			var id_atividade = 	 $(this).attr("data-id_atividade");
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: $(this).val(),
+					Descricao: $('#formAtvtx_descricao'+id_atividade).val(),
+					Tipo: $('#formAtvtx_tipo'+id_atividade).val(),
+					Qtd: $('#formAtvnb_qtd'+id_atividade).val(),
+					Valor: $('#formAtvnb_valor'+id_atividade).val(),
+					Inicio: $('#formAtvidata'+id_atividade).val(),
+					Fim: $('#formAtvfdata'+id_atividade).val(),
+					Atividade: $(this).attr("data-id_atividade")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					//loadCData( $("#Cid").val() );
+					
+				},
+				error: function(result) {
+					alert('error');
+				}
+			});
+			
 		});
 
 		});

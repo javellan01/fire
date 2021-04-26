@@ -64,7 +64,11 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><div><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . " (Ativo)</strong></a></div>";
 			  if($row->cs_estado == 1) 
 					echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . " (Encerrado)</strong></a></div>";
-			  $percent = ($row->medido_total / $row->nb_valor) * 100;
+			  if($row->nb_valor != 0.00){
+					$percent = ($row->medido_total / $row->nb_valor) * 100;
+			  }
+			  else
+			  	$percent = 0.00;
 			  echo "<div class='ml-auto'>Progresso: (" . round($percent) ."%) - ";
 			  echo " R$" . moeda($row->medido_total) . " / " . moeda($row->nb_valor) . "</div></div>";
 			  echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
@@ -138,18 +142,33 @@ $stmt0 = null;
 		</div>
 		<div class="form-group col-6">
 			<label for="formLocal">Local: </label>
-			<input type="text" style="text-transform: uppercase;" class="form-control" id="formLocal" name="Local" placeholder="Local das Atividades">
+			<input type="text" style="" class="form-control" id="formLocal" name="Local" placeholder="Local das Atividades">
 		  </div>
 	</div>
 	<div class="form-row">
 	<div class="form-group col-12">
 		<div class="form-group">
-		<label for="formRespons">Responsável:</label>
+		<label for="formRespons">Responsável FireSystems:</label>
 			<select class="form-control" id="formRespons" name="Responsavel">
 			<option selected hidden>Selecionar Responsável</option>
 	<?php 	$stmt = $conn->query("SELECT * FROM usuario ORDER BY id_usuario ASC");
 			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
 			  echo "<option value=".$row->id_usuario.">".$row->tx_name."</option>";
+			}
+			  ?>
+			</select> 
+		</div>
+	</div>
+	</div>
+	<div class="form-row">
+	<div class="form-group col-12">
+		<div class="form-group">
+		<label for="formRespons">Responsável no Cliente:</label>
+			<select class="form-control" id="formRepresentante" name="Representante">
+			<option selected hidden>Selecionar Representante</option>
+	<?php 	$stmt = $conn->query("SELECT tx_nome, id_cliente, id_usuario FROM cliente_usr ORDER BY id_usuario ASC");
+			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
+			  echo "<option value=".$row->id_usuario.">".$row->tx_nome."</option>";
 			}
 			  ?>
 			</select> 

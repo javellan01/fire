@@ -88,7 +88,7 @@
 	//'Atividade.php' ---	Processa para inserir nova atividade no database
 	if(isset($_GET['Atividade']) && ($_GET['Atividade']) != ''){
 	$tx_nome = $cid = $categoria = $nb_qtd = $nb_valor = $tx_tipo = $pid = "";
-	$tx_nome = strtoupper($_GET['Atividade']);
+	$tx_nome = $_GET['Atividade'];
 	$tx_nome .= " ".$_GET['Tubo'];
 
 	if(isset($_GET['Qtd'])){   		 $nb_qtd = (int)$_GET['Qtd'];}
@@ -233,28 +233,30 @@
 	
 	if(isset($_GET['Pedido']) && ($_GET['Pedido']) != ''){
 		
-	$tx_codigo = $tx_descricao = $id_cliente = $dt_idata = $dt_tdata = $nb_retencao = $nb_valor = "";
+	$tx_codigo = $tx_descricao = $id_cliente = $dt_idata = $dt_tdata = $nb_retencao = $nb_valor =  "";
 	
 	$tx_codigo = strtoupper($_GET['Pedido']);
 	if(isset($_GET['iData'])){   	 $dt_idata = $_GET['iData'];}
 	if(isset($_GET['tData'])){   	 $dt_tdata = $_GET['tData'];}
 	if(isset($_GET['pdDescricao'])){   	 $tx_descricao = $_GET['pdDescricao'];}
 	if(isset($_GET['valorPedido'])){   	 $nb_valor = $_GET['valorPedido'];}
-	if(isset($_GET['Local'])){   	 $tx_local = strtoupper($_GET['Local']);}
+	if(isset($_GET['Local'])){   	 $tx_local =$_GET['Local'];}
 	$id_usu_resp = $_GET['Responsavel'];
 	$nb_retencao = $_GET['Retencao'];
 	$id_cliente = $_GET['idCliente']; 
+	$id_cliente_usr = $_GET['Representante']; 
 	$dt_idata = data_sql($dt_idata);	
 	$dt_tdata = data_sql($dt_tdata);
 	
 		try{
-	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, tx_local, dt_idata, dt_tdata, id_cliente, nb_retencao, nb_valor, id_usu_resp) VALUES (:tx_codigo, :tx_descricao, :tx_local, :dt_idata, :dt_tdata, :id_cliente, :nb_retencao, :nb_valor, :id_usu_resp)");
+	$stmt = $conn->prepare("INSERT INTO pedido (tx_codigo, tx_descricao, tx_local, dt_idata, dt_tdata, id_cliente, id_cliente_usr, nb_retencao, nb_valor, id_usu_resp) VALUES (:tx_codigo, :tx_descricao, :tx_local, :dt_idata, :dt_tdata, :id_cliente, :id_cliente_usr, :nb_retencao, :nb_valor, :id_usu_resp)");
 	$stmt->bindParam(':tx_codigo', $tx_codigo);
 	$stmt->bindParam(':tx_descricao', $tx_descricao);
 	$stmt->bindParam(':tx_local', $tx_local);
 	$stmt->bindParam(':dt_idata', $dt_idata);
 	$stmt->bindParam(':dt_tdata', $dt_tdata);
 	$stmt->bindParam(':id_cliente', $id_cliente);
+	$stmt->bindParam(':id_cliente_usr', $id_cliente_usr);
 	$stmt->bindParam(':nb_valor', $nb_valor);
 	$stmt->bindParam(':nb_retencao', $nb_retencao);
 	$stmt->bindParam(':id_usu_resp', $id_usu_resp);

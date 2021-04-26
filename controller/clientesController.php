@@ -45,7 +45,7 @@ function getUserCliente($conn,$cid){
 }
 
 function getUsrPedidosAtivos($conn,$cuid){
-    $stmt = $conn->query("SELECT COUNT(id_cliente_usr) FROM pedido WHERE cs_estado = 0 AND id_cliente_usr = $cuid");
+    $stmt = $conn->query("SELECT COUNT(id_cliente_usr) FROM pedido WHERE cs_estado = 0 AND id_cliente_usr = $cuid AND id_cliente != 0");
     $data = $stmt->fetch(PDO::FETCH_COLUMN);
 
     return $data[0];

@@ -29,6 +29,7 @@
            
 		}
 	}
+ //detpedido.php ATUALIZAR PEDIDO get value from modalButton
 
     if(($_GET['updatePedido']) == 1){
 		if(isset($_GET['pid']) && ($_GET['Codigo']) != ''){
@@ -46,6 +47,22 @@
             $data[10] = $_GET['pid'];
             
             updatePedido($conn,$data);
+           
+		}
+	}
+
+	if(($_GET['updateAtividade']) == 1){
+		if(($_GET['Atividade']) != ''){
+			$data = array();
+			$data[0] = $_GET['Descricao']; //tx_descricao
+			$data[1] = $_GET['Tipo'];	//tx_tipo
+			$data[2] = $_GET['Qtd'];  //nb_qtd
+			$data[3] = $_GET['Valor'];  //nb_valor
+			$data[4] = data_sql($_GET['Inicio']);  //dt_inicio
+			$data[5] = data_sql($_GET['Fim']);  //dt_fim
+			$data[6] = $_GET['Atividade'];		//id_atividade
+
+            updateAtividade($conn,$data);
            
 		}
 	}

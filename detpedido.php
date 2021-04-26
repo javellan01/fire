@@ -125,10 +125,10 @@
 			
 		</div>
 		<div class='col-3'>
-		<button type='button' class='btn btn-danger float-left' data-toggle='modal' data-target='#modalRPedido'>Remover Pedido</a>	
+		<button type='button' class='btn btn-danger float-left' data-toggle='modal' data-target='#modalRPedido'>Remover Pedido</button>	
 		</div>
 		<div class='col-3'>
-		<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalUPedido'>Atualizar Dados do Pedido</a>		
+		<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalUPedido'>Atualizar Dados do Pedido</button>		
 		</div>
 	</div>
     </form>
@@ -178,7 +178,7 @@ foreach($medicoes AS $medicao){
 </div>   
 <!------ LISTAGEM DAS ATIVIDADES --------------------------------------->			        
 <div class='row m-auto'>  
-	<h4><cite>Pedidos Cadastrados:</h4>
+	<h4><cite>Atividades Cadastradas:</h4>
 	<table class='table table-striped'>
 		<thead>
 			<tr>
@@ -190,6 +190,7 @@ foreach($medicoes AS $medicao){
 				<th>Data Início</th>
 				<th>Data Término</th>
 				<th>Valor Total</th>
+				<th>Atualizar</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -204,25 +205,27 @@ foreach($categorias as $categoria){
 	foreach($atividades as $atividade){
 	// Aloca os users e cria a list
 	echo"<tr>
-			<th><a class='btn btn-ghost-primary' href='' role='button'>".$atividade->tx_descricao."</a></th>
+
+			<th><input type='text' require class='form-control' id='formAtvtx_descricao".$atividade->id_atividade."' name='Atvtx_descricao".$atividade->id_atividade."' value='".$atividade->tx_descricao."'></th>
 			<th>".$categoria->tx_nome."</th>";
 			if($atividade->cs_finalizada == 0) echo"<th class='text-success'>Ativa</th>";
 			else echo"<th class='text-danger'>Finalizada</th>";
-			echo "<th>".$atividade->nb_qtd."</th>
-			<th>".$atividade->tx_tipo."</th>
-			<th>".data_usql($atividade->dt_inicio)."</th>
-			<th>".data_usql($atividade->dt_fim)."</th>
-			<th> R$ ".moeda($atividade->nb_valor)."</th>
+			echo "<th><input type='text' require class='form-control' id='formAtvnb_qtd".$atividade->id_atividade."' name='Atvnb_qtd".$atividade->id_atividade."' value='".$atividade->nb_qtd."'></th>
+			<th><input type='text' require class='form-control' id='formAtvtx_tipo".$atividade->id_atividade."' name='Atvtx_tipo".$atividade->id_atividade."' value='".$atividade->tx_tipo."'></th>
+			<th><input type='text' require class='form-control' id='formAtvidata".$atividade->id_atividade."' name='Atvidata".$atividade->id_atividade."' value='".data_usql($atividade->dt_inicio)."'></th>
+			<th><input type='text' require class='form-control' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
+			<th><input type='text' require class='form-control' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
+			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'>Atualizar</button></th>
 		</tr>";	
 			$sumcat += $atividade->nb_valor;
 		}
-		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th>R$ ".moeda($sumcat)."</th></tr>";
-		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
+		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th>R$ ".moeda($sumcat)."</th></tr>";
+		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
 		$sumatv += $sumcat;
 	}	
 
-	echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
-	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Total:</th><th>R$ ".moeda($sumatv)."</th></tr>";
+	echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th></tr>
+	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>Total:</th><th>R$ ".moeda($sumatv)."</th></tr>";
 
 
 ?>
@@ -301,3 +304,4 @@ foreach($categorias as $categoria){
 			  </div>
 			</div>
 		  </div>
+

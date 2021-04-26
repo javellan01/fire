@@ -67,6 +67,14 @@ function getAtividades($conn,$pid,$cid){
     return $data;
 }
 
+function getAtividade($conn, $id){
+    $stmt = $conn->query("SELECT * FROM atividades WHERE id_atividade = $id");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+
 function getUsersCliente($conn,$cid){
     $stmt = $conn->query("SELECT tx_nome,id_usuario FROM cliente_usr WHERE id_cliente = $cid");
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -114,4 +122,29 @@ function updatePedido($conn,$data){
 			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Pedido Editado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
             <span aria-hidden='true'>&times;</span></button></div>";
 
+}
+
+function updateAtividade($conn, $data){
+    $e = null;
+    try{
+        $stmt = $conn->prepare("UPDATE atividade 
+        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim  
+        WHERE id_atividade = :id_atividade");
+
+        $stmt->bindParam(':tx_descricao',$data[0]); 
+        $stmt->bindParam(':tx_tipo',$data[1]); 
+        $stmt->bindParam(':nb_qtd',$data[2]); 
+        $stmt->bindParam(':nb_valor',$data[3]); 
+        $stmt->bindParam(':dt_inicio',$data[4]); 
+        $stmt->bindParam(':dt_fim',$data[5]); 
+        $stmt->bindParam(':id_atividade',$data[6]); 
+
+       $stmt->execute();
+       
+      }
+      catch(PDOException $e){
+      echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao editar atividade! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
+                <span aria-hidden='true'>&times;</span></button></div>";
+      }
+      if($e == null) echo "Atualizado com Sucesso!";
 }
