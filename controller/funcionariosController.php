@@ -18,12 +18,21 @@ function getFuncionarios($conn){
 
     return $data;    
 }
+
 function getFuncionario($conn,$fid){
     $stmt = $conn->query("SELECT * FROM funcionario WHERE id_funcionario = $fid");
 	$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     return $data;    
 }
+//return lista de funcionarios alocados para o pedido
+function getAlocacao($conn,$pid){
+    $stmt = $conn->query("SELECT * FROM f_alocacao WHERE id_pedido = $pid");
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $data;
+}
+
 // return lista das atividades de cada funcionario (id) para o modal
 function getAFuncionarios($conn,$id){
     $stmt = $conn->query("SELECT fa.*, p.tx_codigo, p.tx_local, c.tx_nome AS cliente FROM f_alocacao AS fa INNER JOIN pedido AS p ON fa.id_pedido = p.id_pedido INNER JOIN cliente AS c ON p.id_cliente = c.id_cliente WHERE fa.id_funcionario = ".$id." ORDER BY fa.dt_inicio ASC;");

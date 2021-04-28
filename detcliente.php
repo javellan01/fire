@@ -106,7 +106,7 @@ foreach($cusers AS $user){
 				<th>Status</th>
 				<th>Data Início</th>
 				<th>Data Término</th>
-				<th>Atividades Executadas</th>
+				<th>Total em Atividades Cadastradas</th>
 				<th>Valor Medido</th>
 				<th>Valor Total</th>
 			</tr>

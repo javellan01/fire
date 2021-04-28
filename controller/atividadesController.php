@@ -143,8 +143,54 @@ function updateAtividade($conn, $data){
        
       }
       catch(PDOException $e){
-      echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao editar atividade! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+      echo  $e->getMessage();
       }
       if($e == null) echo "Atualizado com Sucesso!";
+}
+
+function getAlocacao($conn,$pid){
+    $stmt = $conn->query("SELECT fa.*, fu.tx_nome, fu.tx_funcao FROM f_alocacao AS fa INNER JOIN funcionario AS fu ON fa.id_funcionario = fu.id_funcionario WHERE fa.id_pedido = $pid");
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+
+// return lista de funcionarios para lista base
+function getFuncionarios($conn){
+    $stmt = $conn->query("SELECT * FROM funcionario ORDER BY tx_nome ASC");
+	$data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;    
+}
+ // Aloca Funcionario no Pedido
+function alocaFuncionario($conn,$data){
+    $e = null;
+    try{
+    $stmt = $conn->prepare("INSERT INTO f_alocacao (id_funcionario, id_pedido) VALUES (:id_funcionario, :id_pedido)");
+	
+    $stmt->bindParam(':id_funcionario',$data[0]); 
+    $stmt->bindParam(':id_pedido',$data[1]); 
+
+    $stmt->execute();
+    }
+    catch(PDOException $e){
+        echo  $e->getMessage();
+        }
+        if($e == null) echo "Alocado com Sucesso!";
+}
+ // Remove Funcionario alocado no Pedido
+function removeFuncionario($conn,$data){
+    $e = null;
+    try{
+    $stmt = $conn->prepare("DELETE FROM f_alocacao WHERE id_funcionario = :id_funcionario AND id_pedido = :id_pedido");
+	
+    $stmt->bindParam(':id_funcionario',$data[0]); 
+    $stmt->bindParam(':id_pedido',$data[1]); 
+
+    $stmt->execute();
+    }
+    catch(PDOException $e){
+        echo  $e->getMessage();
+        }
+        if($e == null) echo "Removido com Sucesso!";
 }

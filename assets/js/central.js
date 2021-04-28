@@ -304,6 +304,8 @@
 					removePedido: '0',
 					updatePedido: $(this).val(),
 					updateAtividade: '0',
+					removeFuncionario: '0',
+					alocaFuncionario:'0',
 					Codigo: $('#formCodigo').val(),
 					pid: $('#Pid').val(),
 					idata: $('#formiData').val(),
@@ -339,6 +341,8 @@
 					updatePedido: '0',
 					removePedido: '0',
 					updateAtividade: $(this).val(),
+					removeFuncionario: '0',
+					alocaFuncionario:'0',
 					Descricao: $('#formAtvtx_descricao'+id_atividade).val(),
 					Tipo: $('#formAtvtx_tipo'+id_atividade).val(),
 					Qtd: $('#formAtvnb_qtd'+id_atividade).val(),
@@ -362,8 +366,67 @@
 			
 		});
 
+		$(".button-remover").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: '0',
+					removeFuncionario: $(this).val(),
+					alocaFuncionario:'0',
+					Fid: $(this).attr("data-id_funcionario"),
+					Pid: $(this).attr("data-id_pedido")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+				}
+			});
+			
 		});
+
 		
+		$(".button-alocar").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: '0',
+					removeFuncionario: '0',
+					alocaFuncionario: $(this).val(),
+					Fid: $('#formColaborador').val(),
+					Pid: $(this).attr("data-id_pedido")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+				}
+			});
+			
+		});
+
+		});
+
 		}
 
 		};

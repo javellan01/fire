@@ -67,4 +67,25 @@
 		}
 	}
 	
+	if(($_GET['alocaFuncionario']) == 1){
+		if(($_GET['Fid']) != '' && ($_GET['Pid']) != ''){
+			$data = array();
+			$data[0] = $_GET['Fid'];    //FUNCIONARIO ID
+			$data[1] = $_GET['Pid'];	//PEDIDO ID
+			
+            alocaFuncionario($conn,$data);
+           
+		}
+	}
+
+	if(($_GET['removeFuncionario']) == 1){
+		if(($_GET['Fid']) != '' && ($_GET['Pid']) != ''){
+			$data = array();
+			$data[0] = $_GET['Fid'];    //FUNCIONARIO ID
+			$data[1] = $_GET['Pid'];	//PEDIDO ID
+
+            removeFuncionario($conn,$data);
+           
+		}
+	}
 ?>

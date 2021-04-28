@@ -23,6 +23,8 @@
     $users = getUsers($conn);
 	$cusers = getUsersCliente($conn,$cid);
 	$medicoes = getMedicoes($conn,$pid);
+	$alocacao = getAlocacao($conn,$pid);
+	$funcionarios = getFuncionarios($conn);
 ?>
 
 	<nav aria-label="breadcrumb">
@@ -132,7 +134,8 @@
 		</div>
 	</div>
     </form>
-			
+
+
 	
 
 <!------ LISTAGEM GERAL DAS MEDIÇÕES --------------------------------------->
@@ -182,7 +185,7 @@ foreach($medicoes AS $medicao){
 	<table class='table table-striped'>
 		<thead>
 			<tr>
-				<th>Atividade</th>
+				<th class="col-3">Atividade</th>
 				<th>Categoria</th>
 				<th>Status</th>
 				<th>Quantidade</th>
@@ -190,7 +193,7 @@ foreach($medicoes AS $medicao){
 				<th>Data Início</th>
 				<th>Data Término</th>
 				<th>Valor Total</th>
-				<th>Atualizar</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -203,7 +206,7 @@ foreach($categorias as $categoria){
 	$atividades = getAtividades($conn,$pid,$cid);
 	$sumcat = 0.00;
 	foreach($atividades as $atividade){
-	// Aloca os users e cria a list
+	// Aloca os users e cria a list TOTALMENTE EDITÁVEL
 	echo"<tr>
 
 			<th><input type='text' require class='form-control' id='formAtvtx_descricao".$atividade->id_atividade."' name='Atvtx_descricao".$atividade->id_atividade."' value='".$atividade->tx_descricao."'></th>
@@ -231,14 +234,53 @@ foreach($categorias as $categoria){
 ?>
 		</tbody>
 	</table>
-            </div> 
-            <div class='row'>
+</div> 
+           
+<!------ LISTAGEM PARA ALOCAR FUNCIONÁRIOS --------------------------------------->			
+<div class="row m-auto">
+	
+	<h4><cite>Colaboradores: </h4>
+	<table class='table table-striped'>
+		<thead>
+			<tr>
+				<th class='col-4'>Nome</th>
+				<th class='col-4'>Função</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+<?php
+	 foreach($alocacao as $alocado){
+		echo "<tr>
+		 			<th>".$alocado->tx_nome."</th>
+					<th>".$alocado->tx_funcao."</th>
+					<th><button type='button' class='btn btn-danger float-center button-remover'  value='1' id='removerColaborador' data-id_pedido='".$pid."' data-id_funcionario='".$alocado->id_funcionario."'>Remover</button></th>
+				</tr>";
+	 }
+?>				
+		</tbody>
+	</table>
+</div>
+<div class="row m-auto">
+	<h4><cite>Alocar Colaborador FireSystems:  </h4>
+			<select class="form-control col-5" id="formColaborador" name="Colaborador">
+			<option selected hidden>Selecionar Colaborador</option>
+<?php	foreach($funcionarios as $colaborador){
+               echo "<option value=".$colaborador->id_funcionario.">".$colaborador->tx_nome." - ".$colaborador->tx_funcao."</option>";
+            }
+?>	
+		</select>
+		<div class='col-2'>
+		<button type='button' class='btn btn-primary float-right button-alocar' value="1" id="alocarColaborador" data-id_pedido="<?php echo $pid;?>">Alocar Colaborador</button>		
+		</div>
+	</div>
+<!-- Page Closing ------------------------->
+<div class='row'>
             <div id="process"></div>
             </div>
         </div>
         </div>
     </div>
-
 <!-- Modal Remover Pedido ------------------------->
 <div class="modal" style="text-align: left" id="modalRPedido" tabindex="-1" role="dialog" aria-labelledby="modalRPedido" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
