@@ -50,7 +50,7 @@
            
 		}
 	}
-
+// UPDATE DA Atividade listada
 	if(($_GET['updateAtividade']) == 1){
 		if(($_GET['Atividade']) != ''){
 			$data = array();
@@ -66,7 +66,16 @@
            
 		}
 	}
-	
+//EXCLUI ATIVIDADE listada	
+	if(($_GET['excluirAtividade']) == 1){
+		if(($_GET['Atividade']) != ''){
+			$data = $_GET['Atividade'];		//id_atividade
+
+            excluirAtividade($conn,$data);
+           
+		}
+	}
+
 	if(($_GET['alocaFuncionario']) == 1){
 		if(($_GET['Fid']) != '' && ($_GET['Pid']) != ''){
 			$data = array();

@@ -306,6 +306,7 @@
 					updateAtividade: '0',
 					removeFuncionario: '0',
 					alocaFuncionario:'0',
+					excluirAtividade:'0',
 					Codigo: $('#formCodigo').val(),
 					pid: $('#Pid').val(),
 					idata: $('#formiData').val(),
@@ -343,6 +344,7 @@
 					updateAtividade: $(this).val(),
 					removeFuncionario: '0',
 					alocaFuncionario:'0',
+					excluirAtividade:'0',
 					Descricao: $('#formAtvtx_descricao'+id_atividade).val(),
 					Tipo: $('#formAtvtx_tipo'+id_atividade).val(),
 					Qtd: $('#formAtvnb_qtd'+id_atividade).val(),
@@ -366,6 +368,35 @@
 			
 		});
 
+		$(".button-excluir").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: '0',
+					excluirAtividade:  $(this).val(),
+					removeFuncionario: '0',
+					alocaFuncionario:'0',
+					Atividade: $(this).attr("data-id_atividade")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+				}
+			});
+			
+		});
+
 		$(".button-remover").click(function(event) {
 			event.preventDefault();
 
@@ -376,6 +407,7 @@
 					updatePedido: '0',
 					removePedido: '0',
 					updateAtividade: '0',
+					excluirAtividade:'0',
 					removeFuncionario: $(this).val(),
 					alocaFuncionario:'0',
 					Fid: $(this).attr("data-id_funcionario"),
@@ -407,6 +439,7 @@
 					removePedido: '0',
 					updateAtividade: '0',
 					removeFuncionario: '0',
+					excluirAtividade:'0',
 					alocaFuncionario: $(this).val(),
 					Fid: $('#formColaborador').val(),
 					Pid: $(this).attr("data-id_pedido")

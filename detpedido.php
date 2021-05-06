@@ -194,6 +194,7 @@ foreach($medicoes AS $medicao){
 				<th>Data Término</th>
 				<th>Valor Total</th>
 				<th></th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -219,16 +220,17 @@ foreach($categorias as $categoria){
 			<th><input type='text' require class='form-control' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
 			<th><input type='text' require class='form-control' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
 			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'>Atualizar</button></th>
+			<th><button type='button' class='btn btn-danger float-center button-excluir'  value='1' id='excluirAtividade' data-id_atividade='".$atividade->id_atividade."'>Excluir</button></th>
 		</tr>";	
 			$sumcat += $atividade->nb_valor;
 		}
-		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th>R$ ".moeda($sumcat)."</th></tr>";
-		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
+		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th>R$ ".moeda($sumcat)."</th></th><th></th><th></tr>";
+		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
 		$sumatv += $sumcat;
 	}	
 
-	echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th></tr>
-	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>Total:</th><th>R$ ".moeda($sumatv)."</th></tr>";
+	echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th><th></th></tr>
+	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Total:</th><th>R$ ".moeda($sumatv)."</th><th></th><th></th></tr>";
 
 
 ?>

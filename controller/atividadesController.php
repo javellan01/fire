@@ -124,6 +124,7 @@ function updatePedido($conn,$data){
 
 }
 
+//update dos dados da atividade 
 function updateAtividade($conn, $data){
     $e = null;
     try{
@@ -146,6 +147,28 @@ function updateAtividade($conn, $data){
       echo  $e->getMessage();
       }
       if($e == null) echo "Atualizado com Sucesso!";
+}
+//exclude de atividade verficica tambem se há pendencia antes de excluir
+function excluirAtividade($conn,$data){
+    $e = null;
+
+    $stmt = $conn->query("SELECT count(*) AS existe FROM atividade_executada WHERE id_atividade = $data");
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+    if($result->existe == 0){
+        try{
+            $stmt = $conn->prepare("DELETE FROM atividade WHERE id_atividade = :id_atividade");
+            $stmt->bindParam(':id_atividade',$data); 
+            $stmt->execute();
+            }
+            catch(PDOException $e){
+                echo  $e->getMessage();
+                }
+                if($e == null) echo "Atividade Excluída com Sucesso!";
+
+         }
+        else echo "Erro: Atividade com Execução Registrada!";
+   
 }
 
 function getAlocacao($conn,$pid){
