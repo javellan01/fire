@@ -1,5 +1,4 @@
-	
-	<nav aria-label="breadcrumb">
+<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item "><a href="central.php">Central</a></li>
 			<li class="breadcrumb-item active">Pedidos por Cliente</li>
@@ -20,6 +19,10 @@
 					<div class="card-body">
 <?php 
 	require("./DB/conn.php");
+	session_start(); 
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],0);
+
 	function moeda($num){
 		return number_format($num,2,',','.');
     }

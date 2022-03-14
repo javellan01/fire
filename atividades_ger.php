@@ -13,7 +13,9 @@
 					
 					
 <?php
-	
+session_start(); 
+require("./controller/agentController.php");
+Auth::accessControl($_SESSION['catuser'],1);	
 require("./DB/conn.php");
 
 function data_usql($data) {

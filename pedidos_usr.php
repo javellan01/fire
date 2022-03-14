@@ -1,14 +1,7 @@
 	
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item ">
-			<?php 
-				session_start();
-				if($_SESSION['catuser'] == 0) echo"<a href='central.php'>Central</a>";
-				if($_SESSION['catuser'] == 1) echo"<a href='central_ger.php'>Central</a>";
-				if($_SESSION['catuser'] == 2) echo"<a href='central_usr.php'>Central</a>";
-			?>
-			</li>
+			<li class="breadcrumb-item "><a href="central_usr.php">Central</a></li>
 			<li class="breadcrumb-item active">Pedidos</li>
 		</ol>
 	</nav>
@@ -28,12 +21,18 @@
 						
 						<h2> </h2>
 <?php 
+	session_start(); 
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],2);
 	require("./DB/conn.php");
 
 //Carrrga as empresas pra colocar no titulo dos cards
 $stmt0 = $conn->query("SELECT DISTINCT c.id_cliente,c.tx_nome,c.tx_cnpj FROM cliente AS c 
 						INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
 						WHERE p.id_usu_resp = ".$_SESSION['userid']." ORDER BY tx_nome ASC");
+
+if($stmt0->rowCount() == 0){
+	echo"<p class='h4'> Ainda não há pedidos disponíveis para visualizar.</p>";}
 
 while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	$cliente = $row0->id_cliente;
@@ -61,7 +60,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 							WHERE c.id_cliente = " . $cliente . " AND p.id_usu_resp = ".$_SESSION['userid']." AND p.cs_estado = 0 ORDER BY p.tx_codigo ASC;");
 
 	if($stmt->rowCount() == 0){
-		echo"<p> Não há pedidos disponíveis. </p>";}
+		echo"<p class='h4'> Ainda não há pedidos disponíveis para visualizar neste cliente.</p>";}
 	else{
 	//	href='javascript:atvPhp(&#39;atividades.php&#39;);'	  
 	

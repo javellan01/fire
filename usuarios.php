@@ -30,6 +30,9 @@
 		<tbody>
 
 <?php 
+	session_start(); 
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],0);
 	require("./DB/conn.php");
 
 //Carrrga as users pra colocar na lista
@@ -115,7 +118,6 @@ $stmt0 = null;
 					<option value='0'>Administrador</option>
 					<option value='1'>Gerente</option>
 					<option selected value='2'>Base</option>
-					<option value='3'>Convidado</option>
 				</select>  
 			 </div>
 		</div> 
@@ -172,7 +174,6 @@ $stmt0 = null;
 					<option value='0'>Administrador</option>
 					<option value='1'>Gerente</option>
 					<option value='2'>Base</option>
-					<option value='3'>Convidado</option>
 				</select>  
 			 </div>
 		</div> 

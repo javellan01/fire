@@ -13,10 +13,11 @@
 					
 					
 <?php
+session_start(); 
+require("./controller/agentController.php");
+//Auth::accessControl($_SESSION['catuser'],0);
 require("./DB/conn.php");
 require("./controller/atividadesController.php");
-
-session_start();
 
 $_SESSION['MAtiv'] = array();
 

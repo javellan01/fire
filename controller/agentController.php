@@ -39,7 +39,6 @@ class Auth
             if($_SESSION['catuser'] == 0) return header('Location: central.php');
             if($_SESSION['catuser'] == 1) return header('Location: central_ger.php');
             if($_SESSION['catuser'] == 2) return header('Location: central_usr.php');
-            if($_SESSION['catuser'] == 3) return header('Location: central_gst.php');
  
         }
         else{
@@ -61,6 +60,17 @@ class Auth
     // header('Location: login.php');
    
     }
+
+    }
+
+    public static function accessControl($catuser,$level){
+        
+        if($catuser != $level){
+            if($_SESSION['catuser'] == 0) return header('Location: central.php');
+            if($_SESSION['catuser'] == 1) return header('Location: central_ger.php');
+            if($_SESSION['catuser'] == 2) return header('Location: central_usr.php');
+        }
+
 
     }
 }

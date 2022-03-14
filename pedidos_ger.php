@@ -20,13 +20,18 @@
 						
 						<h2> </h2>
 <?php 
-	session_start();
+	session_start(); 
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],1);
 	require("./DB/conn.php");
 
 //Carrrga as empresas pra colocar no titulo dos cards
 $stmt0 = $conn->query("SELECT DISTINCT c.id_cliente,c.tx_nome,c.tx_cnpj FROM cliente AS c 
 						INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
 						WHERE p.id_usu_resp = ".$_SESSION['userid']." ORDER BY tx_nome ASC");
+
+if($stmt0->rowCount() == 0){
+	echo"<p class='h4'> Ainda não há pedidos disponíveis para gerenciamento. </p>";}
 
 while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 	$cliente = $row0->id_cliente;
@@ -52,9 +57,8 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 							INNER JOIN usuario AS u ON p.id_usu_resp = u.id_usuario
 							INNER JOIN v_sum_pedido_total AS v ON p.id_pedido = v.id_pedido
 							WHERE c.id_cliente = " . $cliente . " AND p.id_usu_resp = ".$_SESSION['userid']." AND p.cs_estado = 0 ORDER BY p.tx_codigo ASC;");
-
 	if($stmt->rowCount() == 0){
-		echo"<p> Ainda não há pedidos disponíveis para gerenciamento. </p>";}
+		echo"<p class='h4'> Ainda não há pedidos disponíveis para gerenciamento neste cliente. </p>";}
 	else{
 	//	href='javascript:atvPhp(&#39;atividades.php&#39;);'	  
 	

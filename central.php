@@ -13,6 +13,10 @@
 	header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 	header("Pragma: no-cache"); // HTTP 1.0.
 	header("Expires: 0"); //
+
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],0);
+
 ?>
 <!DOCTYPE html>
 <html><head>
@@ -34,13 +38,12 @@
 	  .fc-day-header {color: #09568d;}
 	  th {font-weight: normal;}
     </style>
-		<script src="./assets/js/jquery-3.3.1.min.js"></script>
+		<script src="./assets/js/jquery-3.6.0.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
 		<script src="./assets/js/popper.min.js"></script>
 		<script src="./assets/js/moment.min.js"></script>
-		<script src="./assets/js/docs.min.js"></script>
 		<script src="./dist/js/bootstrap.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
@@ -178,8 +181,8 @@ require("./controller/centralController.php");
 	
 	<footer class="app-footer">
 		<div>
-		<a href="http://www.firesystems-am.com.br">FireSystems</a>
-		<span>© 2018-2021 Produtos e Serviços Contra Incêndio </span>
+		<a href="http://www.firesystems-am.com.br">FireSystems-AM</a>
+		<span>© 2018-2022 Produtos e Serviços Contra Incêndio </span>
 		</div>
 		<div class="ml-auto">
 		<span>Sistemas de Gerenciamento Online</span>

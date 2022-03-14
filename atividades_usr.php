@@ -2,14 +2,9 @@
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item ">
-			<?php 
-				session_start();
-				if($_SESSION['catuser'] == 0) echo"<a href='central.php'>Central</a>";
-				if($_SESSION['catuser'] == 1) echo"<a href='central_ger.php'>Central</a>";
-				if($_SESSION['catuser'] == 2) echo"<a href='central_usr.php'>Central</a>";
-				?>
+			<li class="breadcrumb-item "><a href="central_usr.php">Central</a></li>
 			</li>	
-			<li class="breadcrumb-item "><a href="javascript:loadPhp('pedidos_ger.php');">Pedidos</a></li>
+			<li class="breadcrumb-item "><a href="javascript:loadPhp('pedidos_usr.php');">Pedidos</a></li>
 			<li class="breadcrumb-item active">Atividades</li>
 		</ol>
 	</nav>
@@ -19,6 +14,9 @@
 				<div class="card">
 					
 <?php
+	session_start(); 
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],2);	
 	require("./DB/conn.php");
 	$pid = $_REQUEST["pid"];
 

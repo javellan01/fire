@@ -14,6 +14,10 @@
 	header("Pragma: no-cache"); // HTTP 1.0.
     header("Expires: 0"); //
 
+
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],0);
+
     require("./DB/conn.php");
     require("./controller/clientesController.php");
     

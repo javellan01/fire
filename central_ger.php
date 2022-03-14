@@ -10,9 +10,14 @@
 		exit; 
 	} 
 
+
 	header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 	header("Pragma: no-cache"); // HTTP 1.0.
 	header("Expires: 0"); //
+
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],1);
+
 ?>
 <!DOCTYPE html>
 <html><head>
@@ -29,7 +34,7 @@
         overflow-x: initial;
       }
     </style>
-		<script src="./assets/js/jquery-3.3.1.min.js"></script>
+		<script src="./assets/js/jquery-3.6.0.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
@@ -46,6 +51,7 @@
 </head>
 <?php
 
+
 	
 
 ?>
@@ -54,8 +60,8 @@
 	<button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
 	<span class="navbar-toggler-icon"></span>
 	</button>
-		<a class="navbar-brand" href="http://firesystems.com.br/">
-		<img src="http://firesystems.com.br/images/logo.png" alt="FIRE Logo" width="150" height="50">
+		<a class="navbar-brand ml-3" href="http://www.firesystems-am.com.br/">
+		<img src="./img/fire.png" alt="FIRE AM" width="150" height="50">
 		</a>
 			<ul class="nav navbar-nav ml-auto">
 				<li class="nav-item px-3">
@@ -93,19 +99,6 @@
 			  
 			</ul>
 		  </li>
-		  <li class="nav-item nav-dropdown">
-			<a class="nav-link nav-dropdown-toggle" href="#">
-			  <strong><i class="nav-icon cui-layers"></i> Sistema BASE </strong>
-			  
-			</a>
-			<ul class="nav-dropdown-items">
-			  <li class="nav-item">
-				<a class="nav-link" href="javascript:loadPhp('pedidos_usr.php');">
-				  <i class="nav-icon cui-list"></i>Pedidos
-				</a>
-			  </li>
-			</ul>
-		  </li>
 		  <li class="nav-item">
 			<a class="nav-link nav-link-danger" href="logout.php?token=<?php echo md5(session_id());?>">
 			  <i class="nav-icon cui-account-logout"></i>
@@ -139,12 +132,9 @@
 			</div> 	
 			
 			<div class="card-body">
-				<div class='row justify-content-center'>
+				<div class='row'>
 					<div class='col-6'>
-					<a class='btn btn-outline-info' href="javascript:loadPhp('pedidos_ger.php');" role='button'><strong>Situação dos Pedidos</strong></a>					
-					
-					<a class='btn btn-outline-info' href="javascript:loadPhp('');" role='button'><strong>Alocar Funcionário</strong></a>
-				
+					<a class='btn btn-outline-info' href="javascript:loadPhp('pedidos_ger.php');" role='button'><strong>Situação dos Pedidos</strong></a>				
 					</div>
 				</div>	
 			</div>
@@ -159,13 +149,13 @@
 	
 	
 	<footer class="app-footer">
-		<div>
-		<a href="http://www.firesystems.com.br">FireSystems</a>
-		<span>© 2018 Sistemas de Proteção Contra Incêncido LTDA.</span>
+	<div>
+		<a href="http://www.firesystems-am.com.br">FireSystems-AM</a>
+		<span>© 2018-2022 Produtos e Serviços Contra Incêndio </span>
 		</div>
 		<div class="ml-auto">
-		<span>Powered by</span>
-		<a href="http://www.javellan.16mb.com">JAVELLAN</a>
+		<span>Sistemas de Gerenciamento Online</span>
+		
 		</div>
 	</footer>
 		<!-- jQuery (necessary for Boot strap's JavaScript plugins) -->

@@ -13,6 +13,9 @@
 	header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 	header("Pragma: no-cache"); // HTTP 1.0.
 	header("Expires: 0"); //
+
+	require("./controller/agentController.php");
+	Auth::accessControl($_SESSION['catuser'],0);
 ?>
 
 	<nav aria-label="breadcrumb">
