@@ -41,7 +41,7 @@ $stmt1 = $conn->query("SELECT c.*, (a.nb_valor / a.nb_qtd) v_unit FROM atividade
 		WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
 		
 if($stmt1->rowCount() == 0){
-		echo"<h4 class='text-danger'>Não há atividades cadastradas para este pedido. Tenha um bom dia e obrigado.</h4>";}
+		echo"<h4 class='text-danger'>Não há atividades cadastradas para este pedido.</h4>";}
 	else{	
 
 //Inicia card para organização das Categorias
@@ -84,7 +84,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		
         $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum, v1.progresso, v1.nb_valor, v1.valor_sum FROM atividade a 
 		LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
-		WHERE a.id_pedido = $pid AND a.id_categoria = $cid AND a.cs_finalizada = 0");
+		WHERE a.id_pedido = $pid AND a.id_categoria = $cid AND a.cs_finalizada = 0 AND NOT a.dt_inicio = '00-00-0000' ");
 		
 		
 		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
@@ -163,7 +163,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	  </div>
 	  <div class="form-group col-4">
 			<label for="formData">Data:</label>
-			<input type="date" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+			<input type="date" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
 		  </div>
 	</div>
 	  

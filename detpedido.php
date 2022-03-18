@@ -60,11 +60,11 @@
 		</div>
 		<div class="form-group col-3">
 			<label for="formiData">Início: </label>
-			<input type="text" require class="form-control" id="formiData" name="idata" value="<?php echo data_usql($pedido->dt_idata);?>" minlength="18" >
+			<input type="text" require class="form-control date" id="formiData" name="idata" value="<?php echo data_usql($pedido->dt_idata);?>" minlength="18" >
 		</div>	
         <div class="form-group col-3">
 			<label for="formtData">Término: </label>
-			<input type="text" require class="form-control" id="formtData" name="tdata" value="<?php echo  data_usql($pedido->dt_tdata);?>" minlength="18" >
+			<input type="text" require class="form-control date" id="formtData" name="tdata" value="<?php echo  data_usql($pedido->dt_tdata);?>" minlength="18" >
 		</div>	
         <div class="form-group col-2">
         <label for="formStatus">Status:</label>
@@ -220,8 +220,8 @@ foreach($categorias as $categoria){
 			else echo"<th class='text-danger'>Finalizada</th>";
 			echo "<th><input type='text' require class='form-control' id='formAtvnb_qtd".$atividade->id_atividade."' name='Atvnb_qtd".$atividade->id_atividade."' value='".$atividade->nb_qtd."'></th>
 			<th><input type='text' require class='form-control' id='formAtvtx_tipo".$atividade->id_atividade."' name='Atvtx_tipo".$atividade->id_atividade."' value='".$atividade->tx_tipo."'></th>
-			<th><input type='text' require class='form-control' id='formAtvidata".$atividade->id_atividade."' name='Atvidata".$atividade->id_atividade."' value='".data_usql($atividade->dt_inicio)."'></th>
-			<th><input type='text' require class='form-control' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
+			<th><input type='text' require class='form-control date' id='formAtvidata".$atividade->id_atividade."' name='Atvidata".$atividade->id_atividade."' value='".data_usql($atividade->dt_inicio)."'></th>
+			<th><input type='text' require class='form-control date' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
 			<th><input type='text' require class='form-control' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
 			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'>Atualizar</button></th>
 			<th><button type='button' class='btn btn-danger float-center button-excluir'  value='1' id='excluirAtividade' data-id_atividade='".$atividade->id_atividade."'>Excluir</button></th>
@@ -352,4 +352,3 @@ foreach($categorias as $categoria){
 			  </div>
 			</div>
 		  </div>
-

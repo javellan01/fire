@@ -110,11 +110,11 @@ $stmt0 = null;
 	  </div>
 	  <div class="form-group col-3">
 		<label for="formDataA">Ínicio:</label>
-		<input type="text" class="form-control" id="formDataA" name="iData" value="<?php echo date('d/m/Y');?>">
+		<input type="text" class="form-control date" id="formDataA" name="iData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	  <div class="form-group col-3">
 		<label for="formDataB">Término:</label>
-		<input type="text" class="form-control" id="formDataB" name="tData" value="<?php echo date('d/m/Y');?>">
+		<input type="text" class="form-control date" id="formDataB" name="tData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	</div>
 	

@@ -52,22 +52,20 @@ function newClienteUser($conn,$data){
 function updateClienteUser($conn,$data){
     $e = null;
     try{
-		$stmt = $conn->prepare("UPDATE cliente_usr SET tx_nome = :tx_nome, tx_email = :tx_email, tx_contato = :tx_contato WHERE id_usuario = :id_usuario");
+		$stmt = $conn->prepare("UPDATE cliente_usr SET tx_nome = :tx_nome, tx_email = :tx_email, tx_contato = :tx_contato, nb_category_user = :nb_category_user WHERE id_usuario = :id_usuario");
 		$stmt->bindParam(':tx_nome', $data[0]);
 		$stmt->bindParam(':tx_email', $data[1]);
         $stmt->bindParam(':tx_contato', $data[2]);
         $stmt->bindParam(':id_usuario', $data[3]);
+        $stmt->bindParam(':nb_category_user', $data[4]);
 
 		$stmt->execute();
 				}
-			catch(PDOException $e)
-				{
-				echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao editar usuário! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+			catch(PDOException $e){
+                    echo  $e->getMessage();   
 				}
-				
-			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Usuário Editado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-            <span aria-hidden='true'>&times;</span></button></div>";
+			if($e == null) echo "Usuário Editado com Sucesso!";
+            else echo "Erro ao Editar Usuário.";
 
 }
 

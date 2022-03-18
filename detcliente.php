@@ -74,6 +74,7 @@
 				<th>Nome</th>
 				<th>Contato</th>
 				<th>Email</th>
+				<th>Nível de Acesso</th>
 				<th>Pedidos Ativos</th>
 				<th>Último Acesso</th>
 			</tr>
@@ -90,6 +91,7 @@ foreach($cusers AS $user){
 			<th><a class='btn btn-ghost-primary' href='javascript:loadUCData(".$cuid.",".$cid.");' role='button'>".$user->tx_nome."</a></th>
 			<th>".$user->tx_contato."</th>
 			<th>".$user->tx_email."</th>
+			<th>".showUserAccess($user->nb_category_user)."</th>
 			<th class='text-center'>".getUsrPedidosAtivos($conn,$cuid)."</th>
 			<th>".time_usql($user->tz_last)."</th>
 			</tr>";	

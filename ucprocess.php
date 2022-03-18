@@ -54,6 +54,7 @@
 			$data[1] = ($_GET['Email']);
 			$data[2] = ($_GET['Tel']);			
 			$data[3] = ($_GET['cuid']);			
+			$data[4] = ($_GET['Acesso']);			
 
 			updateClienteUser($conn,$data);		
 		}

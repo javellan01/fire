@@ -346,7 +346,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		 </div>
 		<div class="form-group col-4">
 			<label for="formData">Entrega:</label>
-			<input type="date" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+			<input type="date" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
 		  </div>
 	</div>
 	

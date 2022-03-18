@@ -28,6 +28,7 @@
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
+	<link rel="stylesheet" href="./assets/css/jquery-ui.css">
 	<style>
       .app-body {
         overflow-x: initial;

@@ -1,11 +1,17 @@
 // Central de funções JScript Javell_2018
 
+//Set JQuery DatePicker
+
 	function loadPhp(str) {
 		var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 		document.getElementById("main").innerHTML = this.responseText;
 		
+		$( function() {
+			$( ".date" ).datepicker();
+		  } );
+		  
 		$('#modalPedido').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);
 			var cliente = button.data('cliente');
@@ -67,7 +73,9 @@
 		
 		$('#formData').mask('00/00/0000', {reverse: false});
 		$('#formQtdin').mask('###0', {reverse: false});
-		
+		$( function() {
+			$( ".date" ).datepicker();
+		  } );
 		$('.modal').on('hide.bs.modal', function (){
 			atvPhp(str);
 		});
@@ -99,7 +107,9 @@
 		
 		$('#formData').mask('00/00/0000', {reverse: false});
 		$('#formQtdin').mask('###0', {reverse: false});
-		
+		$( function() {
+			$( ".date" ).datepicker();
+		  } );
 		$('#modalUpdate').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);
 			var atividade = button.data('atividade');
@@ -271,7 +281,11 @@
 		$('#formData').mask('00/00/0000', {reverse: false});
 		$('#formQtdin').mask('###0', {reverse: false});
 		$('#formCNPJ').mask('00.000.000/0000-00', {reverse: false});
-				
+
+		$( function() {
+			$( ".date" ).datepicker();
+		  } );
+
 		$('.modal').on('hide.bs.modal', function (){	loadPData(str,str2);	});
 
 		$(document).ready(function(){
@@ -330,7 +344,7 @@
 				}
 			});
 		});
-
+		
 		$(".button-update").click(function(event) {
 			event.preventDefault();
 			var id_atividade = 	 $(this).attr("data-id_atividade");
@@ -532,13 +546,16 @@
 						Nome: $('#formNome').val(),
 						Email: $('#formEmail').val(),
 						Tel: $('#formTel').val(),
+						Acesso: $('#formAcesso').val(),
 						newCuser: '0',
 						removeCuser: '0'
 					},
 					success: function(result) {
+						window.alert(result);
 						loadUCData(str,str2);						
 					},
 					error: function(result) {
+						window.alert(result);
 						alert('error');
 					}
 				});

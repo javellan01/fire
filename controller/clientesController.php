@@ -44,6 +44,11 @@ function getUserCliente($conn,$cid){
     return $data;
 }
 
+function showUserAccess($nb_category_user){
+    if($nb_category_user == 0) return 'Acesso Financeiro'; 
+    if($nb_category_user == 1) return 'Somente Progresso'; 
+}
+
 function getUsrPedidosAtivos($conn,$cuid){
     $stmt = $conn->query("SELECT COUNT(id_cliente_usr) FROM pedido WHERE cs_estado = 0 AND id_cliente_usr = $cuid AND id_cliente != 0");
     $data = $stmt->fetch(PDO::FETCH_COLUMN);

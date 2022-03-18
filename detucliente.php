@@ -57,6 +57,19 @@
 		<input type="text" class="form-control" id="formEmail" name="Email" value="<?php echo $data->tx_email;?>" max-length="36" >
 		<label for="formTel">Contato: </label>
 		<input type="text" class="form-control" id="formTel" name="Tel" placeholder="(00)00000-0000" value="<?php echo $data->tx_contato;?>" max-length="16" >
+        <label for="formAcesso">Nível de Acesso:</label>
+			<select class="form-control" id="formAcesso" name="Acesso">
+            <?php 
+                if($data->nb_category_user == 0){
+                    echo "<option selected value='0' class='text-success'>Acesso Financeiro</option>
+                          <option value='1' class='text-warning'>Somente Progresso</option>";
+                }
+                else{
+                    echo "<option selected value='1' class='text-warning'>Somente Progresso</option>
+                    <option value='0' class='text-success'>Acesso Financeiro</option>";
+                }
+            ?>
+			</select>	
 	</div>
     </form>
         <div class="col-6">

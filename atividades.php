@@ -369,11 +369,11 @@ foreach($atividades AS $atividade)  {
 		 <div class="form-row">	
 		  <div class="form-group col-6">
 			<label for="formiData">Data Início:</label>
-			<input type="text" class="form-control" id="formiData" value="<?php echo date('d/m/Y');?>" name="iData">
+			<input type="text" class="form-control date" id="formiData" value="<?php echo date('d/m/Y');?>" name="iData">
 	  </div>
 		<div class="form-group col-6">
 			<label for="formfData">Data Fim:</label>
-			<input type="text" class="form-control" id="formfData" value="<?php echo date('d/m/Y');?>" name="fData">
+			<input type="text" class="form-control date" id="formfData" value="<?php echo date('d/m/Y');?>" name="fData">
 	  </div>
 		</div>
 	</div>
@@ -419,7 +419,7 @@ foreach($atividades AS $atividade)  {
 	  </div>
 	  <div class="form-group col-4">
 			<label for="formData">Data:</label>
-			<input type="text" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
 		  </div>
 	</div>
 	  
@@ -470,7 +470,7 @@ foreach($atividades AS $atividade)  {
 	
 	  <div class="form-group col-6">
 			<label for="formData">Data:</label>
-			<input type="text" class="form-control" id="formData" value="<?php echo date('d/m/Y');?>" name="MData">
+			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="MData">
 	  </div>
 	</div>
 	
