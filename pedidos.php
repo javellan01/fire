@@ -19,73 +19,68 @@
 					<div class="card-body">
 <?php 
 	require("./DB/conn.php");
-	session_start(); 
+	session_start();
 	require("./controller/agentController.php");
 	Auth::accessControl($_SESSION['catuser'],0);
+	require("./controller/pedidosController.php");
 
-	function moeda($num){
-		return number_format($num,2,',','.');
-    }
-//Carrrga as empresas pra colocar no titulo dos cards
-$stmt0 = $conn->query("SELECT id_cliente,tx_nome,tx_cnpj FROM cliente ORDER BY tx_nome ASC");
+//Carrega as empresas(clientes) pra colocar no titulo dos cards
+$clientes = getClientes($conn);
 
-while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
-	$cliente = $row0->id_cliente;
-	$cnpj = $row0->tx_cnpj;
-	$clientecnpj = $row0->tx_nome." - CNPJ: ".$cnpj;
-	$id=$row0->id_cliente;	
+foreach($clientes as $cliente){
+			
 	echo"<div class='card-body' id='pedidoAccord'>
 	<div class='accordion b-b-1' id='accordion'>
 		<div class='card mb-0'>
-		<div class='card-header' id='heading".$id."'>
+		<div class='card-header' id='heading".$cliente->id_cliente."'>
 			<h5 class='mb-0'>
-				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$id."' aria-expanded='true' aria-controls='collapse".$id."'>";					
-	echo $clientecnpj;
+				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$cliente->id_cliente."' aria-expanded='true' aria-controls='collapse".$cliente->id_cliente."'>";					
+	echo $cliente->tx_nome." - CNPJ: ".$cliente->tx_cnpj;
 	echo"</button>
-				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido' data-cliente='".$clientecnpj."' data-id_cliente=".$row0->id_cliente.">+ Adicionar Pedido</button>
+				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido' data-cliente='".$cliente->tx_nome." - CNPJ: ".$cliente->tx_cnpj."' data-id_cliente=".$cliente->id_cliente.">+ Adicionar Pedido</button>
 			</h5>
 				</div>
-					<div id='collapse".$id."' class='collapse show' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
-	
+					<div id='collapse".$cliente->id_cliente."' class='collapse show' aria-labelledby='heading".$cliente->id_cliente."' data-parent='#accordion'><div class='card-body'>";
 		
 	// Carrega os pedidos e coloca nos cards
-	$stmt = $conn->query("SELECT c.id_cliente, p.tx_codigo, p.id_pedido, p.cs_estado, u.tx_name, v.medido_total, v.nb_valor FROM cliente As c 
-							INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
-							INNER JOIN usuario AS u ON p.id_usu_resp = u.id_usuario
-							INNER JOIN v_sum_pedido_total AS v ON p.id_pedido = v.id_pedido
-							WHERE c.id_cliente = " . $cliente . " ORDER BY p.tx_codigo ASC;");
+	$pedidos = getPedidosCliente($conn,$cliente->id_cliente);
 
-	if($stmt->rowCount() == 0){
+	if(count($pedidos) == 0){
 		echo"<p> Não há pedidos cadastrados para este cliente! </p>";}
-	else{
-	//	href='javascript:atvPhp(&#39;atividades.php&#39;);'	  
-	
-		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
+	else{		
+		foreach($pedidos as $pedido){
+		$fisico = getProgressoFisico($conn,$pedido->id_pedido);
+
+		echo "<div class='progress-group'>";
+			if($pedido->cs_estado == 0) 
+			echo "<div class='progress-group-header align-items-end' style='color: #27b;'><div><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " (Ativo)</strong></a></div>";
+			if($pedido->cs_estado == 1) 
+			echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " (Encerrado)</strong></a></div>";
+
+			echo "<div class='ml-auto'>Atividades Concluídas: " . $fisico->execpercent ."%</div></div>";
+			echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
+			echo "<div class='progress-bar progress-bar-striped bg-warning' role='progressbar' style='width: ". $fisico->execpercent ."%' aria-valuenow='". $fisico->execpercent ."' aria-valuemin='0' aria-valuemax='100'>". $fisico->execpercent ."%</div></div>";
+
+			if($pedido->nb_valor != 0.00){
+				$percent = ($pedido->medido_total / $pedido->nb_valor) * 100;
+			}
+			else
+			$percent = 0.00;
+			echo "<div class='ml-auto'>Progresso Financeiro: (" . round($percent) ."%) - ";
+			echo " R$" . moeda($pedido->medido_total) . " / " . moeda($pedido->nb_valor) . "</div></div>";
+			echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
+			echo "<div class='progress-bar progress-bar-striped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'>".round($percent)."%</div>
+			</div>
+			<div class='ml-auto'><cite>Responsável: ".$pedido->tx_name."</cite></div>
+			</div>
 			
-			echo "<div class='progress-group'>";
-			  if($row->cs_estado == 0) 
-					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><div><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . " (Ativo)</strong></a></div>";
-			  if($row->cs_estado == 1) 
-					echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . " (Encerrado)</strong></a></div>";
-			  if($row->nb_valor != 0.00){
-					$percent = ($row->medido_total / $row->nb_valor) * 100;
-			  }
-			  else
-			  	$percent = 0.00;
-			  echo "<div class='ml-auto'>Progresso: (" . round($percent) ."%) - ";
-			  echo " R$" . moeda($row->medido_total) . " / " . moeda($row->nb_valor) . "</div></div>";
-			  echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
-			  echo "<div class='progress-bar progress-bar-striped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'>".round($percent)."%</div>
-			  </div>
-			  </div>
-			<p class='mb-0 mt-1 ml-2'><cite> Responsável: ".$row->tx_name."</cite></p>  
+		  
 		</div>";
 		}
 	}
 	echo"</div></div></div></div></div>";
 }
-$stmt = null;
-$stmt0 = null;
+
 ?>
 </div>
 
