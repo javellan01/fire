@@ -27,6 +27,9 @@
 //Carrega as empresas(clientes) pra colocar no titulo dos cards
 $clientes = getClientes($conn);
 
+if(count($clientes) == 0){
+	echo"<p> Ainda não há clientes cadastrados no sistema. </p>";}
+
 foreach($clientes as $cliente){
 			
 	echo"<div class='card-body' id='pedidoAccord'>
@@ -123,8 +126,10 @@ foreach($clientes as $cliente){
 			<div class="form-group">
 				<label for="formRetencao">Retenção:</label>
 				<select class="form-control" id="formRetencao" name="Retencao">
-					<option value='5'>5%</option>
+					<option selected value='5'>5%</option>
 					<option value='10'>10%</option>
+					<option value='15'>15%</option>
+					<option value='20'>20%</option>
 				</select>  
 			 </div>
 		</div> 

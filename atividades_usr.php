@@ -126,10 +126,9 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	<div class='card-footer'>
 		<div class='row'>
 			<div class='col-6 text-left'>
-				<h5><label class='border border-danger rounded p-1'>Pendentes: ".$pendentes."</label> / <label class='border border-success rounded p-1'>Encerradas: ".$encerradas.".</label></h5>
 			</div>
 			<div class='col-6 text-right'>
-				<h5><label class='border border-primary rounded p-1'>Total Atividades: ".$stmt2->rowCount()."</label></h5>
+				<h5><label class='border border-danger rounded p-1'>Atividades Pendentes: ".$pendentes."</label></h5>
 			</div>
 		</div>	
 		

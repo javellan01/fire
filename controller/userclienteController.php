@@ -1,4 +1,7 @@
 <?php
+
+require("./controller/mailController.php");
+
 function data_usql($data) {
     $ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4);
     return $ndata;
@@ -66,6 +69,29 @@ function updateClienteUser($conn,$data){
 				}
 			if($e == null) echo "Usuário Editado com Sucesso!";
             else echo "Erro ao Editar Usuário.";
+
+}
+
+function updateClienteUserPwd($conn,$data){
+    $e = null;
+
+    $password = bin2hex(openssl_random_pseudo_bytes(3));
+    $passmd5 = md5($password);
+    
+
+    try{
+		$stmt = $conn->prepare("UPDATE cliente_usr SET tx_password = :tx_password WHERE id_usuario = :id_usuario");
+        $stmt->bindParam(':id_usuario', $data[0]);
+        $stmt->bindParam(':tx_password', $passmd5);
+
+		$stmt->execute();
+				}
+			catch(PDOException $e){
+                    echo  $e->getMessage();   
+				}
+			if($e == null) sendNewLogin($data[1],$password);
+            
+            else echo "Erro ao enviar e-mail com nova senha.";
 
 }
 

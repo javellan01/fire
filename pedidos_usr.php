@@ -25,61 +25,50 @@
 	require("./controller/agentController.php");
 	Auth::accessControl($_SESSION['catuser'],2);
 	require("./DB/conn.php");
-
+	require("./controller/pedidosController.php");
+	
 //Carrrga as empresas pra colocar no titulo dos cards
-$stmt0 = $conn->query("SELECT DISTINCT c.id_cliente,c.tx_nome,c.tx_cnpj FROM cliente AS c 
-						INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
-						WHERE p.id_usu_resp = ".$_SESSION['userid']." ORDER BY tx_nome ASC");
+$clientes = getUserClientes($conn,$_SESSION['userid']);
 
-if($stmt0->rowCount() == 0){
+if(count($clientes) == 0){
 	echo"<p class='h4'> Ainda não há pedidos disponíveis para visualizar.</p>";}
+else{
+	foreach($clientes as $cliente){
 
-while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
-	$cliente = $row0->id_cliente;
-	$cnpj = $row0->tx_cnpj;
-	$clientecnpj = $row0->tx_nome." - CNPJ: ".$cnpj;
-	$id=$row0->id_cliente;	
 	echo"<div class='card-body' id='pedidoAccord'>
 	<div class='accordion b-b-1' id='accordion'>
 		<div class='card mb-0'>
-		<div class='card-header' id='heading".$id."'>
+		<div class='card-header' id='heading".$cliente->id_cliente."'>
 			<h5 class='mb-0'>
-				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$id."' aria-expanded='true' aria-controls='collapse".$id."'>";					
-	echo $clientecnpj;
+				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$cliente->id_cliente."' aria-expanded='true' aria-controls='collapse".$cliente->id_cliente."'>";					
+	echo $cliente->tx_nome;
 	echo"</button>
 			</h5>
 				</div>
-					<div id='collapse".$id."' class='collapse show' aria-labelledby='heading".$id."' data-parent='#accordion'><div class='card-body'>";
+					<div id='collapse".$cliente->id_cliente."' class='collapse show' aria-labelledby='heading".$cliente->id_cliente."' data-parent='#accordion'><div class='card-body'>";
 	
 		
 	// Carrega os pedidos e coloca nos cards
-	$stmt = $conn->query("SELECT c.id_cliente, p.tx_codigo, p.id_pedido, p.cs_estado, u.tx_name, v.medido_total, v.nb_valor FROM cliente As c 
-							INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
-							INNER JOIN usuario AS u ON p.id_usu_resp = u.id_usuario
-							INNER JOIN v_sum_pedido_total AS v ON p.id_pedido = v.id_pedido
-							WHERE c.id_cliente = " . $cliente . " AND p.id_usu_resp = ".$_SESSION['userid']." AND p.cs_estado = 0 ORDER BY p.tx_codigo ASC;");
+	$pedidos = getUserPedidosCliente($conn,$cliente->id_cliente,$_SESSION['userid']);
 
-	if($stmt->rowCount() == 0){
+	if(count($pedidos) == 0){
 		echo"<p class='h4'> Ainda não há pedidos disponíveis para visualizar neste cliente.</p>";}
 	else{
-	//	href='javascript:atvPhp(&#39;atividades.php&#39;);'	  
-	
-		while($row = $stmt->fetch(PDO::FETCH_OBJ)){
-			$percent = ($row->medido_total / $row->nb_valor) * 100;
-			
+	foreach($pedidos as $pedido){
+		$fisico = getProgressoFisico($conn,$pedido->id_pedido);	
 		      echo "<div class='progress-group'>
-					<div class='progress-group-header align-items-end' style='color: #27b;'><a class='btn btn-ghost-primary' href='javascript:atv_uPhp(".$row->id_pedido.");' role='button'><strong>Pedido: " . $row->tx_codigo . "</strong></a>"; 
-			  echo "<div class='btn ml-auto'>Progresso: (" . round($percent) ."%)</div></div>";
+					<div class='progress-group-header align-items-end' style='color: #27b;'><a class='btn btn-ghost-primary' href='javascript:atv_uPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . "</strong></a>"; 
+			  echo "<div class='btn ml-auto'>Atividades Concluídas: (" . $fisico->execpercent ."%)</div></div>";
 			  echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
-			  echo "<div class='progress-bar progress-bar-striped bg-success' role='progressbar' style='width: ".round($percent)."%' aria-valuenow='".round($percent)."' aria-valuemin='0' aria-valuemax='100'>".round($percent)."%</div>
+			  echo "<div class='progress-bar progress-bar-striped bg-warning' role='progressbar' style='width: ".$fisico->execpercent ."%' aria-valuenow='".$fisico->execpercent."' aria-valuemin='0' aria-valuemax='100'>".$fisico->execpercent."%</div>
 			  </div>
 			  </div>
 		</div>";
 		}
 	}
 	echo"</div></div></div></div></div>";
+	}
 }
-$stmt = null;
-$stmt0 = null;
+
 ?>
 </div>

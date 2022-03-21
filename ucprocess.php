@@ -13,6 +13,7 @@
 
 	require("./DB/conn.php");
     require("./controller/userclienteController.php");
+	
     
 	$e = null;
 	$stmt = null;
@@ -59,7 +60,18 @@
 			updateClienteUser($conn,$data);		
 		}
 	}
-
+	//CLIENTE_USER.php --- Processo para Gerar Nova Senha e Enviar Email ao Cliente!
+	if(($_GET['sendNewLogin']) == 1){
+		if(isset($_GET['Email']) && ($_GET['Email']) != ''){
+			$data = array();
+			$data[0] = ($_GET['cuid']);
+			$data[1] = ($_GET['Email']);
+			
+			
+			updateClienteUserPwd($conn,$data);
+		}
+	}
+	//CLIENTE_USER.php --- Processo para Desabilitar Usuario Convidado
 	if(($_GET['removeCuser']) == 1){
 		
 		removeClienteUser($conn,($_GET['cuid']));

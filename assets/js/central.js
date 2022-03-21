@@ -523,7 +523,8 @@
 						cuid: $('#cuid').val(),
 						removeCuser: $(this).val(),
 						newCuser: '0',
-						updateCuser: '0'
+						updateCuser: '0',
+						sendNewLogin : '0'
 					},
 					success: function(result){
 						$('#modalRCuser').modal('hide');
@@ -548,11 +549,37 @@
 						Tel: $('#formTel').val(),
 						Acesso: $('#formAcesso').val(),
 						newCuser: '0',
-						removeCuser: '0'
+						removeCuser: '0',
+						sendNewLogin : '0'
 					},
 					success: function(result) {
 						window.alert(result);
 						loadUCData(str,str2);						
+					},
+					error: function(result) {
+						window.alert(result);
+						alert('error');
+					}
+				});
+			});
+			$("#sendButton").click(function(e){
+				e.preventDefault();
+				$.ajax({
+					type: "GET",
+					url: "ucprocess.php",
+					data:{
+						cuid: $('#cuid').val(),
+						Email: $('#formEmail').val(),
+						sendNewLogin: $(this).val(),
+						newCuser: '0',
+						updateCuser: '0',
+						removeCuser : '0'
+					},
+					success: function(result){
+						window.alert(result);
+						$('#modalSendConfirm').modal('hide');
+						loadUCData(str,str2);
+
 					},
 					error: function(result) {
 						window.alert(result);

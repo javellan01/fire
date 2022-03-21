@@ -14,8 +14,11 @@
 	header("Pragma: no-cache"); // HTTP 1.0.
 	header("Expires: 0"); //
 
+	
 	require("./controller/agentController.php");
+	require("./controller/eventsController.php");
 	Auth::accessControl($_SESSION['catuser'],2);
+	require("./DB/conn.php");
 
 ?>
 <!DOCTYPE html>
@@ -28,11 +31,17 @@
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
+	<link rel="stylesheet" href="./dist/css/fullcalendar.min.css">
 	<link rel="stylesheet" href="./assets/css/jquery-ui.css">
 	<style>
       .app-body {
         overflow-x: initial;
       }
+	  .fc-sat {background-color: #eee;}
+	  .fc-sun {background-color: #eee;}
+	  .fc-week-number {background-color: #09568d; color: white;}
+	  .fc-day-top {color: #09568d;}
+	  .fc-day-header {color: #09568d;}
     </style>
 		<script src="./assets/js/jquery-3.6.0.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
@@ -47,7 +56,37 @@
 		<script src="./assets/js/toastr.min.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
+		<script src="./assets/js/moment.min.js"></script>
+		<script src="./dist/js/fullcalendar.min.js"></script>
+		<script src="./dist/js/locale/pt-br.js"></script>
+		<script>
+		$(document).ready(function() {
 
+			$('#calendar').fullCalendar({
+			  defaultView: 'basicWeek',	
+			  aspectRatio: 4,
+			  defaultDate: '<?php echo date("Y-m-d", $_SERVER['REQUEST_TIME']);?>',
+			  eventRender: function(eventObj, $el) {
+				  $el.popover({
+					title: eventObj.title+', Pedido: '+eventObj.pedido,
+					content: eventObj.periodo,
+					trigger: 'hover',
+					placement: 'top',
+					container: 'body'
+				});
+			  },
+			  
+			  editable: false,
+			  eventLimit: true,
+			  events: 	<?php fillUCalendar($conn,5);?>,
+			  
+			  weekNumbers: true,
+			  weekNumberTitle: 'W',
+			  weekNumberCalculation: 'ISO'
+			});
+
+			});
+		</script>
 </head>
 <?php
 
@@ -131,10 +170,14 @@
 			<div class="card-body">
 				<div class='row'>
 					<div class='col-6'>
-					<a class='btn btn-outline-dark' href="javascript:loadPhp('pedidos_usr.php');" role='button'><strong>Situação dos Pedidos</strong></a>					
-				
+					<a class='btn btn-outline-dark' href="javascript:loadPhp('pedidos_usr.php');" role='button'><strong>Situação dos Pedidos</strong></a>	
 					</div>
 				</div>	
+				<div class='row'>
+				<div class="card-body"><h4><cite>Visão Geral:</cite></h4>
+					<div class="m-4" id="calendar">	</div>
+				</div>
+				</div>
 			</div>
 		</div>
     </div>			

@@ -41,7 +41,7 @@
                         </div>
 						<div class='col-5'>
                         
-						<h3></h3>
+						<h3><button type='button' class='btn btn-outline-success float-right' data-toggle='modal' data-target='#modalSendConfirm'><i class="nav-icon cui-envelope-closed"></i> Enviar Login</button></h3>
 						</div>
 						</div>
 					</div>	
@@ -161,3 +161,32 @@ else{
 			  </div>
 			</div>
 		  </div>
+
+<!-- Modal Enviar Novo Login Cliente User ------------------------->
+<div class="modal" style="text-align: left" id="modalSendConfirm" tabindex="-1" role="dialog" aria-labelledby="modalSendConfirm" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title" id="modalSendConfirm">Enviar Login para Convidado: <cite><?php echo$data->tx_nome;?></cite></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body">
+	<h4>Confirma gerar nova senha e enviar para <cite><?php echo$data->tx_email;?></cite> ?</h4><br>
+	<div class='row'>
+		<div class='col-6'>
+	<button type="button" class="btn btn-success float-left" value="1" id="sendButton">Enviar</button>
+		</div>
+		<div class='col-6'>
+	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>
+		</div>
+			</div>
+			  </div>
+			    <div class="modal-footer">
+					<div id="process"></div>
+				</div>
+				
+			  </div>
+			</div>
+		  </div>		  
