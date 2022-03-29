@@ -13,9 +13,20 @@
 	
 	require("./DB/conn.php");
     require("./controller/clientesController.php");
+    
 	$e = null;
 	$stmt = null;
 	
+	function verificaQtd($conn,$id_atividade){
+
+		$stmt = $conn->query("SELECT * FROM v_sum_atividade_exec WHERE id_atividade = $id_atividade");
+	
+		$data = $stmt->fetchAll(PDO::FETCH_OBJ);
+	
+		$result = $data[0]->nb_qtd - $data[0]->qtd_sum;
+		
+		return $result;
+	}
 	
 	function test_input($data) {
 	  $data = trim($data);
@@ -130,6 +141,11 @@
 	$id_usuario = $_SESSION['userid'];
 	$id_atividade = $_GET['Aid'];
 	
+	$max = verificaQtd($conn,$id_atividade);
+	if($nb_qtd > $max){
+		$nb_qtd = $max;
+	}
+
 		try{
 	$stmt = $conn->prepare("INSERT INTO atividade_executada (id_usuario, id_atividade, nb_qtd, dt_data)
     VALUES (:id_usuario, :id_atividade, :nb_qtd, :dt_data)");

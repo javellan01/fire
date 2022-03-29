@@ -16,8 +16,7 @@
 
 
 	require("./controller/agentController.php");
-	Auth::accessControl($_SESSION['catuser'],0);
-	
+	Auth::accessControl($_SESSION['catuser'],0);	
     require("./DB/conn.php");
     require("./controller/funcionariosController.php");
     
@@ -71,7 +70,8 @@
               <thead>
                   <tr>
                       <th>Documento</th>  
-                      <th>Vencimento</th>  
+                      <th>Vencimento</th> 
+					  <th>Data Upload</th> 
                       <th></th>
                   </tr>
               </thead>
@@ -82,9 +82,11 @@
                 <th>".$row3['tx_documento']."</th>";
                 if($row3['dt_vencimento'] !== null){
                 echo "<th>".data_usql($row3['dt_vencimento'])."</th>";
+                
                 }else{
                 echo "<th>Vencimento Não Aplicável</th>";
                 }
+				echo "<th>".data_usql($row3['dt_upload'])."</th>";
                 echo"	
                 <th><a class='btn btn-outline-primary' href='download.php?token=".md5(session_id())."&data=".md5($fid)."&fname=".$row3['tx_arquivo']."'>Download</a><th>
             </tr>";	  
@@ -108,7 +110,7 @@
         </div>
         </div>
     </div>
-<!-- MODAL UPDATE FUNCIONARIO                      --------------------------------------------------------------------------------------------------------->
+<!-- MODAL UPLOAD DOCS FUNCIONARIO                      --------------------------------------------------------------------------------------------------------->
 <div class="modal" style="text-align: left" id="modalDUpload" tabindex="-1" role="dialog" aria-labelledby="modalDUpload" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -119,20 +121,44 @@
 								</button>
 							  </div>
 							  <div class="modal-body"><h4>
-								<form id="formFunc">
+								<form id="formFunc" method="POST" enctype="multipart/form-data">
   <div class="form-row">			
 	  <div class="form-group col-12">
-		<label for="formDNome">Documento: </label>
-		<input style="text-transform: uppercase;" type="text" required  minlength="4" class="form-control" id="formNome" placeholder="Descrição" name="DNome">
-		
+	  		<label for="formDNome">Documento: </label>
+			<select class="form-control" id="formDNome" name="DNome">
+			<option selected value=0>A.S.O.</option>
+			<option value=1>Ficha de Registro</option>
+			<option value=2>Ficha de EPI`s</option>
+			<option value=3>R.G.</option>
+			<option value=4>C.N.H.</option>
+			<option value=5>Carteira de Trabalho</option>
+			<option value=6>Certificado de Plataforma</option>
+			<option value=7>NR-1</option>
+			<option value=8>NR-10</option>
+			<option value=9>NR-12</option>
+			<option value=10>NR-13</option>
+			<option value=11>NR-18</option>
+			<option value=12>NR-23</option>
+			<option value=13>NR-34</option>
+			<option value=14>NR-35</option>
+			</select>	  		
 	  </div>
-		<div class="form-group col-6">
-		<label for="formFile">Arquivo: </label>
-		<input type="text" class="form-control" id="formFile" name="File" placeholder="" max-length="36" >
+	</div>  
+	  <div class="form-row">
+		<div class="form-group col-12" >
+		<span class="file-name">Selecionar Arquivo:</span><br>
+		<label for="file-upload"><input type="file" id="file-upload" name="uploadedFile"></label>
 	  </div>
+	  </div>
+	<div class="form-row">
+		<div class="form-group col-8">
+		<label for="formVencimento">Data Vencimento: </label>
+			<input type="text" require class="form-control date" id="formVencimento">
+		</div>
+		<input type="text"  class="form-control" value="<?php echo $fid;?>" id="Fid" hidden>
+	</div>	  
 	</div>
-	
-	<a class='btn btn-primary float-right' href="" role='button'>Enviar</a>
+	<button class="btn btn-primary float-right" class="form-control" role="button" value='Updoc' id="uploadBtn"><i class="nav-icon cui-file"></i> Enviar</button>
 			</h4></form>
 			  </div>
 			    <div class="modal-footer">

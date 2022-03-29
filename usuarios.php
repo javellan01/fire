@@ -54,7 +54,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 			<th class='umail'>".$row0->tx_email."</th>
 			<th class='ucpf'>$cpf</th>
 			<th class='text-danger'>Administrador</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
+			<th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'><i class='nav-icon cui-note'> Editar</button></th>
 		</tr>";
 	}
 	if($row0->nb_category_user == 1){		
@@ -64,7 +64,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 			<th class='umail'>".$row0->tx_email."</th>
 			<th class='ucpf'>$cpf</th>
 			<th class='text-success'>Gerente</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
+			<th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'><i class='nav-icon cui-note'> Editar</button></th>
 		</tr>";
 	}
 	if($row0->nb_category_user == 2){		
@@ -74,7 +74,7 @@ while($row0 = $stmt0->fetch(PDO::FETCH_OBJ)){
 			<th class='umail'>".$row0->tx_email."</th>
 			<th class='ucpf'>$cpf</th>
 			<th>Base</th>
-			<th><button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'>Editar</button></th>
+			<th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalEdUsr' data-catuser='$catuser' data-uid='$id'><i class='nav-icon cui-note'></i> Editar</button></th>
 		</tr>";
 	}
 	
@@ -132,13 +132,13 @@ $stmt0 = null;
 		<input type="text" class="form-control" id="formTel" name="Telefone" placeholder="(00) 0.0000-0000" max-length="16" >
 	  </div>
 	</div> 
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-check'></i> Cadastrar</a>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">
 				
 				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 			  </div>
 			</div>
 		  </div>
@@ -188,13 +188,13 @@ $stmt0 = null;
 		<input type="text" class="form-control" id="formTel" name="editTelefone" placeholder="(00) 0.0000-0000" max-length="16" >
 	  </div>
 	</div> 
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Atualizar</a>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-pencil'></i> Atualizar</a>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">
 				
 				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 			  </div>
 			</div>
 		  </div>

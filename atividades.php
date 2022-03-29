@@ -14,8 +14,9 @@
 					
 <?php
 session_start(); 
+
 require("./controller/agentController.php");
-//Auth::accessControl($_SESSION['catuser'],0);
+Auth::accessControl($_SESSION['catuser'],0);
 require("./DB/conn.php");
 require("./controller/atividadesController.php");
 
@@ -84,18 +85,21 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 				<div class='card-body'>";
 	
 if(count($medicoes) == 0){
-		echo"<div class='card border border-light'><h4>Não há medições cadastradas para este pedido. Tenha um bom dia e obrigado.</h4></div>";}
+		echo"<div class='card border border-light'><h4>Não há medições cadastradas para este pedido. </h4></div>";}
 	else{					
 foreach($medicoes as $medicao){
 
 	$mid=$medicao->nb_ordem;	
 	echo"		  
 		<div class='card border border-light mb-3'>
-		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."</h5>
+		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalSend$mid'><i class='nav-icon cui-envelope-closed'></i> Enviar Notificação de Medição</button></h5>
+		  
 		  <div class='card-body'>
-			<h5 class='card-title'>Valor Medido: R$ ".moeda($medicao->v_medido)." - Reponsável: ".$medicao->tx_name."</h5>
+			<h5 class='card-title'>Valor Medido: R$ ".moeda($medicao->v_medido)." - ".calcularPercent($medicao->v_medido,$pedido->nb_valor,1)."% do Pedido, Status: ".getAprovacao($conn,$medicao->id_medicao)."</h5>
+			<h4 class='cart-text'>Responsável: ".$medicao->tx_name."</h4>
 			<p class='card-text'>Nota: ".$medicao->tx_nota." - Vencimento: ".$medicao->dt_vencimento."</p>
-			<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalLAtv$mid'>Listar Atividades Medidas</button>
+			<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalLAtv$mid'><i class='nav-icon cui-list'></i> Listar Atividades Medidas</button>
+			
 			</div>
 		</div>
 		<div class='modal' style='text-align: left' id='modalLAtv$mid' tabindex='-1' role='dialog' aria-labelledby='modalLAtv$mid' aria-hidden='true'>
@@ -358,7 +362,7 @@ foreach($atividades AS $atividade)  {
 		<label for="formCategoria">Categoria:</label>
 			<select class="form-control" id="formCategoria" name="Categoria">
 			<option selected hidden>Selecionar Categoria</option>
-			<?php 	$stmt = $conn->query("SELECT * FROM categoria ORDER BY id_categoria ASC");
+<?php 	$stmt = $conn->query("SELECT * FROM categoria ORDER BY id_categoria ASC");
 			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
 			  echo "<option value=".$row->id_categoria.">".$row->tx_nome."</option>";
 			}
@@ -378,7 +382,7 @@ foreach($atividades AS $atividade)  {
 		</div>
 	</div>
 	
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Cadastrar</a>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-check'></i> Cadastrar</a>
 			</h4></form><div id="process"></div>
 							  </div>
 							  <div class="modal-footer">
@@ -387,7 +391,7 @@ foreach($atividades AS $atividade)  {
 								</div>
 								
 							  </div>
-							  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+							  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 							</div>
 						  </div>
 						</div>
@@ -426,7 +430,7 @@ foreach($atividades AS $atividade)  {
 	<div class="form-row align-items-center">			
 	  
 	</div>
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>OK</a>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-check'></i> OK</a>
 			</h4></form><div id="process"></div>
 							  </div>
 							  <div class="modal-footer">
@@ -435,7 +439,7 @@ foreach($atividades AS $atividade)  {
 								</div>
 								
 							  </div>
-							  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+							  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 							</div>
 						  </div>
 						</div>
@@ -448,9 +452,9 @@ foreach($atividades AS $atividade)  {
 	</div>	
 
 
-	<!-- Modal Verify Medição  -->
+<!-- Modal Verify Medição  -->
 <div class="modal" style="text-align: left" id="modalVMedir" tabindex="-1" role="dialog" aria-labelledby="modalVMedir" aria-hidden="true">
-						  <div class="modal-dialog" role="document">
+						  <div class="modal-dialog modal-lg" role="document">
 							<div class="modal-content">
 							  <div class="modal-header border border-danger rounded-top">
 								<h5 class="modal-title" id="modalVMedir">Medição <?php echo $mid." - ".$pedido->tx_nome;?></h5>
@@ -475,27 +479,27 @@ foreach($atividades AS $atividade)  {
 	</div>
 	
 	<?php
-	$stmt5 = $conn->query("SELECT a.id_atividade, a.tx_descricao, c.tx_nome FROM atividade a 
-	INNER JOIN categoria c ON a.id_categoria = c.id_categoria
-	WHERE id_pedido = $pid AND cs_medida = 0");
-	if($stmt5->rowCount() == 0){
+	$stmt5 = medirAtividades($conn,$pid);
+	if(count($stmt5) == 0){
 		echo"<div class='row'><h5>Não há atividades para medir até o momento.</h5></div>";
 	}
 	else{
 		
 		$loop = 0;
 		//LOOP START
-		while($row5 = $stmt5->fetch(PDO::FETCH_OBJ)){
+		foreach($stmt5 as $row5){
 		$aid = $row5->id_atividade;
 		if($balance[$aid] == 0)	continue;	 
+		$limit = $row5->nb_valor - $row5->valor_sum;
 		
 		echo"<div class='input-group mb-1'>
 				<label class='col-12' for='formMAtiv'><small>".$row5->tx_descricao."<cite> (".$row5->tx_nome.") </cite></small></label>
 				<div class='input-group-prepend'>
 					<span class='input-group-text'>R$</span>
 				</div>
-				<input type='text' class='form-control col-12' id='formMAtiv' value='".number_format($balance[$aid],2,'.','')."' name='nbVal[$aid]'>
+				<input type='text' class='form-control col-6 parcela' id='formMAtiv' value='".number_format($balance[$aid],2,'.','')."' name='nbVal[$aid]'><span> / R$ ".moeda($limit)."</span>
 				<input type='text' class='form-control' id='formMAtiv' value='".$aid."' name='idAtiv[$aid]' hidden='true'>	
+				<input type='text' class='form-control' id='pedidoValor' value='".$pedido->nb_valor."' hidden='true'>
 			</div>";
 			
 		$loop += 1;	
@@ -505,7 +509,7 @@ foreach($atividades AS $atividade)  {
 		echo"<div class='row'><h5>Não há atividades para medir até o momento.</h5></div>";
 		}
 		else{	
-	echo"<a class='btn btn-primary float-right' href='javascript:formMProc();' role='button'>OK</a>";
+	echo"<a class='btn btn-primary float-right' href='javascript:formMProc();' role='button'><i class='nav-icon cui-check'></i> Cadastrar Medição</a>";
 		}	
 	}					
 	?>		</h5></form>	
@@ -514,11 +518,13 @@ foreach($atividades AS $atividade)  {
 							  <div class="modal-footer">
 								
 								<div class="alert alert-success mr-auto ml-auto" role="alert">
-								<h5><?php echo"Total: R$ ".moeda($measure)." em ".count($balance)." Atividades.";?> </h5>
+								<h4>Total: <span id="resultado"></span>% do Pedido.
+									<br><?php echo"R$ <span id='soma'></span> em ".count($balance)." Atividades.";?> 
+								</h4>
 								</div>
 								
 							  </div>
-							  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+							  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 							</div>
 						  </div>
 						</div>

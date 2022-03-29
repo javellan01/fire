@@ -80,6 +80,27 @@
 			atvPhp(str);
 		});
 		
+		function calcular(){
+		let soma = 0;
+		let total = $('input#pedidoValor').val()*1;
+
+		$( 'input.parcela' ).each(function() {
+			soma = soma + $( this ).val()*1;
+		  });
+		
+		let result = (soma / total) *100;
+ 
+		$('span#resultado').text(Number(result).toFixed(1));
+		$('span#soma').text(Number(soma).toFixed(2));
+
+		}
+
+		calcular();
+
+		$('input.parcela').on('keyup', function (){
+			calcular();
+		});
+
 		$('#modalUpdate').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);
 			var atividade = button.data('atividade');
@@ -190,11 +211,39 @@
 		$('#formData').mask('00/00/0000', {reverse: false});
 		$('#formQtdin').mask('###0', {reverse: false});
 		$('#formCPF').mask('000.000.000-00', {reverse: false});
+		
+		$( function() {
+			$( ".date" ).datepicker();
+		  } );
 
 		$('.modal').on('hide.bs.modal', function (){
 			loadFData(str);
 		});
 		
+		$("#uploadBtn").click(function(e) {
+			e.preventDefault();
+			$.ajax({
+				type: "POST",
+				url: "updoc.php",
+				data: { 
+					Fid: $('#Fid').val(), 
+					uploadBtn: $(this).val(),
+					DNome: $('#formDNome').val(),
+					Text: $('#formDNome option:selected').text(),
+					dataVencimento: $('#formVencimento').val()				
+
+					},
+				success: function(result) {
+					window.alert(result);
+					loadFData(str);						
+				},
+				error: function(result) {
+					window.alert('erro');
+					alert('error');
+				}
+			});
+		});
+
 		}
 			
 		};

@@ -44,5 +44,6 @@
         $db = DB::getInstance();
         $conn = $db->getConnection();   
 
+        //Added new data to conn file just for better
 
 ?> 

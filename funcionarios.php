@@ -16,6 +16,8 @@
 
 	require("./controller/agentController.php");
 	Auth::accessControl($_SESSION['catuser'],0);
+	require("./DB/conn.php");
+	require("./controller/funcionariosController.php");
 ?>
 
 	<nav aria-label="breadcrumb">
@@ -50,10 +52,6 @@
 		</thead>
 		<tbody>
 <?php	
-	require("./DB/conn.php");
-	require("./controller/funcionariosController.php");
-	
-	
 	
 $data = getFuncionarios($conn);
 foreach($data as $row){
@@ -66,8 +64,8 @@ foreach($data as $row){
 			<th>".$row['tx_cpf']."</th>
 			<th>".$row['tx_funcao']."</th>
 			<th>".data_usql($row['dt_admissao'])."</th>
-      <th><button type='button' class='btn btn-outline-primary float-right ml-2' data-toggle='modal' data-target='#modalDFunc$id'>Documentos</button></th>
-      <th><button type='button' class='btn btn-outline-primary float-right ml-2' data-toggle='modal' data-target='#modalAFunc$id'>Atividades</button></th>
+      <th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalDFunc$id'><i class='nav-icon cui-file'></i> Documentos</button></th>
+      <th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalAFunc$id'><i class='nav-icon cui-task'></i> Atividades</button></th>
       
 		</tr>";	
 	
@@ -124,13 +122,13 @@ foreach($data as $row){
 		  </div>
 	</div>
 
-	<a class='btn btn-primary float-right' href="javascript:formFProc();" role='button'>Cadastrar</a>
+	<a class='btn btn-primary float-right' href="javascript:formFProc();" role='button'><i class='nav-icon cui-check'></i> Cadastrar</a>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">
 				
 				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 			  </div>
 			</div>
 		  </div>

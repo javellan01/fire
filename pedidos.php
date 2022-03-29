@@ -183,13 +183,13 @@ foreach($clientes as $cliente){
 		<textarea class="form-control" id="formControlTextarea" rows="3" name="pdDescricao"></textarea>
     </div>
 	
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>Adicionar</a>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-check'></i> Adicionar</a>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">
 				
 				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 			  </div>
 			</div>
 		  </div>

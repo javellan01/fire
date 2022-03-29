@@ -131,10 +131,10 @@
 			
 		</div>
 		<div class='col-3'>
-		<button type='button' class='btn btn-danger float-left' data-toggle='modal' data-target='#modalRPedido'>Remover Pedido</button>	
+		<button type='button' class='btn btn-danger float-left' data-toggle='modal' data-target='#modalRPedido'><i class='nav-icon cui-trash'></i> Remover Pedido</button>	
 		</div>
 		<div class='col-3'>
-		<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalUPedido'>Atualizar Dados do Pedido</button>		
+		<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalUPedido'><i class='nav-icon cui-pencil'></i> Atualizar Dados do Pedido</button>		
 		</div>
 	</div>
     </form>
@@ -223,8 +223,8 @@ foreach($categorias as $categoria){
 			<th><input type='text' require class='form-control date' id='formAtvidata".$atividade->id_atividade."' name='Atvidata".$atividade->id_atividade."' value='".data_usql($atividade->dt_inicio)."'></th>
 			<th><input type='text' require class='form-control date' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
 			<th><input type='text' require class='form-control' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
-			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'>Atualizar</button></th>
-			<th><button type='button' class='btn btn-danger float-center button-excluir'  value='1' id='excluirAtividade' data-id_atividade='".$atividade->id_atividade."'>Excluir</button></th>
+			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'><i class='nav-icon cui-pencil'></i> Atualizar</button></th>
+			<th><button type='button' class='btn btn-danger float-center button-excluir'  value='1' id='excluirAtividade' data-id_atividade='".$atividade->id_atividade."'><i class='nav-icon cui-trash'></i> Excluir</button></th>
 		</tr>";	
 			$sumcat += $atividade->nb_valor;
 		}

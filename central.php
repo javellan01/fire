@@ -121,6 +121,12 @@ require("./controller/centralController.php");
 				  <i class="nav-icon cui-people"></i>Funcionários
 				</a>
 			  </li>
+			  </li>
+				<li class="nav-item ">
+				<a class="nav-link text-light" href="javascript:loadPhp('configurar.php');">
+				  <i class="nav-icon cui-settings"></i>Configuração
+				</a>
+			  </li>
 			</ul>
 		  </li>
 		  <li class="nav-item">

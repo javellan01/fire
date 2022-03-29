@@ -13,6 +13,12 @@ function moeda($num){
     return number_format($num,2,',','.');
 }
 
+function calcularPercent($parcel,$total,$precision){
+    
+    $result = ($parcel/$total)*100;
+    
+    return number_format($result,$precision,',','.');
+}
 function getPedidoData($conn, $pid){
     $stmt = $conn->query("SELECT p.*, (( p.nb_valor / 100) * p.nb_retencao) AS retencao, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
 
@@ -42,6 +48,29 @@ function getMedicaoResume($conn,$pid,$mid){
     return $data;
 }
 
+function getAprovacao($conn,$mid){
+
+    $stmt = $conn->query("SELECT md.id_cliente_usr, md.cs_aprovada, cu.tx_nome FROM medicao AS md
+                            INNER JOIN cliente_usr AS cu ON md.id_cliente_usr = cu.id_usuario
+                            WHERE md.id_medicao = $mid");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+
+    if(count($data) == 0){
+        $e = '<span class="text-warning">Aguardando Aprovação.</span>';
+        return $e;    
+    }else{
+        if($data[0]->cs_aprovada == 1){
+            $e = '<span class="text-success">Aprovada por '.$data[0]->tx_nome.'.</span>';
+            return $e;
+        }else{
+            $e = '<span class="text-warning">Aguardando Aprovação de '.$data[0]->tx_nome.'.</span>';
+            return $e;
+        }     
+    }                           
+}
+
 function getCategoria($conn,$pid){
     $stmt = $conn->query("SELECT c.* FROM atividade a  
         INNER JOIN categoria c ON a.id_categoria=c.id_categoria	WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
@@ -69,6 +98,17 @@ function getAtividades($conn,$pid,$cid){
 
 function getAtividade($conn, $id){
     $stmt = $conn->query("SELECT * FROM atividades WHERE id_atividade = $id");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+
+function medirAtividades($conn,$pid){
+    $stmt = $conn->query("SELECT a.id_atividade, a.tx_descricao, c.tx_nome, vsam.valor_sum, vsam.nb_valor FROM atividade a 
+	INNER JOIN categoria c ON a.id_categoria = c.id_categoria
+	INNER JOIN v_sum_atividade_medd vsam ON a.id_atividade = vsam.id_atividade
+	WHERE a.id_pedido = $pid AND cs_medida = 0");
 
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 

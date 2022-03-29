@@ -61,7 +61,7 @@
     </form>
 			<div class='col-2 m-auto'>
 			<div class='mt-3'>
-			<button type='button' class='btn btn-primary float-right' value='1' id='updateButton'>Atualizar Dados do Cliente</button>
+			<button type='button' class='btn btn-primary float-right' value='1' id='updateButton'><i class='nav-icon cui-pencil'></i> Atualizar Dados do Cliente</button>
 			</div>		
 			</div>
 	</div>
@@ -185,13 +185,13 @@ foreach($pedidos as $pedido){
 	  </div>
 	</div>
 
-	<button type="button" class="btn btn-primary float-right" value="1" id="newButton">Cadastrar</button>
+	<button type="button" class="btn btn-primary float-right" value="1" id="newButton"><i class='nav-icon cui-check'></i> Cadastrar</button>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">
 				
 				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 			  </div>
 			</div>
 		  </div>

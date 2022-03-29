@@ -65,12 +65,13 @@ class Auth
 
     public static function accessControl($catuser,$level){
         
+    if(isset($_SESSION['catuser'])){
         if($catuser != $level){
             if($_SESSION['catuser'] == 0) return header('Location: central.php');
             if($_SESSION['catuser'] == 1) return header('Location: central_ger.php');
             if($_SESSION['catuser'] == 2) return header('Location: central_usr.php');
         }
-
+    } else session_destroy();
 
     }
 }
