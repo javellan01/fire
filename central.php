@@ -30,6 +30,8 @@
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
 	<link rel="stylesheet" href="./dist/css/fullcalendar.min.css">
+	<link rel="stylesheet" href="./dist/css/spectrum.min.css">
+
 	<style>
       .app-body { overflow-x: initial;}
 	  .fc-sat {background-color: #eee;}
@@ -53,6 +55,8 @@
 		<script src="./assets/js/toastr.min.js"></script>
 		<script src="./dist/js/fullcalendar.min.js"></script>
 		<script src="./dist/js/locale/pt-br.js"></script>
+		<script src="./dist/spectrum/spectrum.min.js"></script>
+		
 		
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>

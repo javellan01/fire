@@ -66,13 +66,13 @@ foreach($categorias as $categoria){
 			<th>".$categoria->id_categoria."</th>
 			<th>".$categoria->tx_nome."</th>
 			<th>".$counter[$categoria->id_categoria]."</th>
-			<th><button type='button' class='btn btn-primary' style='background-color:".$categoria->tx_color.";'><i class='nav-icon cui-brush'></i> Selecionar Cor</button></th>
+			<th><input class='btn btn-primary color-picker' value='".$categoria->tx_color."'></input></th>
      		<th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalACat$id'><i class='nav-icon cui-pencil'></i> Atualizar</button></th>";
 	if($counter[$categoria->id_categoria] != 0){
-		echo "<th><button type='button' class='btn btn-outline-primary disabled' ><i class='nav-icon cui-trash'></i> Excluir</button></th>";
+		echo "<th><button type='button' class='btn btn-outline-dark disabled' ><i class='nav-icon cui-trash'></i> Excluir</button></th>";
 	}
 	else {
-		echo "<th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalECat$id'><i class='nav-icon cui-trash'></i> Excluir</button></th>";
+		echo "<th><button type='button' class='btn btn-outline-danger' data-toggle='modal' data-target='#modalECat$id'><i class='nav-icon cui-trash'></i> Excluir</button></th>";
 	}
       
       

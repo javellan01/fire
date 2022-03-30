@@ -76,6 +76,50 @@
 		}
 	}
 
+	if(($_GET['grantAcessoConvidado']) == 1){
+		if(($_GET['CUid']) != '' && ($_GET['Pid']) != ''){
+			$data = array();
+			$data[0] = $_GET['CUid'];    //CONVIDADO ID
+			$data[1] = $_GET['Pid'];	//PEDIDO ID
+			
+            grantAcessoConvidado($conn,$data);
+           
+		}
+	}
+
+	if(($_GET['removerAcessoConvidado']) == 1){
+		if(($_GET['CUid']) != '' && ($_GET['Pid']) != ''){
+			$data = array();
+			$data[0] = $_GET['CUid'];    //CONVIDADO ID
+			$data[1] = $_GET['Pid'];	//PEDIDO ID
+
+            removeAcessoConvidado($conn,$data);
+           
+		}
+	}
+
+	if(($_GET['removerAcessoUsuario']) == 1){
+		if(($_GET['Uid']) != '' && ($_GET['Pid']) != ''){
+			$data = array();
+			$data[0] = $_GET['Uid'];    //CONVIDADO ID
+			$data[1] = $_GET['Pid'];	//PEDIDO ID
+
+            removeAcessoUsuario($conn,$data);
+           
+		}
+	}
+
+	if(($_GET['grantAcessoUsuario']) == 1){
+		if(($_GET['Uid']) != '' && ($_GET['Pid']) != ''){
+			$data = array();
+			$data[0] = $_GET['Uid'];    //CONVIDADO ID
+			$data[1] = $_GET['Pid'];	//PEDIDO ID
+			
+            grantAcessoUsuario($conn,$data);
+           
+		}
+	}
+
 	if(($_GET['alocaFuncionario']) == 1){
 		if(($_GET['Fid']) != '' && ($_GET['Pid']) != ''){
 			$data = array();

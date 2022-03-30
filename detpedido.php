@@ -28,7 +28,16 @@
 	$cusers = getUsersCliente($conn,$cid);
 	$medicoes = getMedicoes($conn,$pid);
 	$alocacao = getAlocacao($conn,$pid);
+	$acessoConvidado = getAcessoConvidado($conn,$pid);
+	$usuarios = getUsuarios($conn);
+	$acessoUsuario = getAcessoUsuario($conn,$pid);
 	$funcionarios = getFuncionarios($conn);
+
+	function showUserAccess($nb_category_user){
+		if($nb_category_user == 0) return 'Acesso Financeiro'; 
+		if($nb_category_user == 1) return 'Somente Progresso'; 
+	}
+
 ?>
 
 	<nav aria-label="breadcrumb">
@@ -205,15 +214,15 @@ foreach($medicoes AS $medicao){
 <?php
 $categorias = getCategoria($conn,$pid);
 $sumatv = 0.00;
-foreach($categorias as $categoria){	
 
+foreach($categorias as $categoria){	
+	
 	$cid = $categoria->id_categoria;
 	$atividades = getAtividades($conn,$pid,$cid);
 	$sumcat = 0.00;
 	foreach($atividades as $atividade){
 	// Aloca os users e cria a list TOTALMENTE EDITÁVEL
 	echo"<tr>
-
 			<th><input type='text' require class='form-control' id='formAtvtx_descricao".$atividade->id_atividade."' name='Atvtx_descricao".$atividade->id_atividade."' value='".$atividade->tx_descricao."'></th>
 			<th>".$categoria->tx_nome."</th>";
 			if($atividade->cs_finalizada == 0) echo"<th class='text-success'>Ativa</th>";
@@ -231,6 +240,7 @@ foreach($categorias as $categoria){
 		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th>R$ ".moeda($sumcat)."</th></th><th></th><th></tr>";
 		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
 		$sumatv += $sumcat;
+		
 	}	
 
 	echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th><th></th></tr>
@@ -241,10 +251,115 @@ foreach($categorias as $categoria){
 		</tbody>
 	</table>
 </div> 
-           
-<!------ LISTAGEM PARA ALOCAR FUNCIONÁRIOS --------------------------------------->			
+</div>
+</div>
+
+<div class="card">
+	<div class='card-header'><div class='row'><div class='col-8'>
+        <h5><cite>Controle de Acesso do Pedido</h5>
+                        </div>
+						<div class='col-4'>    
+						
+						</div>
+						</div>
+					</div>	
+					<div class="card-body">
+					<div class="list-group list-group-accent">
+<!------ LISTAGEM PARA CONTROLE ACESSO DE CONVIDADOS --------------------------------------->
+<div class="list-group-item list-group-item-accent-primary">			
 <div class="row m-auto">
 	
+	<h4><cite>Convidados: </h4>
+	<table class='table table-striped'>
+		<thead>
+			<tr>
+				<th class='col-4'>Nome</th>
+				<th class='col-2'>Nível de Acesso</th>
+				<th class='col-2'>E-Mail</th>
+				<th class='col-2'>Contato</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+<?php
+	 foreach($acessoConvidado as $convidado){
+		echo "<tr>
+		 			<th>".$convidado->tx_nome."</th>
+					<th>".showUserAccess($convidado->nb_category_user)."</th> 
+					<th>".$convidado->tx_email."</th>
+					<th>".$convidado->tx_contato."</th>
+					<th><button type='button' class='btn btn-danger float-center button-removeconvidado'  value='1'
+					id='removerAcessoConvidado' data-id_pedido='".$pid."' data-id_cliente_usr='".$convidado->id_cliente_usr."'>
+					<i class='nav-icon cui-user-unfollow'> Remover</button></th>
+				</tr>";
+	 }
+?>				
+		</tbody>
+	</table>
+</div>
+<div class="row m-auto align-items-center">
+	<h5 class="col-3"><cite>Liberar Acesso para Convidado:  </h5>
+			<select class="form-control col-5" id="formAcessoConvidado" name="AcessoConvidado">
+			<option selected hidden>Selecionar Convidado</option>
+<?php	foreach($cusers as $cuser){
+               echo "<option value=".$cuser->id_usuario.">".$cuser->tx_nome."</option>";
+            }
+?>	
+		</select>
+		<div class='col-2'>
+		<button type='button' class='btn btn-primary float-right button-acessoconvidado' value="1"
+		id="grantAcessoConvidado" data-id_pedido="<?php echo $pid;?>">
+		<i class='nav-icon cui-user-follow'></i> Liberar Acesso</button>		
+		</div>
+	</div>   
+</div>
+<!------ LISTAGEM PARA CONTROLE ACESSO DE USUARIOS FIRE --------------------------------------->		
+<div class="list-group-item list-group-item-accent-danger">	
+<div class="row m-auto">
+	
+	<h4><cite>Usuários FireSystems: </h4>
+	<table class='table table-striped'>
+		<thead>
+			<tr>
+				<th class='col-8'>Nome</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+<?php
+	 foreach($acessoUsuario as $usuario){
+		echo "<tr>
+		 			<th>".$usuario->tx_name."</th>					
+					<th><button type='button' class='btn btn-danger float-center button-removeusuario'  value='1'
+					id='removerAcessoUsuario' data-id_pedido='".$pid."' data-id_usuario='".$usuario->id_usuario."'>
+					<i class='nav-icon cui-user-unfollow'> Remover</button></th>
+				</tr>";
+	 }
+?>				
+		</tbody>
+	</table>
+</div>
+<div class="row m-auto align-items-center">
+	<h5 class="col-3"><cite>Liberar Acesso para Usuário:  </h5>
+			<select class="form-control col-5" id="formAcessoUsuario" name="AcessoUsuario">
+			<option selected hidden>Selecionar Usuário</option>
+<?php	foreach($usuarios as $user){
+               echo "<option value=".$user->id_usuario.">".$user->tx_name."</option>";
+            }
+?>	
+		</select>
+		<div class='col-2'>
+		<button type='button' class='btn btn-primary float-right button-acessousuario' value="1" 
+		id="grantAcessoUsuario" data-id_pedido="<?php echo $pid;?>">
+		<i class='nav-icon cui-user-follow'></i> Liberar Acesso</button>		
+		</div>
+	</div>   
+	</div>   
+
+<!------ LISTAGEM PARA ALOCAR FUNCIONÁRIOS --------------------------------------->			
+<div class="list-group-item list-group-item-accent-dark">
+<div class="row m-auto">
+
 	<h4><cite>Colaboradores: </h4>
 	<table class='table table-striped'>
 		<thead>
@@ -260,15 +375,16 @@ foreach($categorias as $categoria){
 		echo "<tr>
 		 			<th>".$alocado->tx_nome."</th>
 					<th>".$alocado->tx_funcao."</th>
-					<th><button type='button' class='btn btn-danger float-center button-remover'  value='1' id='removerColaborador' data-id_pedido='".$pid."' data-id_funcionario='".$alocado->id_funcionario."'>Remover</button></th>
+					<th><button type='button' class='btn btn-danger float-center button-remover'  value='1' id='removerColaborador' data-id_pedido='".$pid."' data-id_funcionario='".$alocado->id_funcionario."'><i class='nav-icon cui-user-unfollow'> Remover</button></th>
 				</tr>";
 	 }
 ?>				
 		</tbody>
 	</table>
+
 </div>
-<div class="row m-auto">
-	<h4><cite>Alocar Colaborador FireSystems:  </h4>
+<div class="row m-auto align-items-center">
+	<h5 class="col-3"><cite>Alocar Colaborador FireSystems:  </h5>
 			<select class="form-control col-5" id="formColaborador" name="Colaborador">
 			<option selected hidden>Selecionar Colaborador</option>
 <?php	foreach($funcionarios as $colaborador){
@@ -277,9 +393,15 @@ foreach($categorias as $categoria){
 ?>	
 		</select>
 		<div class='col-2'>
-		<button type='button' class='btn btn-primary float-right button-alocar' value="1" id="alocarColaborador" data-id_pedido="<?php echo $pid;?>">Alocar Colaborador</button>		
+		<button type='button' class='btn btn-primary float-right button-alocar' value="1" id="alocarColaborador" data-id_pedido="<?php echo $pid;?>"><i class='nav-icon cui-user-follow'></i> Alocar Colaborador</button>		
 		</div>
 	</div>
+	</div>
+	<div class="card-footer"><cite>Obs.: As configurações de acesso estão prontas, porém ainda não é reconhecida pelo site do gerenciamento.</cite></div>
+	</div>
+</div>
+	
+
 <!-- Page Closing ------------------------->
 <div class='row'>
             <div id="process"></div>
@@ -308,8 +430,8 @@ foreach($categorias as $categoria){
 	
 		</div>
 		<div class='col-6'>
-	<button type="button" class="btn btn-danger float-left" value="1" id="removeButton">Remover</button>
-	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>
+	<button type="button" class="btn btn-danger float-left" value="1" id="removeButton"><i class='nav-icon cui-trash'></i> Remover</button>
+	<button type="button" class="btn btn-primary float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
 		</div>
 			</div>
 			  </div>
@@ -338,10 +460,10 @@ foreach($categorias as $categoria){
 	</form>
 	<div class='row'>
 		<div class='col-6'>
-	<button type="button" class="btn btn-danger float-right" value="1" id="updateButton">OK</button>
+	<button type="button" class="btn btn-primary float-right" value="1" id="updateButton"><i class='nav-icon cui-check'></i> OK</button>
 		</div>
 		<div class='col-6'>
-	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>
+	<button type="button" class="btn btn-danger float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
 		</div>
 			</div>
 			  </div>

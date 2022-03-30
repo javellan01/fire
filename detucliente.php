@@ -113,8 +113,8 @@ else{
      </div>
             <div class='row'>  
               <div class='col-6'>
-			  <button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalRCuser'>Desativar Usuário Convidado</button>	
-			  <button type='button' class='btn btn-primary float-right' value='1' id='updateButton'>Atualizar Usuário Convidado</button>		
+			  <button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalRCuser'><i class='nav-icon cui-ban'></i> Desativar Usuário Convidado</button>	
+			  <button type='button' class='btn btn-primary float-right' value='1' id='updateButton'><i class='nav-icon cui-pencil'></i> Atualizar Usuário Convidado</button>		
               
               </div>
               <div class='col-6'>
@@ -149,8 +149,8 @@ else{
 	
 		</div>
 		<div class='col-6'>
-	<button type="button" class="btn btn-danger float-left" value="1" id="removeButton">Desativar</button>
-	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>
+	<button type="button" class="btn btn-danger float-left" value="1" id="removeButton"><i class='nav-icon cui-ban'></i> Desativar</button>
+	<button type="button" class="btn btn-primary float-right" data-dismiss="modal"><i class='nav-icon cui-action-undo'></i> Cancelar</button>
 		</div>
 			</div>
 			  </div>
@@ -176,10 +176,10 @@ else{
 	<h4>Confirma gerar nova senha e enviar para <cite><?php echo$data->tx_email;?></cite> ?</h4><br>
 	<div class='row'>
 		<div class='col-6'>
-	<button type="button" class="btn btn-success float-left" value="1" id="sendButton">Enviar</button>
+	<button type="button" class="btn btn-success float-left" value="1" id="sendButton"><i class='nav-icon cui-action-envelope-closed'></i> Enviar</button>
 		</div>
 		<div class='col-6'>
-	<button type="button" class="btn btn-primary float-right" data-dismiss="modal">Cancelar</button>
+	<button type="button" class="btn btn-primary float-right" data-dismiss="modal"><i class='nav-icon cui-action-undo'></i> Cancelar</button>
 		</div>
 			</div>
 			  </div>

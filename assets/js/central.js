@@ -9,9 +9,16 @@
 		document.getElementById("main").innerHTML = this.responseText;
 		
 		$( function() {
-			$( ".date" ).datepicker();
-		  } );
+		$( ".date" ).datepicker();
 		  
+		$('.color-picker').spectrum({
+			type: "text",
+			hideAfterPaletteSelect: true,
+			showAlpha: false,
+			showButtons: false,
+			allowEmpty: false
+		  }); 
+		} );
 		$('#modalPedido').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);
 			var cliente = button.data('cliente');
@@ -370,6 +377,10 @@
 					removeFuncionario: '0',
 					alocaFuncionario:'0',
 					excluirAtividade:'0',
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: '0',
 					Codigo: $('#formCodigo').val(),
 					pid: $('#Pid').val(),
 					idata: $('#formiData').val(),
@@ -408,6 +419,10 @@
 					removeFuncionario: '0',
 					alocaFuncionario:'0',
 					excluirAtividade:'0',
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: '0',
 					Descricao: $('#formAtvtx_descricao'+id_atividade).val(),
 					Tipo: $('#formAtvtx_tipo'+id_atividade).val(),
 					Qtd: $('#formAtvnb_qtd'+id_atividade).val(),
@@ -444,6 +459,10 @@
 					excluirAtividade:  $(this).val(),
 					removeFuncionario: '0',
 					alocaFuncionario:'0',
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: '0',
 					Atividade: $(this).attr("data-id_atividade")
 					
 				},
@@ -473,6 +492,10 @@
 					excluirAtividade:'0',
 					removeFuncionario: $(this).val(),
 					alocaFuncionario:'0',
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: '0',
 					Fid: $(this).attr("data-id_funcionario"),
 					Pid: $(this).attr("data-id_pedido")
 					
@@ -490,7 +513,143 @@
 			
 		});
 
+		$(".button-removeconvidado").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: '0',
+					excluirAtividade:'0',
+					removeFuncionario: '0',
+					alocaFuncionario:'0',
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: $(this).val(),
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: '0',
+					CUid: $(this).attr("data-id_cliente_usr"),
+					Pid: $(this).attr("data-id_pedido")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+				}
+			});
+			
+		});
+
+		$(".button-removeusuario").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: '0',
+					excluirAtividade:'0',
+					removeFuncionario: '0',
+					alocaFuncionario:'0',
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: $(this).val(),
+					Uid: $(this).attr("data-id_usuario"),
+					Pid: $(this).attr("data-id_pedido")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+				}
+			});
+			
+		});
+
+		$(".button-acessoconvidado").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: '0',
+					excluirAtividade:'0',
+					grantAcessoConvidado: $(this).val(),
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: '0',
+					removeFuncionario: '0',
+					alocaFuncionario:'0',
+					CUid: $('#formAcessoConvidado').val(),
+					Pid: $(this).attr("data-id_pedido")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+				}
+			});
+			
+		});
+
+		$(".button-acessousuario").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "GET",
+				url: "pprocess.php",
+				data: { 
+					updatePedido: '0',
+					removePedido: '0',
+					updateAtividade: '0',
+					excluirAtividade:'0',
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: $(this).val(),
+					removerAcessoUsuario: '0',
+					removeFuncionario: '0',
+					alocaFuncionario:'0',
+					Uid: $('#formAcessoUsuario').val(),
+					Pid: $(this).attr("data-id_pedido")
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+				}
+			});
+			
+		});
 		
+
 		$(".button-alocar").click(function(event) {
 			event.preventDefault();
 
@@ -504,6 +663,10 @@
 					removeFuncionario: '0',
 					excluirAtividade:'0',
 					alocaFuncionario: $(this).val(),
+					grantAcessoConvidado: '0',
+					removerAcessoConvidado: '0',
+					grantAcessoUsuario: '0',
+					removerAcessoUsuario: '0',
 					Fid: $('#formColaborador').val(),
 					Pid: $(this).attr("data-id_pedido")
 					

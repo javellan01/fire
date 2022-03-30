@@ -129,6 +129,13 @@ function getUsers($conn){
     return $data;
 }
 
+function getUsuarios($conn){
+    $stmt = $conn->query("SELECT tx_name,id_usuario FROM usuario WHERE NOT nb_category_user = 0");
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+
 function removePedido($conn,$pid){
     $stmt = $conn->prepare("UPDATE pedido SET id_cliente = 0 WHERE id_pedido = :pid");
     $stmt->bindParam(':pid', $pid);
@@ -210,7 +217,93 @@ function excluirAtividade($conn,$data){
         else echo "Erro: Atividade com Execução Registrada!";
    
 }
+//retur lista de convidados que acessam o sistema
+function getAcessoConvidado($conn,$pid){
+    $stmt = $conn->query("SELECT ap.*, cu.tx_nome, cu.tx_email, cu.tx_contato, cu.nb_category_user FROM acesso_pedido AS ap 
+                        INNER JOIN cliente_usr AS cu ON ap.id_cliente_usr = cu.id_usuario 
+                        WHERE ap.id_usuario IS NULL AND ap.id_pedido = $pid");
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
+    return $data;
+}
+
+//retur lista de users fire que acessam o sistema
+function getAcessoUsuario($conn,$pid){
+    $stmt = $conn->query("SELECT ap.*, u.tx_name FROM acesso_pedido AS ap 
+                        INNER JOIN usuario AS u ON ap.id_usuario = u.id_usuario 
+                        WHERE ap.id_cliente_usr IS NULL AND ap.id_pedido = $pid");
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+}
+//Garante ao Usuario Acesso ao Pedido
+function grantAcessoUsuario($conn,$data){
+    $e = null;
+    try{
+    $stmt = $conn->prepare("INSERT INTO acesso_pedido (id_usuario, id_pedido) VALUES (:id_usuario, :id_pedido)");
+	
+    $stmt->bindParam(':id_usuario',$data[0]); 
+    $stmt->bindParam(':id_pedido',$data[1]); 
+
+    $stmt->execute();
+    }
+    catch(PDOException $e){
+        echo  $e->getMessage();
+        }
+        if($e == null) echo "Acesso Liberado!";
+}
+
+//Garante ao Convidado Acesso ao Pedido
+function grantAcessoConvidado($conn,$data){
+    $e = null;
+    try{
+    $stmt = $conn->prepare("INSERT INTO acesso_pedido (id_cliente_usr, id_pedido) VALUES (:id_cliente_usr, :id_pedido)");
+	
+    $stmt->bindParam(':id_cliente_usr',$data[0]); 
+    $stmt->bindParam(':id_pedido',$data[1]); 
+
+    $stmt->execute();
+    }
+    catch(PDOException $e){
+        echo  $e->getMessage();
+        }
+        if($e == null) echo "Acesso Liberado!";
+}
+
+ // Remove acesso ao Usuario no Pedido
+ function removeAcessoUsuario($conn,$data){
+    $e = null;
+    try{
+    $stmt = $conn->prepare("DELETE FROM acesso_pedido WHERE id_usuario = :id_usuario AND id_pedido = :id_pedido");
+	
+    $stmt->bindParam(':id_usuario',$data[0]); 
+    $stmt->bindParam(':id_pedido',$data[1]); 
+
+    $stmt->execute();
+    }
+    catch(PDOException $e){
+        echo  $e->getMessage();
+        }
+        if($e == null) echo "Acesso Removido com Sucesso!";
+}
+ // Remove acesso ao Convidado no Pedido
+function removeAcessoConvidado($conn,$data){
+    $e = null;
+    try{
+    $stmt = $conn->prepare("DELETE FROM acesso_pedido WHERE id_cliente_usr = :id_cliente_usr AND id_pedido = :id_pedido");
+	
+    $stmt->bindParam(':id_cliente_usr',$data[0]); 
+    $stmt->bindParam(':id_pedido',$data[1]); 
+
+    $stmt->execute();
+    }
+    catch(PDOException $e){
+        echo  $e->getMessage();
+        }
+        if($e == null) echo "Acesso Removido com Sucesso!";
+}
+
+// return lista de funcionarios alocados no pedido
 function getAlocacao($conn,$pid){
     $stmt = $conn->query("SELECT fa.*, fu.tx_nome, fu.tx_funcao FROM f_alocacao AS fa INNER JOIN funcionario AS fu ON fa.id_funcionario = fu.id_funcionario WHERE fa.id_pedido = $pid");
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
