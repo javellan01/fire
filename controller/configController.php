@@ -56,43 +56,41 @@ function checkCategoria($conn,$id){
 
 }
 
-function newCategoria($conn,$data){
+function novaCategoria($conn,$data){
     $e = null;
     try{
-		$stmt = $conn->prepare("INSERT INTO categoria (id_categoria, tx_nome) VALUES (:id_categoria, :tx_nome)");
+		$stmt = $conn->prepare("INSERT INTO categoria (id_categoria, tx_nome, tx_color) VALUES (:id_categoria, :tx_nome, :tx_color)");
 		$stmt->bindParam(':id_categoria', $data[0]);
 		$stmt->bindParam(':tx_nome', $data[1]);
+		$stmt->bindParam(':tx_color', $data[2]);
 
 		$stmt->execute();
 				}
 			catch(PDOException $e)
 				{
-				echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao criar novo funcionário! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+				echo "Erro ao criar nova categoria! " . $e->getMessage();
 				}
 				
-			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Funcionário Cadastrado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-            <span aria-hidden='true'>&times;</span></button></div>";
+			if($e == null) echo "Nova Categoria Cadastrada com Sucesso!";
 
 }
 
 function updateCategoria($conn,$data){
     $e = null;
     try{
-		$stmt = $conn->prepare("UPDATE categoria SET tx_nome = :tx_nome WHERE id_categoria = :id_categoria");
+		$stmt = $conn->prepare("UPDATE categoria SET tx_nome = :tx_nome, tx_color = :tx_color WHERE id_categoria = :id_categoria");
 		$stmt->bindParam(':id_categoria', $data[0]);
 		$stmt->bindParam(':tx_nome', $data[1]);
+        $stmt->bindParam(':tx_color', $data[2]);
 
 		$stmt->execute();
 				}
 			catch(PDOException $e)
 				{
-				echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao renomear categoria! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+				echo "Erro ao editar categoria! " . $e->getMessage();
 				}
 				
-			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Categoria Renomeada com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-            <span aria-hidden='true'>&times;</span></button></div>";
+			if($e == null) echo "Categoria Editada com Sucesso!";
 
 }
 
@@ -111,18 +109,14 @@ function removeCategoria($conn,$id){
                     }
                 catch(PDOException $e)
                     {
-                    echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao remover categoria! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                    <span aria-hidden='true'>&times;</span></button></div>";
+                    echo "Erro ao remover categoria! " . $e->getMessage();
                     }
                     
-                if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Categoria Removida!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+                if($e == null) echo "Categoria Removida!";
 
     }
     else{
-        echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Categoria não pode ser removida! <br> Esta categoria está sendo usada por ".$cound." atividades!
-                    <button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                    <span aria-hidden='true'>&times;</span></button></div>";
+        echo "Categoria não pode ser removida! <br> Esta categoria está sendo usada por ".$cound." atividades!";
     }
     
 

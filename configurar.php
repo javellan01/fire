@@ -63,16 +63,19 @@ foreach($categorias as $categoria){
 	
 	// Aloca os users e cria a list e todos o modais
 	echo"<tr>
+			
 			<th>".$categoria->id_categoria."</th>
-			<th>".$categoria->tx_nome."</th>
+			<th><input type='text' require class='form-control' id='nome$id' value='".$categoria->tx_nome."'></th>
 			<th>".$counter[$categoria->id_categoria]."</th>
-			<th><input class='btn btn-primary color-picker' value='".$categoria->tx_color."'></input></th>
-     		<th><button type='button' class='btn btn-outline-primary' data-toggle='modal' data-target='#modalACat$id'><i class='nav-icon cui-pencil'></i> Atualizar</button></th>";
+			<th><input class='btn btn-primary color-picker' id='color$id' value='".$categoria->tx_color."'></input></th>
+     		<th><button type='button' class='btn btn-outline-primary updateCategoria'  value='1'
+			 data-tx_nome='".$categoria->tx_nome."'
+			 data-id_categoria='".$categoria->id_categoria."'><i class='nav-icon cui-pencil'></i> Atualizar</button></th>";
 	if($counter[$categoria->id_categoria] != 0){
-		echo "<th><button type='button' class='btn btn-outline-dark disabled' ><i class='nav-icon cui-trash'></i> Excluir</button></th>";
+		echo "<th><button type='button' class='btn btn-outline-dark disabled'><i class='nav-icon cui-trash'></i> Excluir</button></th>";
 	}
 	else {
-		echo "<th><button type='button' class='btn btn-outline-danger' data-toggle='modal' data-target='#modalECat$id'><i class='nav-icon cui-trash'></i> Excluir</button></th>";
+		echo "<th><button type='button' class='btn btn-outline-danger removeCategoria' value='1' data-id_categoria='$id'><i class='nav-icon cui-trash'></i> Excluir</button></th>";
 	}
       
       
@@ -88,7 +91,7 @@ foreach($categorias as $categoria){
 	</div>
 </div>
 
-<!-- Modal Novo Funcionario  -->
+<!-- Modal Nova Categoria  -->
 <div class="modal" style="text-align: left" id="modalNewCat" tabindex="-1" role="dialog" aria-labelledby="modalNewCat" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -103,18 +106,24 @@ foreach($categorias as $categoria){
  	<div class="form-row">			
 	  <div class="form-group col-2">
 		<label for="formFNome">Indice: </label>
-		<input style="text" type="text" required disabled class="form-control" id="formCatId" placeholder="<?php echo $newid; ?>" name="CatId">
+		<input style="text" type="text" required disabled class="form-control" value="<?php echo $newid; ?>">
 		<input type="text" class="form-control" value="<?php echo $newid; ?>" id="formCatId" hidden>
 	  </div>	
 	</div>
 	<div class="form-row">		
 		<div class="form-group col-12">
 			<label for="formCatName">Nome: </label>
-			<input type="text" class="form-control" id="formCatName" name="CatName" placeholder="Nova Categoria" max-length="48" >
+			<input type="text" class="form-control" id="formCatName" required placeholder="Nova Categoria" max-length="48" >
+		</div>
+	</div> 
+	<div class="form-row">		
+		<div class="form-group col-12">
+			<label for="formCatColor">Cor: </label>
+			<input class='btn btn-primary color-picker' id="formCatColor" required value="#205090">
 		</div>
 	</div> 
 
-	<a class='btn btn-primary float-right' href="#" role='button'><i class='nav-icon cui-check'></i> Cadastrar</a>
+	<button type='button' class='btn btn-primary float-right' id='novaCategoria' value='1'><i class='nav-icon cui-check'></i> Cadastrar</button>
 			</h4></form><div id="process"></div>
 			  </div>
 			    <div class="modal-footer">

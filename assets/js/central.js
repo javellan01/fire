@@ -19,6 +19,94 @@
 			allowEmpty: false
 		  }); 
 		} );
+
+		$("#novaCategoria").click(function(e) {
+			e.preventDefault();
+			
+				$.ajax({
+				type: "POST",
+				url: "catprocess.php",
+				data: { 
+					removeCategoria: '0',
+					updateCategoria: '0',
+					novaCategoria: $(this).val(),
+					id_categoria: $('input#formCatId').val(),
+					tx_color: $('input#formCatColor').val(),
+					tx_nome: $('input#formCatName').val(),
+						
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					
+				}
+			});
+		});
+
+		$(".updateCategoria").click(function(e) {
+			e.preventDefault();
+			
+			var id_categoria = $(this).attr("data-id_categoria");
+
+			$.ajax({
+				type: "POST",
+				url: "catprocess.php",
+				data: { 
+					removeCategoria: '0',
+					updateCategoria: $(this).val(),
+					novaCategoria: '0',
+					id_categoria: id_categoria,
+					tx_color: $('input#color'+id_categoria).val(),
+					tx_nome: $('input#nome'+id_categoria).val(),
+						
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPhp('configurar.php');
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					loadPhp('configurar.php');
+				}
+			});
+		});
+
+		$(".removeCategoria").click(function(e) {
+			e.preventDefault();
+			
+			var id_categoria = $(this).attr("data-id_categoria");
+
+			$.ajax({
+				type: "POST",
+				url: "catprocess.php",
+				data: { 
+					removeCategoria: $(this).val(),
+					updateCategoria: '0',
+					novaCategoria: '0',
+					id_categoria: id_categoria,
+
+						
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadPhp('configurar.php');
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					loadPhp('configurar.php');
+				}
+			});
+		});	
+
 		$('#modalPedido').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);
 			var cliente = button.data('cliente');
