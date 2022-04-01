@@ -66,7 +66,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		<div class='col-5'>";
 		echo"<button class='btn btn-outline-success float-left' type='button' data-toggle='collapse' data-target='#collapseCat$cid' aria-expanded='true' aria-controls='collapseCat$cid'><strong>";
 		echo $row1->tx_nome;
-		echo"</strong></button>
+		echo" <i class='nav-icon cui-chevron-bottom'></strong></button>
 		</div>
 		 
 		</div>
@@ -162,7 +162,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	  </div>
 	  <div class="form-group col-4">
 			<label for="formData">Data:</label>
-			<input type="date" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" >
 		  </div>
 	</div>
 	  

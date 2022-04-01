@@ -26,7 +26,7 @@
 		//$ano = $_GET['ano'];
 function getEventUsuResponsavel($conn,$uid){
 
-    $stmt = $conn->query("SELECT a.*,p.tx_codigo,cat.tx_nome FROM atividade a 
+    $stmt = $conn->query("SELECT a.*,p.tx_codigo,cat.tx_nome, cat.tx_color FROM atividade a 
                         INNER JOIN pedido p ON a.id_pedido = p.id_pedido 
                         INNER JOIN categoria cat ON a.id_categoria = cat.id_categoria 
                         WHERE p.id_usu_resp = $uid AND a.cs_finalizada = 0 AND NOT a.dt_inicio = '00-00-0000'");
@@ -47,10 +47,10 @@ function fillUCalendar($conn,$uid){
             $status = 'Encerrada';
         }	
         if($event->cs_finalizada == 0){ 
-            $color = cat_color($event->id_categoria);
+            $color = $event->tx_color;
             $status = 'Ativa';
             }
-        $url = "javascript:atv_uPhp(".$event->id_pedido.")";
+        $url = "#";
         $periodo = 'Início: '.data_usql($event->dt_inicio).' - Término: '.data_usql($event->dt_fim);
         
         echo "{ title: '".$event->tx_descricao."', start:'".$event->dt_inicio."', end:'".$event->dt_fim."T18:00:00',url:'".$url."', color:'".$color."', status:'".$status."', pedido:'".$event->tx_codigo."', categoria:'".$event->tx_nome."', periodo:'".$periodo."', allDay: false},";

@@ -223,9 +223,11 @@
 		
 		$('#formData').mask('00/00/0000', {reverse: false});
 		$('#formQtdin').mask('###0', {reverse: false});
+
 		$( function() {
 			$( ".date" ).datepicker();
 		  } );
+		  
 		$('#modalUpdate').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);
 			var atividade = button.data('atividade');

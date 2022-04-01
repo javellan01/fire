@@ -74,7 +74,7 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 		<div class='card mb-0'>
 			<div class='card-header' id='headingMedicao'>
 				<h5 class='mb-0'>
-				<button type='button' class='btn btn-outline-danger float-left'  data-toggle='collapse' data-target='#collapseMedicao' aria-expanded='true' aria-controls='collapseMedicao'>Medições Cadastradas 
+				<button type='button' class='btn btn-outline-danger float-left'  data-toggle='collapse' data-target='#collapseMedicao' aria-expanded='true' aria-controls='collapseMedicao'>Medições Cadastradas <i class='nav-icon cui-chevron-bottom'></i>
 				</button>
 				<button type='button' class='btn btn-outline-primary float-right' data-toggle='modal' data-target='#modalVMedir'>+ Nova Medição
 				</button>
@@ -196,7 +196,7 @@ foreach($categorias as $categoria){
 		<div class='col-5'>";
 		echo"<button class='btn btn-outline-success float-left' type='button' data-toggle='collapse' data-target='#collapseCat$cid' aria-expanded='true' aria-controls='collapseCat$cid'><strong>";
 		echo $categoria->tx_nome;
-		echo"</strong></button>
+		echo" <i class='nav-icon cui-chevron-bottom'></i></strong></button>
 		</div>
 		 
 		<div class='col-7'>";
@@ -253,7 +253,7 @@ foreach($atividades AS $atividade)  {
 			
 			<div class='progress-group-prepend'>";
 		  if($atividade->cs_finalizada == 0) 
-					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong>" . $atividade->tx_descricao . "</strong></div>";
+					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong><i class='nav-icon cui-cursor'></i>" . $atividade->tx_descricao . "</strong></div>";
 		  if($atividade->cs_finalizada == 1) 
 					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong>" . $atividade->tx_descricao . " (Encerrada)</strong></div>";
 		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
@@ -510,7 +510,7 @@ foreach($atividades AS $atividade)  {
 		}
 		else{	
 	echo"<a class='btn btn-primary float-right' href='javascript:formMProc();' role='button'><i class='nav-icon cui-check'></i> Cadastrar Medição</a>";
-		}	
+		}				
 	}					
 	?>		</h5></form>	
 					<div id='process'></div>
