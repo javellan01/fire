@@ -50,19 +50,18 @@ function getMedicaoResume($conn,$pid,$mid){
 
 function getAprovacao($conn,$mid){
 
-    $stmt = $conn->query("SELECT md.id_cliente_usr, md.cs_aprovada, cu.tx_nome FROM medicao AS md
+    $stmt = $conn->query("SELECT md.id_cliente_usr, md.cs_aprovada, md.cs_revisar, md.dt_aprovacao, cu.tx_nome FROM medicao AS md
                             INNER JOIN cliente_usr AS cu ON md.id_cliente_usr = cu.id_usuario
                             WHERE md.id_medicao = $mid");
 
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
-
 
     if(count($data) == 0){
         $e = '<span class="text-warning">Aguardando Aprovação.</span>';
         return $e;    
     }else{
         if($data[0]->cs_aprovada == 1){
-            $e = '<span class="text-success">Aprovada por '.$data[0]->tx_nome.'.</span>';
+            $e = '<span class="text-success">Aprovada por '.$data[0]->tx_nome.' em '.data_usql($data[0]->dt_aprovacao).'.</span>';
             return $e;
         }else{
             $e = '<span class="text-warning">Aguardando Aprovação de '.$data[0]->tx_nome.'.</span>';
@@ -81,7 +80,12 @@ function getCategoria($conn,$pid){
 }
 
 function getCategoriaSum($conn,$pid,$cid){
-    $stmt = $conn->query("SELECT FORMAT(((progresso / nbvalor) *100),1) as execpercent, FORMAT(((valorsum / nbvalor) *100),1) as medpercent, id_categoria, nbvalor, valorsum, qtdsum, nbqtd, progresso, v_unit FROM (SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, SUM(progresso) progresso, v_unit FROM v_categoria_sums WHERE id_pedido = $pid AND id_categoria = $cid GROUP BY id_categoria) AS tb");
+    $stmt = $conn->query("SELECT FORMAT(((progresso / nbvalor) *100),1) as execpercent, 
+    FORMAT(((valorsum / nbvalor) *100),2) as medpercent, id_categoria, nbvalor, valorsum, qtdsum, nbqtd, progresso, v_unit 
+    FROM (SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, SUM(progresso) progresso, v_unit 
+            FROM v_categoria_sums 
+            WHERE id_pedido = $pid AND id_categoria = $cid 
+            GROUP BY id_categoria) AS tb");
 
     $data = $stmt->fetch(PDO::FETCH_OBJ);
 
@@ -89,7 +93,13 @@ function getCategoriaSum($conn,$pid,$cid){
 }
 
 function getAtividades($conn,$pid,$cid){
-    $stmt = $conn->query("SELECT b.*, FORMAT(((b.qtd_sum/b.nb_qtd)*100),1) AS percent, FORMAT(((b.valor_sum/b.nb_valor)*100),1) AS medpercent, FORMAT(((b.progresso/b.nb_valor)*100),1) AS execpercent FROM (SELECT a.*, v1.qtd_sum, v1.progresso, v1.valor_sum FROM atividade a LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade WHERE a.id_pedido = $pid AND a.id_categoria = $cid) AS b");
+    $stmt = $conn->query("SELECT b.*, FORMAT(((b.qtd_sum/b.nb_qtd)*100),1) AS percent, 
+    FORMAT(((b.valor_sum/b.nb_valor)*100),2) AS medpercent, 
+    FORMAT(((b.progresso/b.nb_valor)*100),1) AS execpercent 
+    FROM (SELECT a.*, v1.qtd_sum, v1.progresso, v1.valor_sum 
+            FROM atividade a 
+            LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
+            WHERE a.id_pedido = $pid AND a.id_categoria = $cid) AS b");
 
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 

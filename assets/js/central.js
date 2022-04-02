@@ -175,6 +175,11 @@
 			atvPhp(str);
 		});
 		
+		var formatter = new Intl.NumberFormat('pt-BR', {
+			style: 'currency',
+			currency: 'BRL',
+		  });
+
 		function calcular(){
 		let soma = 0;
 		let total = $('input#pedidoValor').val()*1;
@@ -184,9 +189,9 @@
 		  });
 		
 		let result = (soma / total) *100;
- 
-		$('span#resultado').text(Number(result).toFixed(1));
-		$('span#soma').text(Number(soma).toFixed(2));
+
+		$('span#resultado').text(Number(result).toFixed(2));
+		$('span#soma').text(formatter.format(soma));
 
 		}
 
@@ -194,6 +199,15 @@
 
 		$('input.parcela').on('keyup', function (){
 			calcular();
+			let indice = $(this).attr("data-aid");
+			let nb_valor = $(this).attr("data-nb_valor")*1;
+			let limit = $(this).attr("data-limit")*1;
+			let current = $(this).val()*1;
+			limit = limit - current;
+			let result = (current / nb_valor) * 100;
+			$('span#percent'+indice).text(Number(result).toFixed(2));
+			$('span#limit'+indice).text(formatter.format(limit));
+
 		});
 
 		$('#modalUpdate').on('show.bs.modal', function (event) {

@@ -70,7 +70,7 @@ foreach($data as $cliente){
 			<th>".$cliente->tx_cnpj."</th>
 			<th class='text-center'>".$pnb."</th>
 			<th class='text-center'>".$pnbt."</th>";
-			if($cunb == 0) echo "<th>Favor Cadastrar Usuário</th>";
+			if($cunb == 0) echo "<th><i class='nav-icon cui-info'></i> Favor Cadastrar Usuário</th>";
 			else echo "<th class='text-center'>".$cunb."</th>";
       
 	echo" </tr>";	

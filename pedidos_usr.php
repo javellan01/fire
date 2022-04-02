@@ -42,7 +42,7 @@ else{
 			<h5 class='mb-0'>
 				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$cliente->id_cliente."' aria-expanded='true' aria-controls='collapse".$cliente->id_cliente."'>";					
 	echo $cliente->tx_nome;
-	echo"</button>
+	echo" <i class='nav-icon cui-chevron-bottom'></i></button>
 			</h5>
 				</div>
 					<div id='collapse".$cliente->id_cliente."' class='collapse show' aria-labelledby='heading".$cliente->id_cliente."' data-parent='#accordion'><div class='card-body'>";
@@ -57,7 +57,7 @@ else{
 	foreach($pedidos as $pedido){
 		$fisico = getProgressoFisico($conn,$pedido->id_pedido);	
 		      echo "<div class='progress-group'>
-					<div class='progress-group-header align-items-end' style='color: #27b;'><a class='btn btn-ghost-primary' href='javascript:atv_uPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . "</strong></a>"; 
+					<div class='progress-group-header align-items-end' style='color: #27b;'><a class='btn btn-ghost-primary' href='javascript:atv_uPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " <i class='nav-icon cui-chevron-right'></i></strong></a>"; 
 			  echo "<div class='btn ml-auto'>Atividades Concluídas: (" . $fisico->execpercent ."%)</div></div>";
 			  echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
 			  echo "<div class='progress-bar progress-bar-striped bg-warning' role='progressbar' style='width: ".$fisico->execpercent ."%' aria-valuenow='".$fisico->execpercent."' aria-valuemin='0' aria-valuemax='100'>".$fisico->execpercent."%</div>

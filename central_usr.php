@@ -171,7 +171,7 @@
 			<div class="card-body">
 				<div class='row'>
 					<div class='col-6'>
-					<a class='btn btn-outline-dark' href="javascript:loadPhp('pedidos_usr.php');" role='button'><strong>Situação dos Pedidos</strong></a>	
+					<a class='btn btn-outline-dark' href="javascript:loadPhp('pedidos_usr.php');" role='button'><strong><i class='nav-icon cui-note'></i> Situação dos Pedidos</strong></a>	
 					</div>
 				</div>	
 				<div class='row'>

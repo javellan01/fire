@@ -1,4 +1,3 @@
 
 config/mail.php
-DB/conn.php
-DB/conn.php
+config/db.php

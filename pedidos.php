@@ -28,7 +28,7 @@
 $clientes = getClientes($conn);
 
 if(count($clientes) == 0){
-	echo"<p> Ainda não há clientes cadastrados no sistema. </p>";}
+	echo"<p><i class='nav-icon cui-info'></i> Ainda não há clientes cadastrados no sistema. </p>";}
 
 foreach($clientes as $cliente){
 			
@@ -39,7 +39,7 @@ foreach($clientes as $cliente){
 			<h5 class='mb-0'>
 				<button class='btn btn-outline-danger' type='button' data-toggle='collapse' data-target='#collapse".$cliente->id_cliente."' aria-expanded='true' aria-controls='collapse".$cliente->id_cliente."'>";					
 	echo $cliente->tx_nome." - CNPJ: ".$cliente->tx_cnpj;
-	echo"</button>
+	echo" <i class='nav-icon cui-chevron-bottom'></i></button>
 				<button type='button' class='btn btn-outline-primary float-right ml-3' data-toggle='modal' data-target='#modalPedido' data-cliente='".$cliente->tx_nome." - CNPJ: ".$cliente->tx_cnpj."' data-id_cliente=".$cliente->id_cliente.">+ Adicionar Pedido</button>
 			</h5>
 				</div>
@@ -49,16 +49,16 @@ foreach($clientes as $cliente){
 	$pedidos = getPedidosCliente($conn,$cliente->id_cliente);
 
 	if(count($pedidos) == 0){
-		echo"<p> Não há pedidos cadastrados para este cliente! </p>";}
+		echo"<p><i class='nav-icon cui-info'></i> Não há pedidos cadastrados para este cliente! </p>";}
 	else{		
 		foreach($pedidos as $pedido){
 		$fisico = getProgressoFisico($conn,$pedido->id_pedido);
 
 		echo "<div class='progress-group'>";
 			if($pedido->cs_estado == 0) 
-			echo "<div class='progress-group-header align-items-end' style='color: #27b;'><div><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " (Ativo)</strong></a></div>";
+			echo "<div class='progress-group-header align-items-end' style='color: #27b;'><div><a class='btn btn-ghost-primary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " (Ativo) <i class='nav-icon cui-chevron-right'></i></strong></a></div>";
 			if($pedido->cs_estado == 1) 
-			echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " (Encerrado)</strong></a></div>";
+			echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " (Encerrado) <i class='nav-icon cui-chevron-right'></i></strong></a></div>";
 
 			echo "<div class='ml-auto'>Atividades Concluídas: " . $fisico->execpercent ."%</div></div>";
 			echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";

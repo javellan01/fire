@@ -85,7 +85,7 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 				<div class='card-body'>";
 	
 if(count($medicoes) == 0){
-		echo"<div class='card border border-light'><h4>Não há medições cadastradas para este pedido. </h4></div>";}
+		echo"<div class='card border border-light'><h4><i class='nav-icon cui-info'></i> Não há medições cadastradas para este pedido. </h4></div>";}
 	else{					
 foreach($medicoes as $medicao){
 
@@ -97,7 +97,7 @@ foreach($medicoes as $medicao){
 		  <div class='card-body'>
 			<h5 class='card-title'>Valor Medido: R$ ".moeda($medicao->v_medido)." - ".calcularPercent($medicao->v_medido,$pedido->nb_valor,1)."% do Pedido, Status: ".getAprovacao($conn,$medicao->id_medicao)."</h5>
 			<h4 class='cart-text'>Responsável: ".$medicao->tx_name."</h4>
-			<p class='card-text'>Nota: ".$medicao->tx_nota." - Vencimento: ".$medicao->dt_vencimento."</p>
+			<p class='card-text'>Nota: ".$medicao->tx_nota." - Emissão: ".$medicao->dt_emissao."Vencimento: ".$medicao->dt_vencimento."</p>
 			<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalLAtv$mid'><i class='nav-icon cui-list'></i> Listar Atividades Medidas</button>
 			
 			</div>
@@ -152,7 +152,7 @@ foreach($medicoes as $medicao){
 					</div>
 					<div class='modal-footer'>
 				  </div>
-				  <button type='button' class='btn btn-secondary' data-dismiss='modal'>Fechar</button>
+				  <button type='button' class='btn btn-secondary' data-dismiss='modal'><i class='nav-icon cui-undo'></i> Fechar</button>
 				</div>
 			  </div>
 			</div>";
@@ -172,7 +172,7 @@ echo"</div></div></div></div>";
 $categorias = getCategoria($conn,$pid);
 		
 if(count($categorias) == 0){
-		echo"<h4 class='danger'>Ainda não há atividades cadastradas para este pedido!</h4>";}
+		echo"<h4 class='danger'><i class='nav-icon cui-info'></i> Ainda não há atividades cadastradas para este pedido!</h4>";}
 	else{	
 
 //Inicia card para organização das Categorias
@@ -225,18 +225,21 @@ foreach($categorias as $categoria){
 	  
 	  <!-- MAIN WHILE FOR ATIVIDADE CATEGORIA -->";
 		$encerradas = 0;
+		$em_andamento = 0;
 		$subtotal = 0.00;
 foreach($atividades AS $atividade)  {
-		if($atividade->cs_finalizada	== 1) $encerradas += 1;	
+		if($atividade->qtd_sum > 0 && $atividade->cs_finalizada == 0) $em_andamento += 1;
+		if($atividade->cs_finalizada == 1) $encerradas += 1;	
 		if($atividade->valor_sum == null) $atividade->valor_sum = 0;
+		
 
 		if(is_null($atividade->medpercent)){
-			$atividade->medpercent = '0.0';
+			$atividade->medpercent = '0.00';
 		}
 		if(is_null($atividade->execpercent)){
 			$atividade->execpercent = '0.0';
 		}
-
+		
 		$balpercent = $atividade->execpercent - $atividade->medpercent;
 		
 		if($balpercent < 0) $balpercent = 0;
@@ -253,9 +256,9 @@ foreach($atividades AS $atividade)  {
 			
 			<div class='progress-group-prepend'>";
 		  if($atividade->cs_finalizada == 0) 
-					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong><i class='nav-icon cui-cursor'></i>" . $atividade->tx_descricao . "</strong></div>";
+					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong><i class='nav-icon cui-cursor'></i> " . $atividade->tx_descricao . "</strong></div>";
 		  if($atividade->cs_finalizada == 1) 
-					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong>" . $atividade->tx_descricao . " (Encerrada)</strong></div>";
+					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong><i class='nav-icon cui-check'></i> " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
 		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $atividade->qtd_sum . " / " . $atividade->nb_qtd ." ". $atividade->tx_tipo . "</div>";
@@ -274,7 +277,7 @@ foreach($atividades AS $atividade)  {
 		</div><!--/.callout-->
 				</div><!--/.col--></div>";
 		$subtotal +=  $balance[$atividade->id_atividade];
-		$pendentes = count($atividades) - $encerradas;
+		
 		echo"<div class='row'><h6></h6></div>";
 		}
 		$measure += $subtotal;
@@ -284,10 +287,14 @@ foreach($atividades AS $atividade)  {
 	<div class='card-footer'>
 		<div class='row'>
 			<div class='col-6 text-muted text-left'>
-				<h5 class='mb-0'><label class='border border-danger rounded p-1'>Ativas: ".$pendentes."</label> / <label class='border border-success rounded p-1'>Encerradas: ".$encerradas.".</label></h5>
+				<h5 class='mb-0'>
+				<label class='border border-primary rounded p-1'>Total Atividades: ".count($atividades)."</label> / 
+				<label class='border border-warning rounded p-1'>Em Andamento: ".$em_andamento."</label> / 
+				<label class='border border-success rounded p-1'>Finalizadas: ".$encerradas."</label>
+				</h5>
 			</div>
 			<div class='col-6 text-right'>
-				<h5 class='mb-0'><label class='border border-primary rounded p-1'>Total Atividades: ".count($atividades)."</label>    -  Saldo: R$ ".moeda($subtotal)."</h5>
+				<h5 class='mb-0'>Saldo: R$ ".moeda($subtotal)."</h5>
 			</div>
 		</div>	
 		
@@ -465,14 +472,15 @@ foreach($atividades AS $atividade)  {
 							  <div class="modal-body"><h5>
 								<form class="medicao">
     <div class="form-row">			
-	  <div class="form-group col-6">
+	  <div class="form-group col-9">
 			<label for="formMPed">Pedido</label>	
-			<input type="text" class="form-control" value="<?php echo $pedido->tx_nome." - ".$pedido->tx_codigo;?>" disabled>
+			<input type="text" class="form-control" value="<?php echo $pedido->tx_codigo." - ".$pedido->tx_nome;?>" disabled>
 			<input type="text" class="form-control" id="formMPed" value="<?php echo $pid;?>" name="idPedido" hidden>
 			<input type="text" class="form-control" id="formMPed" value="<?php echo $mid;?>" name="nbOrdem" hidden>
+			<input type="text" class="form-control" id="pedidoValor" value="<?php echo $pedido->nb_valor;?>" hidden>
 	  </div>
 	
-	  <div class="form-group col-6">
+	  <div class="form-group col-3">
 			<label for="formData">Data:</label>
 			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="MData">
 	  </div>
@@ -481,7 +489,7 @@ foreach($atividades AS $atividade)  {
 	<?php
 	$stmt5 = medirAtividades($conn,$pid);
 	if(count($stmt5) == 0){
-		echo"<div class='row'><h5>Não há atividades para medir até o momento.</h5></div>";
+		echo"<div class='row'><h5><i class='nav-icon cui-info'></i> Não há atividades para medir até o momento.</h5></div>";
 	}
 	else{
 		
@@ -490,23 +498,29 @@ foreach($atividades AS $atividade)  {
 		foreach($stmt5 as $row5){
 		$aid = $row5->id_atividade;
 		if($balance[$aid] == 0)	continue;	 
-		$limit = $row5->nb_valor - $row5->valor_sum;
-		
-		echo"<div class='input-group mb-1'>
-				<label class='col-12' for='formMAtiv'><small>".$row5->tx_descricao."<cite> (".$row5->tx_nome.") </cite></small></label>
-				<div class='input-group-prepend'>
-					<span class='input-group-text'>R$</span>
+		$limit = $row5->nb_valor - $row5->valor_sum ;
+		$percent = ($balance[$aid] / $row5->nb_valor) * 100;
+		$percent = number_format($percent,2,'.','');
+		echo"<div class='input-group py-2 border-bottom border-primary'>
+				<label class='col-12' for='formMAtiv'><small><i class='nav-icon cui-chevron-right'></i> ".$row5->tx_descricao."<cite> (".$row5->tx_nome.") </cite></small></label>
+				
+					<div class='input-group-prepend'>
+						<span class='input-group-text'>R$</span>
+					</div>
+				<input type='text' class='form-control col-4 parcela' id='formMAtiv' value='".number_format($balance[$aid],2,'.','')."' 
+				data-aid='$aid' data-nb_valor='$row5->nb_valor' data-limit='$limit' name='nbVal[$aid]'></input>
+				<div class='col-6 py-2'>
+				<small><cite ><span id='percent$aid'>$percent</span>% da Atividade.</cite>
+				- Saldo: <span id='limit$aid'>R$ ".moeda(($limit- $balance[$aid]))."</span></cite></small>
+				<input type='text' class='form-control' id='formMAtiv' value='$aid' name='idAtiv[$aid]' hidden='true'></input>
 				</div>
-				<input type='text' class='form-control col-6 parcela' id='formMAtiv' value='".number_format($balance[$aid],2,'.','')."' name='nbVal[$aid]'><span> / R$ ".moeda($limit)."</span>
-				<input type='text' class='form-control' id='formMAtiv' value='".$aid."' name='idAtiv[$aid]' hidden='true'>	
-				<input type='text' class='form-control' id='pedidoValor' value='".$pedido->nb_valor."' hidden='true'>
 			</div>";
 			
 		$loop += 1;	
 		}
 		
 	if($loop == 0) {
-		echo"<div class='row'><h5>Não há atividades para medir até o momento.</h5></div>";
+		echo"<div class='row'><h5><i class='nav-icon cui-info'></i> Não há atividades para medir até o momento.</h5></div>";
 		}
 		else{	
 	echo"<a class='btn btn-primary float-right' href='javascript:formMProc();' role='button'><i class='nav-icon cui-check'></i> Cadastrar Medição</a>";
@@ -519,7 +533,7 @@ foreach($atividades AS $atividade)  {
 								
 								<div class="alert alert-success mr-auto ml-auto" role="alert">
 								<h4>Total: <span id="resultado"></span>% do Pedido.
-									<br><?php echo"R$ <span id='soma'></span> em ".count($balance)." Atividades.";?> 
+									<br><?php echo"<span id='soma'></span> em ".count($balance)." Atividades.";?> 
 								</h4>
 								</div>
 								

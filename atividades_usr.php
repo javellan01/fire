@@ -66,7 +66,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		<div class='col-5'>";
 		echo"<button class='btn btn-outline-success float-left' type='button' data-toggle='collapse' data-target='#collapseCat$cid' aria-expanded='true' aria-controls='collapseCat$cid'><strong>";
 		echo $row1->tx_nome;
-		echo" <i class='nav-icon cui-chevron-bottom'></strong></button>
+		echo" <i class='nav-icon cui-chevron-bottom'></i></strong></button>
 		</div>
 		 
 		</div>
@@ -99,7 +99,8 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 			<div class='progress-group-prepend'>";
 		  if($row->cs_finalizada == 0) 
 
-					echo "<div class='progress-group-header align-items-end' style='color: #27b;'><button type='button' class='btn btn-ghost p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $row->tx_descricao . "</strong></div>";
+					echo "<div class='progress-group-header align-items-end' style='color: #27b;'>
+					<button type='button' class='btn btn-outline-dark p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong><i class='nav-icon cui-cursor'></i> " . $row->tx_descricao . "</strong></div>";
 		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $row->qtd_sum . " / " . $row->nb_qtd ." ". $row->tx_tipo . "</div>";
@@ -169,7 +170,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	<div class="form-row align-items-center">			
 	  
 	</div>
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'>OK</a>
+	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-check'></i> OK</a>
 			</h4></form><div id="process"></div>
 							  </div>
 							  <div class="modal-footer">
@@ -179,7 +180,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 								</div>
 								
 							  </div>
-							  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+							  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 							</div>
 						  </div>
 						</div>
