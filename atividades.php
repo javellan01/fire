@@ -27,7 +27,7 @@ $balance = array();
 $measure = 0.00;
 $mid = 0;	
 $pedido = getPedidoData($conn, $pid);
-
+$users = getAcessoConvidado($conn,$pid);
 //Carrega dados do pedido
 
 echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
@@ -81,7 +81,7 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 				</h5>
 			</div>
 				
-			<div id='collapseMedicao' class='collapse' aria-labelledby='headingMedicao' data-parent='#accordion'>
+			<div id='collapseMedicao' aria-labelledby='headingMedicao' data-parent='#accordion'>
 				<div class='card-body'>";
 	
 if(count($medicoes) == 0){
@@ -92,16 +92,46 @@ foreach($medicoes as $medicao){
 	$mid=$medicao->nb_ordem;	
 	echo"		  
 		<div class='card border border-light mb-3'>
-		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalSend$mid'><i class='nav-icon cui-envelope-closed'></i> Enviar Notificação de Medição</button></h5>
+		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalNotificar'><i class='nav-icon cui-envelope-closed'></i> Enviar Notificação de Medição</button></h5>
 		  
 		  <div class='card-body'>
-			<h5 class='card-title'>Valor Medido: R$ ".moeda($medicao->v_medido)." - ".calcularPercent($medicao->v_medido,$pedido->nb_valor,1)."% do Pedido, Status: ".getAprovacao($conn,$medicao->id_medicao)."</h5>
-			<h4 class='cart-text'>Responsável: ".$medicao->tx_name."</h4>
+		  <div class='row mb-2'>
+		  <div class='col-6'>
+			<h5 class='card-title'>Valor Medido: R$ ".moeda($medicao->v_medido)." - ".calcularPercent($medicao->v_medido,$pedido->nb_valor,1)."% do Pedido.</h5>	
+			<h5 class='cart-text'>Status: ".getStatus($conn,$medicao->id_medicao)."</h5>
+			<h5 class='cart-text'>Responsável: ".$medicao->tx_name."</h5>
 			<p class='card-text'>Nota: ".$medicao->tx_nota." - Emissão: ".$medicao->dt_emissao."Vencimento: ".$medicao->dt_vencimento."</p>
-			<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalLAtv$mid'><i class='nav-icon cui-list'></i> Listar Atividades Medidas</button>
+			</div>
+			<div class='col-6'>".getMessage($conn,$medicao->id_medicao)."</div>
+			</div>
+			<button type='button' class='btn btn-primary mx-2' data-toggle='modal' 
+			data-target='#modalLAtv$mid'><i class='nav-icon cui-list'></i> Listar Atividades Medidas</button>";
+		
+		if($medicao->cs_aprovada == 0){	
+		echo"
+			<button type='button' class='btn btn-warning mx-2' data-toggle='modal' 
+			data-target='#modalRAtv$mid'><i class='nav-icon cui-pencil'></i> Revisar Medição</button>";
+		}
+		else{
+		echo"
+			<button type='button' class='btn btn-warning mx-2' disabled><i class='nav-icon cui-pencil'></i> Revisar Mediçao</button>";
+		}
+		
+
+		if($medicao->cs_aprovada == 1 && $medicao->cs_finalizada == 0){
+		echo"	
+			<button type='button' class='btn btn-success mx-2 finalize' data-ordem='$mid' data-toggle='modal' 
+			data-target='#modalFAtv' value='$medicao->id_medicao'><i class='nav-icon cui-check'></i> Finalizar / Cadastrar Nota</button>";
+		}
+		else{
+			echo"
+			<button type='button' class='btn btn-success mx-2' disabled><i class='nav-icon cui-check'></i> Finalizar / Cadastrar Nota</button>";
+		}
+		echo"	
 			
 			</div>
 		</div>
+	<!!----- MODAL PARA LISTAR ATIVIDADES --------------------------------------->
 		<div class='modal' style='text-align: left' id='modalLAtv$mid' tabindex='-1' role='dialog' aria-labelledby='modalLAtv$mid' aria-hidden='true'>
 			  <div class='modal-dialog modal-lg' role='document'>
 				<div class='modal-content'>
@@ -152,7 +182,7 @@ foreach($medicoes as $medicao){
 					</div>
 					<div class='modal-footer'>
 				  </div>
-				  <button type='button' class='btn btn-secondary' data-dismiss='modal'><i class='nav-icon cui-undo'></i> Fechar</button>
+				  <button type='button' class='btn btn-secondary' data-dismiss='modal'><i class='nav-icon cui-action-undo'></i> Fechar</button>
 				</div>
 			  </div>
 			</div>";
@@ -223,7 +253,7 @@ foreach($categorias as $categoria){
     <div id='collapseCat$cid' class='collapse show' aria-labelledby='headingCat$cid' data-parent='#accordion'>
       <div class='card-body'>
 	  
-	  <!-- MAIN WHILE FOR ATIVIDADE CATEGORIA -->";
+	  <!-- MAIN FOREACH FOR ATIVIDADE CATEGORIA -->";
 		$encerradas = 0;
 		$em_andamento = 0;
 		$subtotal = 0.00;
@@ -256,7 +286,7 @@ foreach($atividades AS $atividade)  {
 			
 			<div class='progress-group-prepend'>";
 		  if($atividade->cs_finalizada == 0) 
-					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong><i class='nav-icon cui-cursor'></i> " . $atividade->tx_descricao . "</strong></div>";
+					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong>" . $atividade->tx_descricao . "</strong></div>";
 		  if($atividade->cs_finalizada == 1) 
 					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong><i class='nav-icon cui-check'></i> " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
 		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
@@ -459,7 +489,7 @@ foreach($atividades AS $atividade)  {
 	</div>	
 
 
-<!-- Modal Verify Medição  -->
+<!-- Modal Gerar Medição  -->
 <div class="modal" style="text-align: left" id="modalVMedir" tabindex="-1" role="dialog" aria-labelledby="modalVMedir" aria-hidden="true">
 						  <div class="modal-dialog modal-lg" role="document">
 							<div class="modal-content">
@@ -523,7 +553,7 @@ foreach($atividades AS $atividade)  {
 		echo"<div class='row'><h5><i class='nav-icon cui-info'></i> Não há atividades para medir até o momento.</h5></div>";
 		}
 		else{	
-	echo"<a class='btn btn-primary float-right' href='javascript:formMProc();' role='button'><i class='nav-icon cui-check'></i> Cadastrar Medição</a>";
+	echo"<a class='btn btn-primary float-right m-2' href='javascript:formMProc();' role='button'><i class='nav-icon cui-check'></i> Cadastrar Medição</a>";
 		}				
 	}					
 	?>		</h5></form>	
@@ -549,3 +579,91 @@ foreach($atividades AS $atividade)  {
 		</div>
 		
 	</div>	
+
+<!-- Modal Finalizar Medição  -->
+<div class="modal" style="text-align: left" id="modalFAtv" tabindex="-1" role="dialog" aria-labelledby="modalFAtv" aria-hidden="true">
+						  <div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+							  <div class="modal-header border border-danger rounded-top">
+								<h5 class="modal-title">Finalizar Medição <span id="ordemMedicao"></span> - <?php echo $pedido->tx_codigo;?></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h5>
+	<form class="container finalizar">
+    <div class="form-row">			
+	  <div class="form-group col-6">
+			<label for="formDadoNota">Número da Nota:</label>	
+			<input type="text" class="form-control" id="formDadoNota" placeholder="Insira Número da Nota">
+	  </div>
+	  <div class="form-group col-3">
+			<label for="formData">Data Emissão:</label>
+			<input type="text" class="form-control date" id="formEmData" value="<?php echo date('d/m/Y');?>" name="EmData">
+	  </div>
+	  <div class="form-group col-3">
+			<label for="formData">Data Vencimento:</label>
+			<input type="text" class="form-control date" id="formVeData" value="<?php echo date('d/m/Y');?>" name="VeData">
+	  </div>
+	</div>
+	<button type='button' class='btn btn-success mx-2' data-id_medicao='' id='finalizarMedicao' value='1'
+			<i class='nav-icon cui-check'></i> Finalizar / Cadastrar Nota</button>
+	</div>
+				<div class="modal-footer">
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
+			</div>
+			</div>
+		</div>
+						
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+	</div>
+
+	<!-- Modal Enviar Notificação  -->
+<div class="modal" style="text-align: left" id="modalNotificar" tabindex="-1" role="dialog" aria-labelledby="modalNotificar" aria-hidden="true">
+						  <div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+							  <div class="modal-header border border-danger rounded-top">
+								<h5 class="modal-title">Enviar Notificação da Medição <span id="ordemMedicao"></span> - <?php echo $pedido->tx_codigo;?></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h5>
+	<form class="container finalizar">
+	<h5>O e-mail de noticação de lançamento desta medição será enviada para os usuários a seguir:</h5>
+<?php 
+	foreach($users as $user){
+		echo"<div class='input-group mb-3'>
+				<div class='input-group-prepend'>
+				<div class='input-group-text'>
+				<input type='checkbox' id='checkuser".$user->id_cliente_usr."' checked></input>
+				</div>
+				<span class='input-group-text'>".$user->tx_nome."</span>
+			</div>
+		<input type='text' class='form-control' value='".$user->tx_email."'></input>
+	</div>";
+
+	}
+	?>
+	
+	<button type='button' class='btn btn-primary float-right mx-2' id='sendNotificacao' value='1'>
+			<i class='nav-icon cui-envelope-closed'></i> Confirmar Envio</button>
+	</div>
+				<div class="modal-footer">
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
+			</div>
+			</div>
+		</div>
+						
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+	</div>

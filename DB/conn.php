@@ -28,7 +28,16 @@
         private function __clone()
         {
         }
-    
+        
+        public function setConfig($data){
+
+            $this->_host = $data['host'];
+            $this->_password = $data['password'];
+            $this->_username = $data['username'];
+            $this->_database = $data['database'];
+
+        }
+
         public function getConnection()
         {
             return $this->_connection;
@@ -39,11 +48,9 @@
         public static function query($sql) {
             return parent::getInstance()->getConnection()->query($sql);
             }
-        }  
-
+        }                 
         $db = DB::getInstance();
         $conn = $db->getConnection();   
 
-        //Added new data to conn file just for better
 
 ?> 

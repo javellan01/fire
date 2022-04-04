@@ -195,6 +195,9 @@
 
 		}
 
+		
+		
+
 		calcular();
 
 		$('input.parcela').on('keyup', function (){
@@ -208,6 +211,14 @@
 			$('span#percent'+indice).text(Number(result).toFixed(2));
 			$('span#limit'+indice).text(formatter.format(limit));
 
+		});
+
+		$('#modalFAtv').on('show.bs.modal', function(event){ 
+			let button = $(event.relatedTarget);
+			let id_medicao = button.val();
+			let nb_ordem = button.data('ordem');
+			$(this).find('#ordemMedicao').text(nb_ordem);
+			$(this).find('#finalizarMedicao').attr("data-id_medicao", id_medicao);
 		});
 
 		$('#modalUpdate').on('show.bs.modal', function (event) {

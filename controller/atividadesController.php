@@ -48,9 +48,9 @@ function getMedicaoResume($conn,$pid,$mid){
     return $data;
 }
 
-function getAprovacao($conn,$mid){
+function getStatus($conn,$mid){
 
-    $stmt = $conn->query("SELECT md.id_cliente_usr, md.cs_aprovada, md.cs_revisar, md.dt_aprovacao, cu.tx_nome FROM medicao AS md
+    $stmt = $conn->query("SELECT md.id_cliente_usr, md.cs_aprovada, md.cs_revisar, md.cs_finalizada, md.dt_aprovacao, cu.tx_nome FROM medicao AS md
                             INNER JOIN cliente_usr AS cu ON md.id_cliente_usr = cu.id_usuario
                             WHERE md.id_medicao = $mid");
 
@@ -60,14 +60,43 @@ function getAprovacao($conn,$mid){
         $e = '<span class="text-warning">Aguardando Aprovação.</span>';
         return $e;    
     }else{
-        if($data[0]->cs_aprovada == 1){
+        if($data[0]->cs_aprovada == 1 && $data[0]->cs_finalizada == 0){
             $e = '<span class="text-success">Aprovada por '.$data[0]->tx_nome.' em '.data_usql($data[0]->dt_aprovacao).'.</span>';
             return $e;
-        }else{
-            $e = '<span class="text-warning">Aguardando Aprovação de '.$data[0]->tx_nome.'.</span>';
+        }
+        
+        if($data[0]->cs_revisar == 1 && $data[0]->cs_finalizada == 0){
+            $e = '<span class="text-warning">Revisão Solicitada por '.$data[0]->tx_nome.'.</span>';
             return $e;
-        }     
+        }
+        if($data[0]->cs_finalizada == 1){
+            $e = '<span class="text-success">Medição Finalizada.</span>';
+            return $e;
+        }
+
+            $e = '<span class="text-warning">Aguardando Aprovação.</span>';
+            return $e;
+        
     }                           
+}
+
+function getMessage($conn, $mid){
+
+    $stmt = $conn->query("SELECT * FROM comentario_medicao WHERE id_medicao = $mid");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    if(count($data) == 0){
+        return true;
+    } else{ 
+        $e = '
+                <h5 class="card-title">Comentário:</h5>
+                <p class="card-text text-primary">'.$data[0]->tx_comentario.'</p>';
+        return $e;
+
+    }
+
+    return $data;
 }
 
 function getCategoria($conn,$pid){
@@ -124,34 +153,34 @@ function medirAtividades($conn,$pid){
 
     return $data;
 }
-
+//get o user Convidado de acordo com o cliente
 function getUsersCliente($conn,$cid){
     $stmt = $conn->query("SELECT tx_nome,id_usuario FROM cliente_usr WHERE id_cliente = $cid");
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     return $data;
 }
-
+//get os users da FireSys
 function getUsers($conn){
     $stmt = $conn->query("SELECT tx_name,id_usuario FROM usuario");
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     return $data;
 }
-
+//get os users NOT admin da FireSys
 function getUsuarios($conn){
     $stmt = $conn->query("SELECT tx_name,id_usuario FROM usuario WHERE NOT nb_category_user = 0");
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     return $data;
 }
-
+//desaloca os dados do pedido do cliente
 function removePedido($conn,$pid){
     $stmt = $conn->prepare("UPDATE pedido SET id_cliente = 0 WHERE id_pedido = :pid");
     $stmt->bindParam(':pid', $pid);
     $stmt->execute();
 }
-
+//update dos dados do pedido
 function updatePedido($conn,$data){
     $e = null;
     try{

@@ -7,12 +7,11 @@ require("./dist/phpmailer/Exception.php");
 require("./dist/phpmailer/PHPMailer.php");
 require("./dist/phpmailer/SMTP.php");
 
-$mlogin = include("./config/mail.php");
 
 function sendNewLogin($user,$password){
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
-
+$mlogin = include("./config/mail.php");
 try {
     //Server settings
     //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
@@ -62,14 +61,14 @@ try {
 
     echo 'Mensagem Enviada com Sucesso!';
     } catch (Exception $e) {
-        echo "Mensagem não pôde ser enviada. Error: {$mail->ErrorInfo}";
+        echo "Mensagem não pôde ser enviada. User:".$mlogin['username']." Error: {$mail->ErrorInfo}";
     }
 }
 
 function sendMedicao($users,$medicao){
     //Create an instance; passing `true` enables exceptions
     $mail = new PHPMailer(true);
-    
+    $mlogin = include("./config/mail.php");
     try {
         //Server settings
         //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
@@ -86,7 +85,7 @@ function sendMedicao($users,$medicao){
         foreach($users as $user){
             $mail->addAddress($user);
         }
-                                    //Add a recipient
+        //Add a recipient
        // $mail->addAddress('ellen@example.com');               //Name is optional
        //$mail->addReplyTo('info@example.com', 'Information');
        // $mail->addCC('cc@example.com');
@@ -98,7 +97,7 @@ function sendMedicao($users,$medicao){
     
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = 'Login de Acesso - Sistema de Gerenciamento FireSystems-AM';
+        $mail->Subject = 'Lançamento de Medição - Sistema de Gerenciamento FireSystems-AM';
         $mail->Body    = '<tbody><tr>
         <td valign="top" style="padding-top:9px">
             <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%;min-width:100%" width="100%">
@@ -110,13 +109,13 @@ function sendMedicao($users,$medicao){
                 <span style="font-size:15px">Geramos uma senha para que você possa ter acesso ao sitema.</span></span>
                 <br><br>
                 <span style="font-size:16px">Sua senha de acesso será: </span></span></span>
-                <span style="color:#801010"><strong>'.$password.'</strong></span></span></span><br><br>
+                <span style="color:#801010"><strong></strong></span></span></span><br><br>
                 <span style="font-size:15px">Esta senha possibilitará o acesso ao </span>
                 <a href="https://gerenciamento.firesystems-am.com.br" target="_blank" >site de Gerenciamento de FireSystems</span></a> usando seu e-mail como login.<br>
                 <br>
                 </span></span></span></div>
                 </div></td></tr></tbody></table></td></tr></tbody>';
-        $mail->AltBody = 'Senha de Acesso ao Sistema FireSystems: '.$password;
+        $mail->AltBody = 'Medição Disponível no Sistema de Gerenciamento.';
         
         $mail->send();
     
