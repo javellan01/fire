@@ -19,9 +19,10 @@
 
 function getUserClientes($conn,$userid){    
     $stmt = $conn->query("SELECT DISTINCT c.id_cliente,c.tx_nome,c.tx_cnpj 
-                        FROM cliente AS c 
-						INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
-						WHERE p.id_usu_resp = $userid ORDER BY tx_nome ASC");
+                        FROM acesso_pedido AS ap
+						INNER JOIN pedido AS p ON ap.id_pedido = p.id_pedido
+                        INNER JOIN cliente As c ON p.id_cliente = c.id_cliente
+						WHERE ap.id_usuario = $userid AND ap.id_cliente_usr IS NULL ORDER BY tx_nome ASC");
 
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -40,6 +41,18 @@ function getPedidosCliente($conn,$cid){
     
     return $data;
   }
+
+function getUserPedidos($conn,$userid){
+    
+    $stmt = $conn->query("SELECT p.tx_codigo, p.id_pedido, p.cs_estado
+                        FROM acesso_pedido AS ap
+						INNER JOIN pedido AS p ON ap.id_pedido = p.id_pedido
+                        WHERE ap.id_usuario = $userid AND p.cs_estado = 0 ORDER BY p.tx_codigo ASC;");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+    return $data;   
+    }
 
 function getUserPedidosCliente($conn,$cid,$userid){
     $stmt = $conn->query("SELECT c.id_cliente, p.tx_codigo, p.id_pedido, p.cs_estado, u.tx_name, v.medido_total, v.nb_valor 

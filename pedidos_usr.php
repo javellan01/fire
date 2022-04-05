@@ -53,7 +53,7 @@ else{
 	
 		
 	// Carrega os pedidos e coloca nos cards
-	$pedidos = getUserPedidosCliente($conn,$cliente->id_cliente,$_SESSION['userid']);
+	$pedidos = getUserPedidos($conn,$_SESSION['userid']);
 
 	if(count($pedidos) == 0){
 		echo"<p class='h4'> Ainda não há pedidos disponíveis para visualizar neste cliente.</p>";}
