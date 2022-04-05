@@ -1,4 +1,8 @@
-
+<style>
+      .btn {
+        white-space: normal;
+      }
+</style>
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item ">
@@ -100,7 +104,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		  if($row->cs_finalizada == 0) 
 
 					echo "<div class='progress-group-header align-items-end' style='color: #27b;'>
-					<button type='button' class='btn btn-outline-dark p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong><i class='nav-icon cui-cursor'></i> " . $row->tx_descricao . "</strong></div>";
+					<button type='button' class='btn btn-outline-dark p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $row->tx_descricao . "</strong></div>";
 		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $row->qtd_sum . " / " . $row->nb_qtd ." ". $row->tx_tipo . "</div>";
@@ -163,7 +167,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	  </div>
 	  <div class="form-group col-4">
 			<label for="formData">Data:</label>
-			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" >
+			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
 		  </div>
 	</div>
 	  

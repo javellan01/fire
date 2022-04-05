@@ -172,7 +172,7 @@
 		  top: 0;
 		  left: 0;
 		  z-index: 50;
-		  height: 50px;
+		  height: 60px;
 		}
 		@-webkit-keyframes square {
 		  0% {

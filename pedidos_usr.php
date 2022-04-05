@@ -1,4 +1,8 @@
-	
+<style>
+      .btn {
+        white-space: normal;
+      }
+</style>	
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item "><a href="central_usr.php">Central</a></li>
