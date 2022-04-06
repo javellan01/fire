@@ -290,21 +290,29 @@ foreach($atividades AS $atividade)  {
 			
 			<div class='progress-group-prepend'>";
 		  if($atividade->cs_finalizada == 0) 
-					echo "<div class='progress-group-header align-items-end'><button type='button' class='btn btn-outline-primary p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong>" . $atividade->tx_descricao . "</strong></div>";
+					echo "<div class='progress-group-header align-items-end'>
+					<button type='button' class='btn btn-outline-primary p-1 m-1' 
+					data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'>
+					<strong>" . $atividade->tx_descricao . "</strong></div>";
 		  if($atividade->cs_finalizada == 1) 
-					echo "<div class='progress-group-header align-items-end' style='color: #777;'><strong><i class='nav-icon cui-check'></i> " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
+					echo "<div class='progress-group-header align-items-end m-1' style='color: #777;'>
+					<strong><i class='nav-icon cui-check'></i> " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
 		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $atividade->qtd_sum . " / " . $atividade->nb_qtd ." ". $atividade->tx_tipo . "</div>";
 		  echo"	  
 		  <div class='progress-group-bars mb-1'>
 			<div class='progress progress'>
-			  <div class='progress-bar bg-orange' role='progressbar' style='width: ".$atividade->percent."%' aria-valuenow='".$atividade->percent."' aria-valuemin='0' aria-valuemax='100'>".$atividade->percent."% Executados</div>
+			  <div class='progress-bar bg-orange' role='progressbar' 
+			  style='width: ".$atividade->percent."%' aria-valuenow='".$atividade->percent."' 
+			  aria-valuemin='0' aria-valuemax='100'>".$atividade->percent."% Executados</div>
 			</div>
 		  </div>
 		  <div class='progress-group-bars mb-1'>
 			<div class='progress progress'>
-			  <div class='progress-bar bg-primary' role='progressbar' style='width: ".$atividade->medpercent."%' aria-valuenow='".$atividade->medpercent."' aria-valuemin='0' aria-valuemax='100'>".$atividade->medpercent."% Medidos</div>
+			  <div class='progress-bar bg-primary' role='progressbar' 
+			  style='width: ".$atividade->medpercent."%' aria-valuenow='".$atividade->medpercent."' 
+			  aria-valuemin='0' aria-valuemax='100'>".$atividade->medpercent."% Medidos</div>
 			</div>
 		  </div>
 		</div>
@@ -444,7 +452,7 @@ foreach($atividades AS $atividade)  {
 		
 	</div>
 
-<!-- Modal Update Atividade  -->
+<!-- Modal Registra Atividade  -->
 <div class="modal" style="text-align: left" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdate" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -458,21 +466,18 @@ foreach($atividades AS $atividade)  {
 								<form>
     <div class="form-row">			
 	  <div class="form-group col-8">
-		<label for="formQtdin">Quantidade:</label>
-		<input type="text" class="form-control" id="formQtdin" placeholder="Insira Quantidade" name="Qtdin">
-		<input type="text" class="form-control" id="formAid" name="Aid" hidden>
+		<label for="formUqtd"><i class='nav-icon cui-note'></i> Quantidade:</label>
+		<input type="text" class="form-control" id="formUqtd" placeholder="Insira Quantidade">
+		<input type="text" class="form-control" id="formAid" hidden>
 	  </div>
 	  <div class="form-group col-4">
-			<label for="formData">Data:</label>
-			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+			<label for="formData"><i class='nav-icon cui-calendar'></i> Data:</label>
+			<input type="text" class="form-control date" id="formUdata" value="<?php echo date('d/m/Y');?>">
 		  </div>
 	</div>
 	  
-	<div class="form-row align-items-center">			
-	  
-	</div>
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-check'></i> OK</a>
-			</h4></form><div id="process"></div>
+	<button type='button' class='btn btn-primary float-right' id='updateAtividade' value='1' ><i class='nav-icon cui-check'></i> OK</button>
+			</h4></form>
 							  </div>
 							  <div class="modal-footer">
 								<div class="alert alert-secondary mx-auto" role="alert">

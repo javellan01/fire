@@ -171,6 +171,7 @@
 		$( function() {
 			$( ".date" ).datepicker();
 		  } );
+
 		$('.modal').on('hide.bs.modal', function (){
 			atvPhp(str);
 		});
@@ -194,9 +195,6 @@
 		$('span#soma').text(formatter.format(soma));
 
 		}
-
-		
-		
 
 		calcular();
 
@@ -229,7 +227,30 @@
 			modal.find('.modal-title').text(atividade);
 			modal.find('#formAid.form-control').val(id_atividade);
 		});
-		
+
+		$('button#updateAtividade').on('click', function (){
+
+			$.ajax({
+				type: "POST",
+				url: "./process/updateAtividade.php",
+				data: {
+					id_atividade: $('#formAid').val(),
+					nb_qtd: $('#formUqtd').val(),
+					dt_date : $('#formUdata').val()
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					
+				}
+			});
+		});
+
 		$('#formiData').mask('00/00/0000', {reverse: false});
 		$('#formfData').mask('00/00/0000', {reverse: false});
 
@@ -262,11 +283,34 @@
 			modal.find('#formAid.form-control').val(id_atividade);
 		});
 		
+		$('button#updateAtividade').on('click', function (){
+
+			$.ajax({
+				type: "POST",
+				url: "./process/updateAtividade.php",
+				data: {
+					id_atividade: $('#formAid').val(),
+					nb_qtd: $('#formUqtd').val(),
+					dt_date : $('#formUdata').val()
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					
+				}
+			});
+		});
+
 		$('.modal').on('hide.bs.modal', function (){
 			atv_uPhp(str);
 		});
 		
-			}
+		}
 			
 		};
 		xhttp.open("GET", "atividades_usr.php?pid="+str, true);

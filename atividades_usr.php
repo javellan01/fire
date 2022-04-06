@@ -147,7 +147,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 ?>
 </div></div>
 
-<!-- Modal Update Atividade  -->
+<!-- Modal Registra Atividade  -->
 <div class="modal" style="text-align: left" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdate" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
@@ -161,25 +161,21 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 								<form>
     <div class="form-row">			
 	  <div class="form-group col-8">
-		<label for="formQtdin">Quantidade:</label>
-		<input type="text" class="form-control" id="formQtdin" placeholder="Insira Quantidade" name="Qtdin">
-		<input type="text" class="form-control" id="formAid" name="Aid" hidden>
+		<label for="formUqtd"><i class='nav-icon cui-note'></i> Quantidade:</label>
+		<input type="text" class="form-control" id="formUqtd" placeholder="Insira Quantidade">
+		<input type="text" class="form-control" id="formAid" hidden>
 	  </div>
 	  <div class="form-group col-4">
-			<label for="formData">Data:</label>
-			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="eData">
+			<label for="formData"><i class='nav-icon cui-calendar'></i> Data:</label>
+			<input type="text" class="form-control date" id="formUdata" value="<?php echo date('d/m/Y');?>">
 		  </div>
 	</div>
 	  
-	<div class="form-row align-items-center">			
-	  
-	</div>
-	<a class='btn btn-primary float-right' href="javascript:formProc();" role='button'><i class='nav-icon cui-check'></i> OK</a>
-			</h4></form><div id="process"></div>
+	<button type='button' class='btn btn-primary float-right' id='updateAtividade' value='1' ><i class='nav-icon cui-check'></i> OK</button>
+			</h4></form>
 							  </div>
 							  <div class="modal-footer">
-								<h6 id="success"><small></small></h6>
-								<div class="alert alert-secondary mr-auto" role="alert">
+								<div class="alert alert-secondary mx-auto" role="alert">
 								<h6><?php echo"Obra: ".$row3->tx_nome.", ".$row3->tx_local.".";?> </h6>
 								</div>
 								
@@ -194,4 +190,4 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 			</div>	
 		</div>
 		
-	</div>
+	</div>	

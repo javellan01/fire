@@ -3,7 +3,7 @@
 	session_start(); 
 	//echo session_status(); 
 	// Verifica se existe os dados da sessão de login 
-	if(!isset($_SESSION["login"]) && !isset($_SESSION["usuario"])) 
+	if(!isset($_SESSION["login"]) && !isset($_SESSION["usuario"]) && !isset($_SESSION["userid"])) 
 		{ 
 	// Usuário não logado! Redireciona para a página de login 
 		header("Location: login.php"); 
@@ -78,7 +78,7 @@
 			  
 			  editable: false,
 			  eventLimit: true,
-			  events: 	<?php fillUCalendar($conn,5);?>,
+			  events: 	<?php fillUCalendar($conn,$_SESSION["userid"]);?>,
 			  
 			  weekNumbers: true,
 			  weekNumberTitle: 'W',

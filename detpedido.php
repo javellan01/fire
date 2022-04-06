@@ -32,6 +32,7 @@
 	$usuarios = getUsuarios($conn);
 	$acessoUsuario = getAcessoUsuario($conn,$pid);
 	$funcionarios = getFuncionarios($conn);
+	$listaCat = getListaCategorias($conn);
 
 	function showUserAccess($nb_category_user){
 		if($nb_category_user == 0) return 'Acesso Financeiro'; 
@@ -194,7 +195,8 @@ foreach($medicoes AS $medicao){
 </div>   
 <!------ LISTAGEM DAS ATIVIDADES --------------------------------------->			        
 <div class='row m-auto'>  
-	<h4><cite>Atividades Cadastradas:</h4>
+	<h4 class='col-6'><cite>Atividades Cadastradas:</h4>
+	<h4 class='col-6'><button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalGenerate'><i class='nav-icon cui-pencil'></i> Criar Atividades</h4>
 	<table class='table table-striped'>
 		<thead>
 			<tr>
@@ -461,6 +463,50 @@ foreach($categorias as $categoria){
 	<div class='row'>
 		<div class='col-6'>
 	<button type="button" class="btn btn-primary float-right" value="1" id="updateButton"><i class='nav-icon cui-check'></i> OK</button>
+		</div>
+		<div class='col-6'>
+	<button type="button" class="btn btn-danger float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
+		</div>
+			</div>
+			  </div>
+			    <div class="modal-footer">
+					<div id="process"></div>
+				</div>
+				
+			  </div>
+			</div>
+		  </div>
+<!-- Modal GERAR multiplas atividades ------------------------->
+		  <div class="modal" style="text-align: left" id="modalGenerate" tabindex="-1" role="dialog" aria-labelledby="modalGenerate" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title">Criar Múltiplas Atividades</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body">
+	<h4>Selecione Categoria para criar as atividades: </h4>
+	<form>
+	<div class="form-group">
+		<select class="form-control col-5" id="formCategoria">
+		<option selected hidden>Selecionar Categoria</option>
+<?php	foreach($listaCat as $catline){
+               echo "<option value=".$catline->id_categoria.">".$catline->tx_nome."</option>";
+            }
+?>	
+		</select>
+		
+		<label for="formMultiple">Número de Atividades: (máx.: 50)</label>
+		<input type="text" class="form-control col-5" id="formMultiple"></input>
+		<input type="text" class="form-control" value="<?php echo$pedido->id_pedido;?>" id="Pid" hidden>
+		</div>
+
+	</form>
+	<div class='row'>
+		<div class='col-6'>
+	<button type="button" class="btn btn-primary float-right" value="1" id="generateButton"><i class='nav-icon cui-check'></i> OK</button>
 		</div>
 		<div class='col-6'>
 	<button type="button" class="btn btn-danger float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>

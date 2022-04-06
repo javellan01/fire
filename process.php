@@ -132,38 +132,8 @@
 		if($e == null) echo strtoupper($tx_nome)." ".$nb_qtd." ".strtoupper($tx_tipo).", Valor: R$ ".$nb_valor." - Atividade Cadastrada!";
 	}
 	
-	//'Atividade_user.php' ---	Processa para inserir atividade executada
-	if(isset($_GET['Aid']) && ($_GET['Qtdin']) != '' && ($_GET['Aid']) != 0){
-	$nb_qtd = $id_usuario = $id_atividade = $dt_data = '';
-		
-	$dt_data = data_sql($_GET['eData']);
-	$nb_qtd = (int)$_GET['Qtdin'];
-	$id_usuario = $_SESSION['userid'];
-	$id_atividade = $_GET['Aid'];
+	//'Atividade_user.php' ---	DEPRECIATED Processa para inserir atividade executada
 	
-	$max = verificaQtd($conn,$id_atividade);
-	if($nb_qtd > $max){
-		$nb_qtd = $max;
-	}
-
-		try{
-	$stmt = $conn->prepare("INSERT INTO atividade_executada (id_usuario, id_atividade, nb_qtd, dt_data)
-    VALUES (:id_usuario, :id_atividade, :nb_qtd, :dt_data)");
-	$stmt->bindParam(':id_usuario', $id_usuario);
-	$stmt->bindParam(':id_atividade', $id_atividade);
-	$stmt->bindParam(':nb_qtd', $nb_qtd);
-	$stmt->bindParam(':dt_data', $dt_data);
-
-	$stmt->execute();
-		}
-	catch(PDOException $e)
-		{
-		echo "Error Ativ. Proc.: " . $e->getMessage();
-		}
-		
-		if($e == null) echo "Progresso cadastrado!";
-		
-	}
 	
 	
 	//'Pedidos.php' ---	Processa para inserir novo CLIENTE no database

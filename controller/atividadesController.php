@@ -19,6 +19,18 @@ function calcularPercent($parcel,$total,$precision){
     
     return number_format($result,$precision,',','.');
 }
+
+function verificaQtd($conn,$id_atividade){
+
+    $stmt = $conn->query("SELECT * FROM v_sum_atividade_exec WHERE id_atividade = $id_atividade");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    $result = $data[0]->nb_qtd - $data[0]->qtd_sum;
+    
+    return $result;
+}
+
 function getPedidoData($conn, $pid){
     $stmt = $conn->query("SELECT p.*, (( p.nb_valor / 100) * p.nb_retencao) AS retencao, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
 
@@ -95,6 +107,15 @@ function getMessage($conn, $mid){
         return $e;
 
     }
+
+    return $data;
+}
+
+function getListaCategorias($conn){
+    $stmt = $conn->query("SELECT * FROM categoria c  
+                        GROUP BY id_categoria ASC");
+        
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     return $data;
 }
@@ -201,15 +222,49 @@ function updatePedido($conn,$data){
 				}
 			catch(PDOException $e)
 				{
-				echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao editar pedido! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+				echo "Erro ao editar pedido! " . $e->getMessage();
 				}
 				
-			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Pedido Editado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-            <span aria-hidden='true'>&times;</span></button></div>";
+			if($e == null) echo "Pedido Editado com Sucesso!";
 
 }
+//verfifica progresso existente
+function verifyAtividadeExec($conn,$data){
+    
+        $stmt = $conn->query("SELECT * FROM atividade_executada 
+                            WHERE id_usuario = $data[0] AND id_atividade = $data[1] AND dt_data = $data[3]");
+        
+        $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
+        if(count($data) == 0) return true;
+        else {
+            echo "Progresso não cadastrado! Favor selecionar outra data para cadastrar o progresso.";
+            return false;
+        }
+              
+}
+//insere progresso da atividade
+function registraAtividadeExec($conn,$data){
+    $e = null;
+    try{
+        $stmt = $conn->prepare("INSERT INTO atividade_executada (id_usuario, id_atividade, nb_qtd, dt_data)
+        VALUES (:id_usuario, :id_atividade, :nb_qtd, :dt_data)");
+
+        $stmt->bindParam(':id_usuario', $data[0]);
+        $stmt->bindParam(':id_atividade', $data[1]);
+        $stmt->bindParam(':nb_qtd', $data[2]);
+        $stmt->bindParam(':dt_data', $data[3]);
+        
+        $stmt->execute();
+
+        }
+	catch(PDOException $e)
+		{
+	    	echo "Erro ao cadastrar progresso: " . $e->getMessage();
+		}
+        
+		if($e == null) echo "Progresso cadastrado!XXX ";
+}
 //update dos dados da atividade 
 function updateAtividade($conn, $data){
     $e = null;
@@ -230,7 +285,7 @@ function updateAtividade($conn, $data){
        
       }
       catch(PDOException $e){
-      echo  $e->getMessage();
+         echo  $e->getMessage();
       }
       if($e == null) echo "Atualizado com Sucesso!";
 }
@@ -252,9 +307,30 @@ function excluirAtividade($conn,$data){
                 }
                 if($e == null) echo "Atividade Excluída com Sucesso!";
 
-         }
+        }
         else echo "Erro: Atividade com Execução Registrada!";
    
+}
+//criar multiplas atividades
+function createMultipleAtividades($conn,$number,$data){
+    
+    try{
+        $query = "INSERT INTO atividade (tx_descricao,id_categoria,id_pedido) VALUES ";
+
+        for($i = 1; $i <= $number; $i++ )  {
+            $query .= "('Nova Atividade '$i, $data[0], $data[1]),";
+                    
+        }
+
+        $stmt = $conn->prepare($query);      
+        $stmt->execute();
+            
+        }
+        catch(PDOException $e){
+            echo  $e->getMessage();
+            }
+        if($e == null) echo "Atividades Cadastradas com Sucesso!";
+
 }
 //retur lista de convidados que acessam o sistema
 function getAcessoConvidado($conn,$pid){
