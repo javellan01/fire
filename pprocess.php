@@ -60,7 +60,9 @@
 			$data[3] = $_GET['Valor'];  //nb_valor
 			$data[4] = data_sql($_GET['Inicio']);  //dt_inicio
 			$data[5] = data_sql($_GET['Fim']);  //dt_fim
-			$data[6] = $_GET['Atividade'];		//id_atividade
+			$data[6] = $_GET['Atividade'];	//id_atividade
+			$data[7] = $_GET['Categoria'];	//id_categoria
+			$data[8] = $_GET['Status'];
 
             updateAtividade($conn,$data);
            

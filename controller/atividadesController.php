@@ -270,7 +270,7 @@ function updateAtividade($conn, $data){
     $e = null;
     try{
         $stmt = $conn->prepare("UPDATE atividade 
-        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim  
+        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim, id_categoria = :id_categoria, cs_finalizada = :cs_finalizada  
         WHERE id_atividade = :id_atividade");
 
         $stmt->bindParam(':tx_descricao',$data[0]); 
@@ -280,6 +280,9 @@ function updateAtividade($conn, $data){
         $stmt->bindParam(':dt_inicio',$data[4]); 
         $stmt->bindParam(':dt_fim',$data[5]); 
         $stmt->bindParam(':id_atividade',$data[6]); 
+        $stmt->bindParam(':id_categoria',$data[7]); 
+        $stmt->bindParam(':cs_finalizada',$data[8]); 
+        
 
        $stmt->execute();
        

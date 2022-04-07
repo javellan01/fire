@@ -226,9 +226,15 @@ foreach($categorias as $categoria){
 	// Aloca os users e cria a list TOTALMENTE EDITÁVEL
 	echo"<tr>
 			<th><input type='text' require class='form-control' id='formAtvtx_descricao".$atividade->id_atividade."' name='Atvtx_descricao".$atividade->id_atividade."' value='".$atividade->tx_descricao."'></th>
-			<th>".$categoria->tx_nome."</th>";
-			if($atividade->cs_finalizada == 0) echo"<th class='text-success'>Ativa</th>";
-			else echo"<th class='text-danger'>Finalizada</th>";
+			<th><select require class='form-control' id='formAtvCat".$atividade->id_atividade."'>
+				<option selected value='$cid'>".$categoria->tx_nome."</option>";
+		foreach($listaCat as $catline){
+				echo "<option value=".$catline->id_categoria.">".$catline->tx_nome."</option>";
+			 }	
+			echo"</select></th>";
+			echo"<th><select require class='form-control' id='formStatus".$atividade->id_atividade."'>";
+			if($atividade->cs_finalizada == 0) echo"<option class='text-success' selected value='0'>Ativa</option><option class='text-danger' value='1'>Finalizar</option></select></th>";	
+			else echo"<option class='text-danger' selected value='1'>Finalizada</option><option class='text-success' value='0'>Ativar</option></select></th>";
 			echo "<th><input type='text' require class='form-control' id='formAtvnb_qtd".$atividade->id_atividade."' name='Atvnb_qtd".$atividade->id_atividade."' value='".$atividade->nb_qtd."'></th>
 			<th><input type='text' require class='form-control' id='formAtvtx_tipo".$atividade->id_atividade."' name='Atvtx_tipo".$atividade->id_atividade."' value='".$atividade->tx_tipo."'></th>
 			<th><input type='text' require class='form-control date' id='formAtvidata".$atividade->id_atividade."' name='Atvidata".$atividade->id_atividade."' value='".data_usql($atividade->dt_inicio)."'></th>

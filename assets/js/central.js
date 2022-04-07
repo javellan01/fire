@@ -583,6 +583,8 @@
 					removerAcessoConvidado: '0',
 					grantAcessoUsuario: '0',
 					removerAcessoUsuario: '0',
+					Status: $('#formAtvStatus'+id_atividade).val(),
+					Categoria: $('#formAtvCat'+id_atividade).val(),
 					Descricao: $('#formAtvtx_descricao'+id_atividade).val(),
 					Tipo: $('#formAtvtx_tipo'+id_atividade).val(),
 					Qtd: $('#formAtvnb_qtd'+id_atividade).val(),
