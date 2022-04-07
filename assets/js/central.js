@@ -404,7 +404,7 @@
 					loadFData(str);						
 				},
 				error: function(result) {
-					window.alert('erro');
+					window.alert('Erro: '+result);
 					alert('error');
 				}
 			});
@@ -510,7 +510,7 @@
 				type: "GET",
 				url: "pprocess.php",
 				data: { 
-					Pid: $("#Pid").val(), // < note use of 'this' here
+					Pid: $("#Pid").val(), 
 					removePedido: $(this).val()
 				},
 				success: function(result) {
@@ -523,6 +523,7 @@
 				}
 			});
 		});
+
 		$("#updateButton").click(function(e) {
 			e.preventDefault();
 			
@@ -553,13 +554,13 @@
 					pdDescricao: $('#formControlTextarea').val()
 				},
 				
-				success: function(data) {
+				success: function() {
 					$('#modalUPedido').modal('hide');
 					loadCData( $("#Cid").val() );
 					
 				},
 				error: function(result) {
-					alert('error');
+					window.alert('Erro :'+result);
 				}
 			});
 		});
@@ -599,15 +600,14 @@
 					
 				},
 				error: function(result) {
-					alert('error');
+					window.alert('Erro: '+result);
 				}
 			});
 			
 		});
 
-		$(".button-excluir").click(function(event) {
-			event.preventDefault();
-
+		$("#excluirAtividade").click(function() {
+			
 			$.ajax({
 				type: "GET",
 				url: "pprocess.php",
@@ -615,24 +615,25 @@
 					updatePedido: '0',
 					removePedido: '0',
 					updateAtividade: '0',
-					excluirAtividade:  $(this).val(),
 					removeFuncionario: '0',
 					alocaFuncionario:'0',
+					excluirAtividade: $(this).val(),
 					grantAcessoConvidado: '0',
 					removerAcessoConvidado: '0',
 					grantAcessoUsuario: '0',
 					removerAcessoUsuario: '0',
-					Atividade: $(this).attr("data-id_atividade")
+					Atividade: $('#modalExAtividade').find('#id_atividade').val()
 					
 				},
 				
 				success: function(result) {
 					window.alert(result);
+					$('#modalExAtividade').modal('hide');
 					loadPData(str,str2);
 					
 				},
 				error: function(result) {
-					window.alert(result);
+					window.alert('Erro: '+result);
 				}
 			});
 			
@@ -843,6 +844,37 @@
 			
 		});
 
+		});
+		$('#modalExAtividade').on('show.bs.modal', function(event){
+			let id_atividade = $(event.relatedTarget).val();
+			let atividade = $('#formAtvtx_descricao'+id_atividade).val();
+			$(this).find('#nomeAtividade').text(atividade);
+			$(this).find('#id_atividade').val(id_atividade);
+		});
+
+		$('button#generateButton').on('click', function (event){
+			event.preventDefault();
+			$.ajax({
+				type: "POST",
+				url: "./process/newAtividade.php",
+				data: {
+					generateButton: $(this).val(),
+					id_pedido: $('#formPid').val(),
+					nb_loops: $('#formMultiple').val(),
+					id_categoria : $('#formCategoria').val()
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					$('#modalGenerate').modal('hide');
+					loadPData(str,str2);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					
+				}
+			});
 		});
 
 		}

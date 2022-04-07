@@ -116,7 +116,7 @@ $stmt0 = null;
 				<label for="formCatuser">Tipo: </label>
 				<select class="form-control" id="formCatuser" name="Catuser">
 					<option value='0'>Administrador</option>
-					<option value='1'>Gerente</option>
+					<!-- option value='1'>Gerente</!-->
 					<option selected value='2'>Base</option>
 				</select>  
 			 </div>

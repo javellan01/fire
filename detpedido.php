@@ -235,7 +235,7 @@ foreach($categorias as $categoria){
 			<th><input type='text' require class='form-control date' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
 			<th><input type='text' require class='form-control' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
 			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'><i class='nav-icon cui-pencil'></i> Atualizar</button></th>
-			<th><button type='button' class='btn btn-danger float-center button-excluir'  value='1' id='excluirAtividade' data-id_atividade='".$atividade->id_atividade."'><i class='nav-icon cui-trash'></i> Excluir</button></th>
+			<th><button type='button' class='btn btn-danger float-center' data-toggle='modal' data-target='#modalExAtividade' value='".$atividade->id_atividade."'><i class='nav-icon cui-trash'></i> Excluir</button></th>
 		</tr>";	
 			$sumcat += $atividade->nb_valor;
 		}
@@ -269,7 +269,7 @@ foreach($categorias as $categoria){
 					<div class="list-group list-group-accent">
 <!------ LISTAGEM PARA CONTROLE ACESSO DE CONVIDADOS --------------------------------------->
 <div class="list-group-item list-group-item-accent-primary">			
-<div class="row m-auto">
+<div class="row col-10">
 	
 	<h4><cite>Convidados: </h4>
 	<table class='table table-striped'>
@@ -290,7 +290,7 @@ foreach($categorias as $categoria){
 					<th>".showUserAccess($convidado->nb_category_user)."</th> 
 					<th>".$convidado->tx_email."</th>
 					<th>".$convidado->tx_contato."</th>
-					<th><button type='button' class='btn btn-danger float-center button-removeconvidado'  value='1'
+					<th><button type='button' class='btn btn-danger float-right button-removeconvidado'  value='1'
 					id='removerAcessoConvidado' data-id_pedido='".$pid."' data-id_cliente_usr='".$convidado->id_cliente_usr."'>
 					<i class='nav-icon cui-user-unfollow'> Remover</button></th>
 				</tr>";
@@ -317,13 +317,13 @@ foreach($categorias as $categoria){
 </div>
 <!------ LISTAGEM PARA CONTROLE ACESSO DE USUARIOS FIRE --------------------------------------->		
 <div class="list-group-item list-group-item-accent-danger">	
-<div class="row m-auto">
+<div class="row col-10">
 	
 	<h4><cite>Usuários FireSystems: </h4>
 	<table class='table table-striped'>
 		<thead>
 			<tr>
-				<th class='col-8'>Nome</th>
+				<th>Nome</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -332,7 +332,7 @@ foreach($categorias as $categoria){
 	 foreach($acessoUsuario as $usuario){
 		echo "<tr>
 		 			<th>".$usuario->tx_name."</th>					
-					<th><button type='button' class='btn btn-danger float-center button-removeusuario'  value='1'
+					<th><button type='button' class='btn btn-danger float-right button-removeusuario'  value='1'
 					id='removerAcessoUsuario' data-id_pedido='".$pid."' data-id_usuario='".$usuario->id_usuario."'>
 					<i class='nav-icon cui-user-unfollow'> Remover</button></th>
 				</tr>";
@@ -360,7 +360,7 @@ foreach($categorias as $categoria){
 
 <!------ LISTAGEM PARA ALOCAR FUNCIONÁRIOS --------------------------------------->			
 <div class="list-group-item list-group-item-accent-dark">
-<div class="row m-auto">
+<div class="row col-10">
 
 	<h4><cite>Colaboradores: </h4>
 	<table class='table table-striped'>
@@ -377,7 +377,7 @@ foreach($categorias as $categoria){
 		echo "<tr>
 		 			<th>".$alocado->tx_nome."</th>
 					<th>".$alocado->tx_funcao."</th>
-					<th><button type='button' class='btn btn-danger float-center button-remover'  value='1' id='removerColaborador' data-id_pedido='".$pid."' data-id_funcionario='".$alocado->id_funcionario."'><i class='nav-icon cui-user-unfollow'> Remover</button></th>
+					<th><button type='button' class='btn btn-danger float-right button-remover'  value='1' id='removerColaborador' data-id_pedido='".$pid."' data-id_funcionario='".$alocado->id_funcionario."'><i class='nav-icon cui-user-unfollow'> Remover</button></th>
 				</tr>";
 	 }
 ?>				
@@ -491,7 +491,7 @@ foreach($categorias as $categoria){
 	<form>
 	<div class="form-group">
 		<select class="form-control col-5" id="formCategoria">
-		<option selected hidden>Selecionar Categoria</option>
+		<option selected value="0" hidden>Selecionar Categoria</option>
 <?php	foreach($listaCat as $catline){
                echo "<option value=".$catline->id_categoria.">".$catline->tx_nome."</option>";
             }
@@ -499,17 +499,50 @@ foreach($categorias as $categoria){
 		</select>
 		
 		<label for="formMultiple">Número de Atividades: (máx.: 50)</label>
-		<input type="text" class="form-control col-5" id="formMultiple"></input>
-		<input type="text" class="form-control" value="<?php echo$pedido->id_pedido;?>" id="Pid" hidden>
+		<input type="text" class="form-control col-5" value="1" id="formMultiple"></input>
+		<input type="text" class="form-control" value="<?php echo$pedido->id_pedido;?>" id="formPid" hidden>
 		</div>
 
 	</form>
 	<div class='row'>
 		<div class='col-6'>
-	<button type="button" class="btn btn-primary float-right" value="1" id="generateButton"><i class='nav-icon cui-check'></i> OK</button>
+	<button type="button" class="btn btn-primary float-right" value="1" id="generateButton"><i class='nav-icon cui-check'></i> Gerar Atividades</button>
 		</div>
 		<div class='col-6'>
 	<button type="button" class="btn btn-danger float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
+		</div>
+			</div>
+			  </div>
+			    <div class="modal-footer">
+					<div id="process"></div>
+				</div>
+				
+			  </div>
+			</div>
+		  </div>
+<!-- Modal Remover Pedido ------------------------->
+<div class="modal" style="text-align: left" id="modalExAtividade" tabindex="-1" role="dialog" aria-labelledby="modalExAtividade" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title"><cite>Excluir Atividade:</cite></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body">
+	<h4>Deseja excluir esta atividade do sistema?</h4><br>
+	<h5 id="nomeAtividade"></h5>
+	<form>
+		<input type="text" class="form-control" value="" id="id_atividade" hidden>
+	</form>
+	<div class='row'>
+		<div class='col-6'>
+	
+		</div>
+		<div class='col-6'>
+	<button type="button" class="btn btn-danger float-left" value="1" id="excluirAtividade"><i class='nav-icon cui-trash'></i> Excluir</button>
+	<button type="button" class="btn btn-primary float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
 		</div>
 			</div>
 			  </div>

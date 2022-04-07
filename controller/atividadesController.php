@@ -313,15 +313,16 @@ function excluirAtividade($conn,$data){
 }
 //criar multiplas atividades
 function createMultipleAtividades($conn,$number,$data){
-    
+    $e=null;
     try{
         $query = "INSERT INTO atividade (tx_descricao,id_categoria,id_pedido) VALUES ";
 
         for($i = 1; $i <= $number; $i++ )  {
-            $query .= "('Nova Atividade '$i, $data[0], $data[1]),";
-                    
+            $query .= " ('Nova Atividade $i', $data[1], $data[0]),";
+               
         }
-
+        $query = substr_replace($query, "", -1);
+        $i--;
         $stmt = $conn->prepare($query);      
         $stmt->execute();
             
@@ -329,7 +330,8 @@ function createMultipleAtividades($conn,$number,$data){
         catch(PDOException $e){
             echo  $e->getMessage();
             }
-        if($e == null) echo "Atividades Cadastradas com Sucesso!";
+        if($e == null) echo $i." Atividades Cadastradas com Sucesso!";
+        //if($e == null) echo $i." Atividades Cadastradas com Sucesso!";
 
 }
 //retur lista de convidados que acessam o sistema
