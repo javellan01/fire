@@ -96,7 +96,7 @@ foreach($medicoes as $medicao){
 	$mid=$medicao->nb_ordem;	
 	echo"		  
 		<div class='card border border-light mb-3'>
-		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalNotificar'><i class='nav-icon cui-envelope-closed'></i> Enviar Notificação de Medição</button></h5>
+		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."<button type='button' class='btn btn-primary float-right'data-id_medicao=$medicao->id_medicao value=$mid data-toggle='modal' data-target='#modalNotificar'><i class='nav-icon cui-envelope-closed'></i> Enviar Notificação de Medição</button></h5>
 		  
 		  <div class='card-body'>
 		  <div class='row mb-2'>
@@ -650,17 +650,17 @@ foreach($atividades AS $atividade)  {
 		echo"<div class='input-group mb-3'>
 				<div class='input-group-prepend'>
 				<div class='input-group-text'>
-				<input type='checkbox' id='checkuser".$user->id_cliente_usr."' checked></input>
+				<input type='checkbox' id='checkUser' value='".$user->id_cliente_usr."' checked></input>
 				</div>
 				<span class='input-group-text'>".$user->tx_nome."</span>
 			</div>
-		<input type='text' class='form-control' value='".$user->tx_email."'></input>
+		<input type='text' class='form-control' id='formUser".$user->id_cliente_usr."' value='".$user->tx_email."'></input>
 	</div>";
 
 	}
 	?>
 	
-	<button type='button' class='btn btn-primary float-right mx-2' id='sendNotificacao' value='1'>
+	<button type='button' class='btn btn-primary float-right mx-2' data-id_medicao='' id='sendNotificacao' value='1'>
 			<i class='nav-icon cui-envelope-closed'></i> Confirmar Envio</button>
 	</div>
 				<div class="modal-footer">

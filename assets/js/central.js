@@ -228,6 +228,47 @@
 			modal.find('#formAid.form-control').val(id_atividade);
 		});
 
+		$('#modalNotificar').on('show.bs.modal', function (event) {
+			
+			$(this).find('#ordemMedicao').text($(event.relatedTarget).val());
+			$(this).find('#sendNotificacao').attr("data-id_medicao", $(event.relatedTarget).data('id_medicao'));
+		});
+
+		$('button#sendNotificacao').on('click', function (event){
+			event.preventDefault();
+			let contatos = 0;
+			let indice = 0;
+			let contato = [];
+
+			$( 'input#checkUser:checked' ).each(function() {
+				contatos = contatos + 1 * 1;
+				indice = $(this).val();
+				contato.push($('input#formUser'+indice).val());
+			});
+
+			$.ajax({
+				type: "POST",
+				url: "./process/enviaNotificacao.php",
+				data: {
+					sendNotificacao: $(this).val(),
+					id_medicao: $(this).attr('data-id_medicao'),
+					contatos: contatos,
+					contato: contato
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					$('#modalNotificar').modal('hide');
+					atvPhp(str);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					
+				}
+			});
+		});
+
 		$('button#updateAtividade').on('click', function (){
 
 			$.ajax({
@@ -499,11 +540,10 @@
 
 		$( function() {
 			$( ".date" ).datepicker();
-		  } );
+		} );
 
 		$('.modal').on('hide.bs.modal', function (){	loadPData(str,str2);	});
 
-		$(document).ready(function(){
 		$("#removeButton").click(function(e) {
 			e.preventDefault();
 			$.ajax({
@@ -846,7 +886,7 @@
 			
 		});
 
-		});
+		
 		$('#modalExAtividade').on('show.bs.modal', function(event){
 			let id_atividade = $(event.relatedTarget).val();
 			let atividade = $('#formAtvtx_descricao'+id_atividade).val();
@@ -878,6 +918,8 @@
 				}
 			});
 		});
+
+		
 
 		}
 

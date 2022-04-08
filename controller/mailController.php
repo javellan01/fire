@@ -7,7 +7,6 @@ require("./dist/phpmailer/Exception.php");
 require("./dist/phpmailer/PHPMailer.php");
 require("./dist/phpmailer/SMTP.php");
 
-
 function sendNewLogin($user,$password){
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
@@ -22,7 +21,7 @@ try {
     $mail->Password   = $mlogin['password'];                            //SMTP password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
+    $mail->CharSet    = 'UTF-8';                //Charset para letras no brasil
     //Recipients
     $mail->setFrom('app.sistema@firesystems-am.com.br', 'Sistema FireSystems-AM');
     $mail->addAddress($user);                            //Add a recipient
@@ -79,7 +78,7 @@ function sendMedicao($users,$medicao){
         $mail->Password   = $mlogin['password'];                            //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-    
+        $mail->CharSet    = 'UTF-8';                //Charset para letras no brasil
         //Recipients
         $mail->setFrom('app.sistema@firesystems-am.com.br', 'Sistema FireSystems-AM');
         foreach($users as $user){
@@ -104,13 +103,11 @@ function sendMedicao($users,$medicao){
                 <tbody><tr>
                     <td valign="top" style="padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px">
                     <div style="text-align:left">
-                <div style="text-align:center"><span style="font-size:18px"><span style="color:#801010"><strong>Bem vindo ao Sistema de Gerenciamento FireSystems</strong></span><br>
-                <br>
-                <span style="font-size:15px">Geramos uma senha para que você possa ter acesso ao sitema.</span></span>
+                <div style="text-align:center"><span style="font-size:18px"><span style="color:#801010"><strong>Uma nova medição no pedido foi gerada!</strong></span><br>
                 <br><br>
-                <span style="font-size:16px">Sua senha de acesso será: </span></span></span>
+                <span style="font-size:16px">Aguardamos sua aprovação ou solicitação de revisão.</span></span></span>
                 <span style="color:#801010"><strong></strong></span></span></span><br><br>
-                <span style="font-size:15px">Esta senha possibilitará o acesso ao </span>
+                <span style="font-size:15px">Verfique a medição lançada no sistema de gerenciamento </span>
                 <a href="https://gerenciamento.firesystems-am.com.br" target="_blank" >site de Gerenciamento de FireSystems</span></a> usando seu e-mail como login.<br>
                 <br>
                 </span></span></span></div>
