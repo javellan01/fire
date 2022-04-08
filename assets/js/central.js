@@ -248,7 +248,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "./process/enviaNotificacao.php",
+				url: "/process/enviaNotificacao.php",
 				data: {
 					sendNotificacao: $(this).val(),
 					id_medicao: $(this).attr('data-id_medicao'),
@@ -273,7 +273,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "./process/updateAtividade.php",
+				url: "/process/updateAtividade.php",
 				data: {
 					id_atividade: $('#formAid').val(),
 					nb_qtd: $('#formUqtd').val(),
@@ -328,7 +328,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "./process/updateAtividade.php",
+				url: "/process/updateAtividade.php",
 				data: {
 					id_atividade: $('#formAid').val(),
 					nb_qtd: $('#formUqtd').val(),
@@ -560,6 +560,60 @@
 				},
 				error: function(result) {
 					alert('error');
+				}
+			});
+		});
+
+		$('button#updateAllAtividade').on('click', function (event){
+			
+			let status = [];
+			let categoria = [];
+			let descricao = [];
+			let tipo = [];
+			let qtd = [];
+			let valor = [];
+			let inicio = [];
+			let fim = [];
+			let atividade = [];
+
+			$( 'tr.form-row' ).each(function() {
+				var id_atividade = 	 $(this).find('.button-update').attr("data-id_atividade");
+				atividade.push(id_atividade);
+				status.push($(this).find('#formAtvStatus'+id_atividade).val());	
+				categoria.push($(this).find('#formAtvCat'+id_atividade).val());
+				descricao.push($(this).find('#formAtvtx_descricao'+id_atividade));
+				tipo.push($(this).find('#formAtvtx_tipo'+id_atividade));
+				qtd.push($(this).find('#formAtvnb_qtd'+id_atividade).val());
+				valor.push($(this).find('#formAtvnb_valor'+id_atividade).val());;
+				inicio.push($(this).find('#formAtvidata'+id_atividade).val());
+				fim.push($(this).find('#formAtvfdata'+id_atividade).val());	
+			});
+
+			$.ajax({
+				type: "POST",
+				url: "/process/updateAllAtividade.php",
+				data: {
+					updateAllAtividade: $(this).val(),
+					Status: status,
+					Categoria: categoria,
+					Descricao: descricao,
+					Tipo: tipo,
+					Qtd: qtd,
+					Valor: valor,
+					Inicio: inicio,
+					Fim: fim,
+					Atividade: atividade,
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					$('#modalNotificar').modal('hide');
+					atvPhp(str);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					
 				}
 			});
 		});
@@ -898,7 +952,7 @@
 			event.preventDefault();
 			$.ajax({
 				type: "POST",
-				url: "./process/newAtividade.php",
+				url: "./newAtividade.php",
 				data: {
 					generateButton: $(this).val(),
 					id_pedido: $('#formPid').val(),

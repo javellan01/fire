@@ -196,7 +196,7 @@ foreach($medicoes AS $medicao){
 <!------ LISTAGEM DAS ATIVIDADES --------------------------------------->			        
 <div class='row m-auto'>  
 	<h4 class='col-6'><cite>Atividades Cadastradas:</h4>
-	<h4 class='col-6'><button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalGenerate'><i class='nav-icon cui-pencil'></i> Criar Atividades</h4>
+	<h4 class='col-6'><button type='button' class='btn btn-primary mx-2 float-right'><i class='nav-icon cui-pencil'></i> Salvar Atividades</button><button type='button' class='btn btn-primary mx-2 float-right' data-toggle='modal' data-target='#modalGenerate'><i class='nav-icon cui-pencil'></i> Criar Atividades</button></h4>
 	<table class='table table-striped'>
 		<thead>
 			<tr>
@@ -214,7 +214,7 @@ foreach($medicoes AS $medicao){
 		</thead>
 		<tbody>
 <?php
-$categorias = getCategoria($conn,$pid);
+$categorias = getCategoriaPedido($conn,$pid);
 $sumatv = 0.00;
 
 foreach($categorias as $categoria){	
@@ -224,7 +224,7 @@ foreach($categorias as $categoria){
 	$sumcat = 0.00;
 	foreach($atividades as $atividade){
 	// Aloca os users e cria a list TOTALMENTE EDITÁVEL
-	echo"<tr>
+	echo"<tr class='form-row'>
 			<th><input type='text' require class='form-control' id='formAtvtx_descricao".$atividade->id_atividade."' name='Atvtx_descricao".$atividade->id_atividade."' value='".$atividade->tx_descricao."'></th>
 			<th><select require class='form-control' id='formAtvCat".$atividade->id_atividade."'>
 				<option selected value='$cid'>".$categoria->tx_nome."</option>";

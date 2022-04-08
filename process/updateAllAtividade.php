@@ -15,7 +15,7 @@ function data_sql($data) {
     return $ndata;
 }
 
-if(isset($_POST['id_atividade']) && ($_POST['nb_qtd']) != '' && ($_POST['id_atividade']) != 0){
+if(isset($_POST['id_atividade']) && ($_POST['nb_qtd']) != '' ){
 	
 	$data = array();
 

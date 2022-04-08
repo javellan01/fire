@@ -120,7 +120,7 @@ function getListaCategorias($conn){
     return $data;
 }
 
-function getCategoria($conn,$pid){
+function getCategoriaPedido($conn,$pid){
     $stmt = $conn->query("SELECT c.* FROM atividade a  
         INNER JOIN categoria c ON a.id_categoria=c.id_categoria	WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
         
@@ -292,6 +292,39 @@ function updateAtividade($conn, $data){
       }
       if($e == null) echo "Atualizado com Sucesso!";
 }
+
+function updateAllAtividade($conn, $data){
+    $e = null;
+    try{
+        $conn->beginTransaction();
+
+        
+        $stmt = $conn->prepare("UPDATE atividade 
+        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim, id_categoria = :id_categoria, cs_finalizada = :cs_finalizada  
+        WHERE id_atividade = :id_atividade");
+
+        foreach($atividades as $atividade){
+            $stmt->bindParam(':tx_descricao',$data[0]); 
+            $stmt->bindParam(':tx_tipo',$data[1]); 
+            $stmt->bindParam(':nb_qtd',$data[2]); 
+            $stmt->bindParam(':nb_valor',$data[3]); 
+            $stmt->bindParam(':dt_inicio',$data[4]); 
+            $stmt->bindParam(':dt_fim',$data[5]); 
+            $stmt->bindParam(':id_atividade',$data[6]); 
+            $stmt->bindParam(':id_categoria',$data[7]); 
+            $stmt->bindParam(':cs_finalizada',$data[8]); 
+            
+            $stmt->execute();
+        }
+        $conn->commit();
+      }
+      catch(Exception $e){
+         $conn->rollback();
+         throw $e;
+      }
+      if($e == null) echo "Atualizado com Sucesso!";
+}
+
 //exclude de atividade verficica tambem se há pendencia antes de excluir
 function excluirAtividade($conn,$data){
     $e = null;

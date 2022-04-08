@@ -32,7 +32,7 @@
 //Carrega as empresas(clientes) pra colocar no titulo dos cards
 $clientes = getClientes($conn);
 
-if(count($clientes) == 0){
+if(!$clientes){
 	echo"<p><i class='nav-icon cui-info'></i> Ainda não há clientes cadastrados no sistema. </p>";}
 
 foreach($clientes as $cliente){
@@ -53,7 +53,7 @@ foreach($clientes as $cliente){
 	// Carrega os pedidos e coloca nos cards
 	$pedidos = getPedidosCliente($conn,$cliente->id_cliente);
 
-	if(count($pedidos) == 0){
+	if(!$pedidos){
 		echo"<p><i class='nav-icon cui-info'></i> Não há pedidos cadastrados para este cliente! </p>";}
 	else{		
 		foreach($pedidos as $pedido){

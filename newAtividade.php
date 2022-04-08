@@ -7,8 +7,8 @@
      exit; 
  } 
 
-require("../DB/conn.php");
-require("../controller/atividadesController.php");
+require("./DB/conn.php");
+require("./controller/atividadesController.php");
 
 function data_sql($data) {
     $ndata = substr($data, 6, 4) ."-". substr($data, 3, 2) ."-".substr($data, 0, 2);

@@ -44,7 +44,7 @@ $stmt1 = $conn->query("SELECT c.*, (a.nb_valor / a.nb_qtd) v_unit FROM atividade
 		INNER JOIN categoria c ON a.id_categoria=c.id_categoria
 		WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
 		
-if($stmt1->rowCount() == 0){
+if(!$stmt1){
 		echo"<h4 class='text-danger'>Não há atividades cadastradas para este pedido.</h4>";}
 	else{	
 

@@ -88,7 +88,7 @@ echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'
 			<div id='collapseMedicao' aria-labelledby='headingMedicao' data-parent='#accordion'>
 				<div class='card-body'>";
 	
-if(count($medicoes) == 0){
+if(!$medicoes){
 		echo"<div class='card border border-light'><h4><i class='nav-icon cui-info'></i> Não há medições cadastradas para este pedido. </h4></div>";}
 	else{					
 foreach($medicoes as $medicao){
@@ -203,9 +203,9 @@ echo"</div></div></div></div>";
 			";
 			
 // Carrega as categorias
-$categorias = getCategoria($conn,$pid);
+$categorias = getCategoriaPedido($conn,$pid);
 		
-if(count($categorias) == 0){
+if(!$categorias){
 		echo"<h4 class='danger'><i class='nav-icon cui-info'></i> Ainda não há atividades cadastradas para este pedido!</h4>";}
 	else{	
 
@@ -527,7 +527,7 @@ foreach($atividades AS $atividade)  {
 	
 	<?php
 	$stmt5 = medirAtividades($conn,$pid);
-	if(count($stmt5) == 0){
+	if(!$stmt5){
 		echo"<div class='row'><h5><i class='nav-icon cui-info'></i> Não há atividades para medir até o momento.</h5></div>";
 	}
 	else{
