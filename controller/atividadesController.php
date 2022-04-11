@@ -353,6 +353,37 @@ function updateAllAtividade($conn, $data){
       if($e == null) echo "Todas Atividades foram Salvas com Sucesso!";
 }
 
+function updateMedicao($conn, $data){
+    $e = null;
+    try{
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("UPDATE atividade_medida 
+        SET nb_valor = :nb_valor  
+        WHERE nb_ordem = :nb_ordem AND id_pedido = :id_pedido AND id_atividade = :id_atividade");
+
+        foreach($data as $atividade){
+            $stmt->bindParam(':nb_valor',$atividade['Descricao']); 
+            $stmt->bindParam(':tx_tipo',$atividade['Tipo']); 
+            $stmt->bindParam(':nb_qtd',$atividade['Qtd']); 
+            $stmt->bindParam(':nb_valor',$atividade['Valor']); 
+            $stmt->bindParam(':dt_inicio',$atividade['Inicio']); 
+            $stmt->bindParam(':dt_fim',$atividade['Fim']); 
+            $stmt->bindParam(':id_atividade',$atividade['Atividade']); 
+            $stmt->bindParam(':id_categoria',$atividade['Categoria']); 
+            $stmt->bindParam(':cs_finalizada',$atividade['Status']); 
+            
+            $stmt->execute();
+        }
+        $conn->commit();
+      }
+      catch(Exception $e){
+         $conn->rollback();
+         throw $e;
+      }
+      if($e == null) echo "Todas Atividades foram Salvas com Sucesso!";
+}
+
 //exclude de atividade verficica tambem se há pendencia antes de excluir
 function excluirAtividade($conn,$data){
     $e = null;

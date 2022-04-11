@@ -166,6 +166,7 @@
 				<th>Emissão</th>
 				<th>Vencimento</th>
 				<th>Valor</th>
+				<th>Revisar</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -188,8 +189,14 @@ foreach($medicoes AS $medicao){
 			else echo"<th>".data_usql($medicao->dt_emissao)."</th>";
 			if(is_null($medicao->dt_vencimento)) echo"<th class='text-warning'>Aguardando Nota</th>";
 			else echo"<th>".data_usql($medicao->dt_vencimento)."</th>";
-			echo "<th> R$".moeda($medicao->v_medido)."</th>
-		</tr>";	
+			echo "<th> R$".moeda($medicao->v_medido)."</th>";
+			if($medicao->cs_aprovada == 0) {echo "<th><button type='button' class='btn btn-warning mx-auto' id='revisarMedicao'
+			data-local='1' data-id_medicao=$pedido->id_pedido value=$mid><i class='nav-icon cui-pencil'></i> Revisar Medição</button></th>";}
+			else{
+				echo "<th><button type='button' class='btn btn-warning mx-auto' id='revisarMedicao'
+			disabled><i class='nav-icon cui-pencil'></i> Revisar Medição</button></th>";
+			}
+			echo "</tr>";	
 	
 	}	
 ?>
@@ -218,13 +225,13 @@ foreach($medicoes AS $medicao){
 				<th></th>
 			</tr>
 		</thead>
-		<tbody>
+		
 <?php
 $categorias = getCategoriaPedido($conn,$pid);
 $sumatv = 0.00;
 
 foreach($categorias as $categoria){	
-	
+	echo"<tbody class='categoria-sub'>";
 	$cid = $categoria->id_categoria;
 	$atividades = getAtividades($conn,$pid,$cid);
 	$sumcat = 0.00;
@@ -245,24 +252,24 @@ foreach($categorias as $categoria){
 			<th><input type='text' require class='form-control' id='formAtvtx_tipo".$atividade->id_atividade."' name='Atvtx_tipo".$atividade->id_atividade."' value='".$atividade->tx_tipo."'></th>
 			<th><input type='text' require class='form-control date' id='formAtvidata".$atividade->id_atividade."' name='Atvidata".$atividade->id_atividade."' value='".data_usql($atividade->dt_inicio)."'></th>
 			<th><input type='text' require class='form-control date' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
-			<th><input type='text' require class='form-control' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
+			<th><input type='text' require class='form-control valores' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
 			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'><i class='nav-icon cui-pencil'></i> Atualizar</button></th>
-			<th><button type='button' class='btn btn-danger float-center' data-toggle='modal' data-target='#modalExAtividade' value='".$atividade->id_atividade."'><i class='nav-icon cui-trash'></i> Excluir</button></th>
+			<th><button type='button' class='btn btn-danger float-center' data-toggle='modal' data-target='#modalExAtividade' value='".$atividade->id_atividade."'><i class='nav-icon cui-trash'></i></button></th>
 		</tr>";	
 			$sumcat += $atividade->nb_valor;
 		}
-		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th>R$ ".moeda($sumcat)."</th></th><th></th><th></tr>";
+		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th><span id='subtotal'>R$ ".moeda($sumcat)."</span></th></th><th></th><th></tr>";
 		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
 		$sumatv += $sumcat;
-		
+		echo "</tbody>";
 	}	
 
-	echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th><th></th></tr>
-	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Total:</th><th>R$ ".moeda($sumatv)."</th><th></th><th></th></tr>";
+	echo"<tbody><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th><th></th></tr>
+	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th><h5>Total:</th></h5><th><h5><span id='totalfinal'>R$ ".moeda($sumatv)."</span></h5></th><th></th><th></th></tr></tbody>";
 
 
 ?>
-		</tbody>
+		
 	</table>
 </div> 
 </div>
@@ -411,7 +418,7 @@ foreach($categorias as $categoria){
 		</div>
 	</div>
 	</div>
-	<div class="card-footer"><cite>Obs.: As configurações de acesso estão prontas, porém ainda não é reconhecida pelo site do gerenciamento.</cite></div>
+	<div class="card-footer"><cite></cite></div>
 	</div>
 </div>
 	

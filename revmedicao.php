@@ -13,6 +13,7 @@ require("./controller/atividadesController.php");
 
 $pid = $_REQUEST["pid"];
 $mid = $_REQUEST["mid"];
+$controlid = $_REQUEST["controlid"];
 
 $balance = array();
 $measure = 0.00;
@@ -20,14 +21,15 @@ $pedido = getPedidoData($conn, $pid);
 $users = getAcessoConvidado($conn,$pid);
 $categorias = getCategoriaAtividades($conn,$pid,$mid);
 $medidas = getMedicaoResume($conn,$pid,$mid);
+$cid = $pedido->id_cliente;
 
 ?>
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item "><a href="central.php">Central</a></li>
 			<li class="breadcrumb-item "><a href="javascript:loadPhp('pedidos.php');">Pedidos por Cliente</a></li>
-			<li class="breadcrumb-item "><a href="javascript:atvPhp(<?php echo $pid;?>);">Detalhes do Pedido</a></li>
-			<li class="breadcrumb-item active">Detalhes do Pedido</li>
+			<li class='breadcrumb-item '><a href='javascript:<?php if($controlid) echo "loadPData($pid,$cid)"; else echo "atvPhp($pid)";?>;'>Detalhes do Pedido</a></li>
+			<li class="breadcrumb-item active">Revisar Medição</li>
 		</ol>
 	</nav>
 	<div class="container-fluid">
@@ -118,10 +120,10 @@ echo $mid." do Pedido : ".$pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cit
 					</div>
 				  	
 					<div class='card-footer'>
-					<button type='button' class='btn btn-primary float-left' id='updateMedicao' val='1'><i class='nav-icon cui-pencil'></i> Salvar e Voltar</button>
-					<a role='button' class='btn btn-secondary float-right' href='javascript:atvPhp($pid);'><i class='nav-icon cui-action-undo'></i> Voltar</a>
-					
-				</div>
+					<button type='button' class='btn btn-primary float-left' id='updateMedicao' val='1' data-controlid=$controlid><i class='nav-icon cui-pencil'></i> Salvar e Voltar</button>";
+			if(!$controlid) echo"<a role='button' class='btn btn-secondary float-right' href='javascript:atvPhp($pid);'><i class='nav-icon cui-action-undo'></i> Voltar</a>";
+			else echo"<a role='button' class='btn btn-secondary float-right' href='javascript:loadPData($pid,$cid);'><i class='nav-icon cui-action-undo'></i> Voltar</a>";
+			echo"</div>
 			  </div>
 			</div>";
 		

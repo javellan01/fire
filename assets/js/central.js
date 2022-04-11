@@ -298,7 +298,7 @@
 			let pid = $(this).attr("data-id_medicao");
 			let mid = $(this).val();
 
-			loadMData(pid,mid);
+			loadMData(pid,mid,'');
 		});
 		
 
@@ -396,11 +396,7 @@
 		}
 		};
 		
-		var formData = $('form').serialize();
-
-		toastr.info(formData);
-		toastr.options.progressBar = true;
-		
+	
 		xhttp.open("GET", "process.php?"+formData, true);
 		xhttp.send();
 	}
@@ -414,8 +410,6 @@
 			};
 
 			var formData = $('form').serialize();
-			
-			
 			
 			xhttp.open("GET", "fprocess.php?"+formData, true);
 			xhttp.send();
@@ -540,14 +534,14 @@
 		xhttp.send();
 	}	
 
-	function loadMData(str,str2) {
+	function loadMData(str,str2,str3) {
 		var xhttp = new XMLHttpRequest();
 
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 		document.getElementById("main").innerHTML = this.responseText;
 		
-		var formatter = new Intl.NumberFormat('pt-BR', {
+		const formatter = new Intl.NumberFormat('pt-BR', {
 			style: 'currency',
 			currency: 'BRL',
 		  });
@@ -593,7 +587,7 @@
 
 };
 
-xhttp.open("GET", "revmedicao.php?pid="+str+"&mid="+str2, true);
+xhttp.open("GET", "revmedicao.php?pid="+str+"&mid="+str2+"&controlid="+str3, true);
 xhttp.send();
 }	
 
@@ -614,6 +608,37 @@ xhttp.send();
 
 		$('.modal').on('hide.bs.modal', function (){	loadPData(str,str2);	});
 
+		const formatter = new Intl.NumberFormat('pt-BR', {
+			style: 'currency',
+			currency: 'BRL',
+		  });
+
+		function calcular(){	
+			let reference = $('#formValor').val()*1;
+			let total_global = 0;
+
+			$( '.categoria-sub' ).each(function() {
+				let soma = 0;
+				$(this).find('.valores').each(function(){
+					soma = soma + $(this).val()*1;
+				});
+				$(this).find('#subtotal').text(formatter.format(soma));
+				total_global = total_global + soma;
+			  });
+			
+			$('#totalfinal').text(formatter.format(total_global));
+			if(total_global > reference){
+				$('#totalfinal').addClass('text-danger');
+			}else{
+				$('#totalfinal').removeClass('text-danger');
+			}
+
+			}
+	
+			$('.valores').on('keyup', function (){
+				calcular();	
+			});
+
 		$("#removeButton").click(function(e) {
 			e.preventDefault();
 			$.ajax({
@@ -629,6 +654,13 @@ xhttp.send();
 					
 				}
 			});
+		});
+
+		$('button#revisarMedicao').on('click', function (){
+			let pid = $(this).attr("data-id_medicao");
+			let mid = $(this).val();
+
+			loadMData(pid,mid,'1');
 		});
 
 		$('button#updateAllAtividade').on('click', function (event){
