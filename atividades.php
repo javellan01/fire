@@ -13,7 +13,7 @@
 	<div class="container-fluid">
 		<div class="card">
 		<div class='card-header'><div class="row mt-1"><div class="col-9">
-			<h3>Detalhes do Pedido: 
+			<h3><i class='nav-icon cui-list'></i> Detalhes do Pedido: 
 					
 					
 <?php
@@ -44,27 +44,27 @@ echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 		<div class='card-body border border-primary rounded-top'>
 			<div class='row justify-content-between'>
 						<div class='col-8'>
-				<h4>Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".moeda($pedido->nb_valor)."</label> - Retenção: <label class='border border-secondary rounded p-1'>R$ ".moeda($pedido->retencao)." (".$pedido->nb_retencao."%)</label>
+				<h4><i class='nav-icon cui-pie-chart'></i> Total do Pedido:<label class='border border-secondary rounded p-1'> R$ ".moeda($pedido->nb_valor)."</label> - Retenção: <label class='border border-secondary rounded p-1'>R$ ".moeda($pedido->retencao)." (".$pedido->nb_retencao."%)</label>
 						</div>
 						<div class='col-4'>
-						<h4>Data Ínicio: <label class='border border-secondary rounded p-1'>".data_usql($pedido->dt_idata)."</label>
+						<h4><i class='nav-icon cui-calendar'></i> Data Ínicio: <label class='border border-secondary rounded p-1'>".data_usql($pedido->dt_idata)."</label>
 							</h4>
 						</div>
 						</div>
 		<div class='row'>
 			<div class='col-8'>
-			<h4>Área: <label class='border border-secondary rounded p-1'>".$pedido->tx_local."</label></h4>
+			<h4><i class='nav-icon cui-location-pin'></i> Área: <label class='border border-secondary rounded p-1'>".$pedido->tx_local."</label></h4>
 			</div>
 			<div class='col-4'>
-				<h4>Data Término: <label class='border border-secondary rounded p-1'>".data_usql($pedido->dt_tdata)."</label>
+				<h4><i class='nav-icon cui-calendar'></i> Data Término: <label class='border border-secondary rounded p-1'>".data_usql($pedido->dt_tdata)."</label>
 					</h4>
 		</div>
 		</div>	
 		<div class='row'>
-			<div class='col-12 border border-secondary'>
-			<h4>Informações Relacionadas: </h4>
+			<div class='col-12'>
+			<h4><i class='nav-icon cui-comment-square'></i> Informações Relacionadas: </h4>
 			
-				<p class='m-2'>".$pedido->tx_descricao."</p><br><br>
+				<p class='mx-2 my-2 border border-secondary'>".$pedido->tx_descricao."</p><br><br>
 			</div>	
 		</div>			
 		</div>
@@ -96,7 +96,7 @@ foreach($medicoes as $medicao){
 	$mid=$medicao->nb_ordem;	
 	echo"		  
 		<div class='card border border-light mb-3'>
-		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."<button type='button' class='btn btn-primary float-right'data-id_medicao=$medicao->id_medicao value=$mid data-toggle='modal' data-target='#modalNotificar'><i class='nav-icon cui-envelope-closed'></i> Enviar Notificação de Medição</button></h5>
+		  <h5 class='card-header'>Medição ".$mid." - ".data_usql($medicao->dt_data)."<button type='button' class='btn btn-primary float-right' data-id_medicao=$medicao->id_medicao value=$mid data-toggle='modal' data-target='#modalNotificar'><i class='nav-icon cui-envelope-closed'></i> Enviar Notificação de Medição</button></h5>
 		  
 		  <div class='card-body'>
 		  <div class='row mb-2'>
@@ -113,8 +113,9 @@ foreach($medicoes as $medicao){
 		
 		if($medicao->cs_aprovada == 0){	
 		echo"
-			<button type='button' class='btn btn-warning mx-2' data-toggle='modal' 
-			data-target='#modalRAtv$mid'><i class='nav-icon cui-pencil'></i> Revisar Medição</button>";
+			<button type='button' class='btn btn-warning mx-2' id='revisarMedicao'
+			data-id_medicao=$pedido->id_pedido value=$mid>
+			<i class='nav-icon cui-pencil'></i> Revisar Medição</button>";
 		}
 		else{
 		echo"
@@ -410,7 +411,7 @@ foreach($atividades AS $atividade)  {
 		<div class="form-group">
 		<label for="formCategoria">Categoria:</label>
 			<select class="form-control" id="formCategoria" name="Categoria">
-			<option selected hidden>Selecionar Categoria</option>
+			<option value="1" selected hidden>Selecionar Categoria</option>
 <?php 	$stmt = $conn->query("SELECT * FROM categoria ORDER BY id_categoria ASC");
 			while($row = $stmt->fetch(PDO::FETCH_OBJ)){ 
 			  echo "<option value=".$row->id_categoria.">".$row->tx_nome."</option>";
@@ -476,7 +477,7 @@ foreach($atividades AS $atividade)  {
 		  </div>
 	</div>
 	  
-	<button type='button' class='btn btn-primary float-right' id='updateAtividade' value='1' ><i class='nav-icon cui-check'></i> OK</button>
+	<button type='button' class='btn btn-primary float-right' id='registraAtividade' value='1' ><i class='nav-icon cui-check'></i> OK</button>
 			</h4></form>
 							  </div>
 							  <div class="modal-footer">

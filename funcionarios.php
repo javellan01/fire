@@ -29,7 +29,7 @@
 	<div class="container-fluid">
 				<div class="card">
 					<div class='card-header'><div class='row mt-1'><div class='col-10'>
-						<h3> Lista Geral de Funcionários: </h3></div>
+						<h3><i class="nav-icon cui-people"></i> Lista Geral de Funcionários: </h3></div>
 						<div class='col-2'>
 						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalNFunc'>+ Novo Funcionário</button>
 						</div>

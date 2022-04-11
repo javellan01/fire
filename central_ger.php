@@ -29,7 +29,7 @@
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
-	<link rel="stylesheet" href="./assets/css/jquery-ui.css">
+	<link rel="stylesheet" href="./assets/css/jquery-ui.min.css">
 	<style>
       .app-body {
         overflow-x: initial;
@@ -40,10 +40,9 @@
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
 		<script src="./assets/js/popper.min.js"></script>
-		<script src="./dist/js/bootstrap.js"></script>
+		<script src="./dist/js/bootstrap.min.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
-		<script src="./assets/js/docs.min.js"></script>
 		<script src="./assets/js/vue.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->

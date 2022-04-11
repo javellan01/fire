@@ -171,7 +171,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		  </div>
 	</div>
 	  
-	<button type='button' class='btn btn-primary float-right' id='updateAtividade' value='1' ><i class='nav-icon cui-check'></i> OK</button>
+	<button type='button' class='btn btn-primary float-right' id='registraAtividade' value='1' ><i class='nav-icon cui-check'></i> OK</button>
 			</h4></form>
 							  </div>
 							  <div class="modal-footer">

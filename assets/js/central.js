@@ -1,4 +1,4 @@
-// Central de funções JScript Javell_2018
+// Bagunça Central de funções JScript Javell_2018-2022
 
 //Set JQuery DatePicker
 
@@ -135,8 +135,6 @@
 			modal.find('#formEmail.form-control').val(mail[0].innerHTML);
 			modal.find('#formTel.form-control').val(tel[0].innerHTML);
 			document.getElementById('formECatuser').options.selectIndex = catuser;
-			console.log(catuser);
-			console.log(document.getElementById('formECatuser').options.selectIndex);
 			
 		});
 		
@@ -269,28 +267,40 @@
 			});
 		});
 
-		$('button#updateAtividade').on('click', function (){
+		$('button#registraAtividade').on('click', function (){
 
 			$.ajax({
 				type: "POST",
-				url: "/process/updateAtividade.php",
+				url: "registraAtividade.php",
 				data: {
+					registraAtividade: $(this).val(),
 					id_atividade: $('#formAid').val(),
 					nb_qtd: $('#formUqtd').val(),
 					dt_date : $('#formUdata').val()
 				},
 				
 				success: function(result) {
-					window.alert(result);
+					toastr.success(result);
+					toastr.options.progressBar = true;
+					//window.alert(result);
 					
 					
 				},
-				error: function(result) {
-					window.alert(result);
+				error: function() {
+					toastr.error('Atividade já cadastrada nesta data!');
+					toastr.options.progressBar = true;
 					
 				}
 			});
 		});
+
+		$('button#revisarMedicao').on('click', function (){
+			let pid = $(this).attr("data-id_medicao");
+			let mid = $(this).val();
+
+			loadMData(pid,mid);
+		});
+		
 
 		$('#formiData').mask('00/00/0000', {reverse: false});
 		$('#formfData').mask('00/00/0000', {reverse: false});
@@ -324,11 +334,12 @@
 			modal.find('#formAid.form-control').val(id_atividade);
 		});
 		
+		
 		$('button#updateAtividade').on('click', function (){
 
 			$.ajax({
 				type: "POST",
-				url: "/process/updateAtividade.php",
+				url: "updateAtividade.php",
 				data: {
 					id_atividade: $('#formAid').val(),
 					nb_qtd: $('#formUqtd').val(),
@@ -336,12 +347,15 @@
 				},
 				
 				success: function(result) {
-					window.alert(result);
+					toastr.success(result);
+					toastr.options.progressBar = true;
+					//window.alert(result);
 					
 					
 				},
-				error: function(result) {
-					window.alert(result);
+				error: function() {
+					toastr.error('Atividade já cadastrada nesta data!');
+					toastr.options.progressBar = true;
 					
 				}
 			});
@@ -368,8 +382,7 @@
 		
 		var formData = $('form.medicao').serialize();
 		
-		toastr.info(formData);
-		toastr.options.progressBar = true;
+		
 		
 		xhttp.open("GET", "mprocess.php?"+formData, true);
 		xhttp.send();
@@ -402,8 +415,7 @@
 
 			var formData = $('form').serialize();
 			
-			toastr.info(formData);
-			toastr.options.progressBar = true;
+			
 			
 			xhttp.open("GET", "fprocess.php?"+formData, true);
 			xhttp.send();
@@ -473,6 +485,7 @@
 		$('.modal').on('hide.bs.modal', function (){
 			loadCData(str);
 		});
+
 		$(document).ready(function(){
 			$("#newButton").click(function(e) {
 				e.preventDefault();
@@ -527,6 +540,63 @@
 		xhttp.send();
 	}	
 
+	function loadMData(str,str2) {
+		var xhttp = new XMLHttpRequest();
+
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		document.getElementById("main").innerHTML = this.responseText;
+		
+		var formatter = new Intl.NumberFormat('pt-BR', {
+			style: 'currency',
+			currency: 'BRL',
+		  });
+
+		function calcular(){
+		let soma = 0;
+		let total = $('input#pedidoValor').val()*1;
+		let sbalance = $('input#medidoSaldo').val()*1;
+
+		$( 'input.parcela' ).each(function() {
+			soma = soma + $(this).val()*1;
+		  });
+		
+		let result = (soma / total) *100;
+		let saldo = total - sbalance - soma;
+		$('span#resultado').text(Number(result).toFixed(2)+' %');
+		$('span#soma').text(formatter.format(soma));
+		$('span#saldo').text(formatter.format(saldo));
+
+		}
+
+		calcular();
+
+		$('input.parcela').on('keyup', function (){
+			calcular();
+			let indice = $(this).attr("data-aid");
+			let nb_valor = $(this).attr("data-nb_valor")*1;
+			let nb_sum = $(this).attr("data-nb_sum")*1;
+			let limit = $(this).attr("data-limit")*1;
+			let current = $(this).val()*1;
+			limit = limit + nb_valor - current;
+			let result = (current / nb_sum) * 100;
+			$('span#percent'+indice).text(Number(result).toFixed(2));
+			$('span#limit'+indice).text(formatter.format(limit));
+
+		});
+
+		$('button#updateMedicao').on('click', function (event){
+			$(this).prop({disabled: true});
+		
+		});	
+	}
+
+};
+
+xhttp.open("GET", "revmedicao.php?pid="+str+"&mid="+str2, true);
+xhttp.send();
+}	
+
 	function loadPData(str,str2) {
 		var xhttp = new XMLHttpRequest();
 
@@ -557,14 +627,12 @@
 					$('#modalRPedido').modal('hide');
 					loadCData( $("#Cid").val() );
 					
-				},
-				error: function(result) {
-					alert('error');
 				}
 			});
 		});
 
 		$('button#updateAllAtividade').on('click', function (event){
+			$(this).prop({disabled: true});
 			
 			let status = [];
 			let categoria = [];
@@ -576,13 +644,13 @@
 			let fim = [];
 			let atividade = [];
 
-			$( 'tr.form-row' ).each(function() {
+			$( 'tr.atividades' ).each(function() {
 				var id_atividade = 	 $(this).find('.button-update').attr("data-id_atividade");
 				atividade.push(id_atividade);
 				status.push($(this).find('#formAtvStatus'+id_atividade).val());	
 				categoria.push($(this).find('#formAtvCat'+id_atividade).val());
-				descricao.push($(this).find('#formAtvtx_descricao'+id_atividade));
-				tipo.push($(this).find('#formAtvtx_tipo'+id_atividade));
+				descricao.push($(this).find('#formAtvtx_descricao'+id_atividade).val());
+				tipo.push($(this).find('#formAtvtx_tipo'+id_atividade).val());
 				qtd.push($(this).find('#formAtvnb_qtd'+id_atividade).val());
 				valor.push($(this).find('#formAtvnb_valor'+id_atividade).val());;
 				inicio.push($(this).find('#formAtvidata'+id_atividade).val());
@@ -591,7 +659,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "/process/updateAllAtividade.php",
+				url: "updateAllAtividade.php",
 				data: {
 					updateAllAtividade: $(this).val(),
 					Status: status,
@@ -607,12 +675,7 @@
 				
 				success: function(result) {
 					window.alert(result);
-					$('#modalNotificar').modal('hide');
-					atvPhp(str);
-					
-				},
-				error: function(result) {
-					window.alert(result);
+					loadPData(str,str2);
 					
 				}
 			});
@@ -652,9 +715,6 @@
 					$('#modalUPedido').modal('hide');
 					loadCData( $("#Cid").val() );
 					
-				},
-				error: function(result) {
-					window.alert('Erro :'+result);
 				}
 			});
 		});
@@ -694,9 +754,6 @@
 					loadPData(str,str2);
 					//loadCData( $("#Cid").val() );
 					
-				},
-				error: function(result) {
-					window.alert('Erro: '+result);
 				}
 			});
 			
@@ -727,9 +784,6 @@
 					$('#modalExAtividade').modal('hide');
 					loadPData(str,str2);
 					
-				},
-				error: function(result) {
-					window.alert('Erro: '+result);
 				}
 			});
 			
@@ -761,12 +815,9 @@
 					window.alert(result);
 					loadPData(str,str2);
 					
-				},
-				error: function(result) {
-					window.alert(result);
 				}
-			});
 			
+			});
 		});
 
 		$(".button-removeconvidado").click(function(event) {
@@ -795,9 +846,6 @@
 					window.alert(result);
 					loadPData(str,str2);
 					
-				},
-				error: function(result) {
-					window.alert(result);
 				}
 			});
 			
@@ -829,9 +877,6 @@
 					window.alert(result);
 					loadPData(str,str2);
 					
-				},
-				error: function(result) {
-					window.alert(result);
 				}
 			});
 			
@@ -863,9 +908,6 @@
 					window.alert(result);
 					loadPData(str,str2);
 					
-				},
-				error: function(result) {
-					window.alert(result);
 				}
 			});
 			
@@ -897,9 +939,6 @@
 					window.alert(result);
 					loadPData(str,str2);
 					
-				},
-				error: function(result) {
-					window.alert(result);
 				}
 			});
 			
@@ -932,9 +971,6 @@
 					window.alert(result);
 					loadPData(str,str2);
 					
-				},
-				error: function(result) {
-					window.alert(result);
 				}
 			});
 			
@@ -952,7 +988,7 @@
 			event.preventDefault();
 			$.ajax({
 				type: "POST",
-				url: "./newAtividade.php",
+				url: "newAtividade.php",
 				data: {
 					generateButton: $(this).val(),
 					id_pedido: $('#formPid').val(),
@@ -964,10 +1000,6 @@
 					window.alert(result);
 					$('#modalGenerate').modal('hide');
 					loadPData(str,str2);
-					
-				},
-				error: function(result) {
-					window.alert(result);
 					
 				}
 			});
@@ -993,8 +1025,6 @@
 
 		var formData = $('form').serialize();
 		
-		toastr.info(formData);
-		toastr.options.progressBar = true;
 		
 		xhttp.open("GET", "pprocess.php?"+formData, true);
 		xhttp.send();
@@ -1107,9 +1137,6 @@
 		};
 
 		var formData = $('form').serialize();
-		
-		toastr.info(formData);
-		toastr.options.progressBar = true;
 		
 		xhttp.open("GET", "ucprocess.php?"+formData, true);
 		xhttp.send();

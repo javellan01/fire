@@ -26,7 +26,7 @@
 	
 	<title>Admin | FireSystems</title>
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
-	<link rel="stylesheet" href="./assets/css/jquery-ui.css">
+	<link rel="stylesheet" href="./assets/css/jquery-ui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
 	<link rel="stylesheet" href="./dist/css/fullcalendar.min.css">
@@ -47,10 +47,9 @@
 		<script src="./assets/js/jquery.mask.min.js"></script>
 		<script src="./assets/js/popper.min.js"></script>
 		<script src="./assets/js/moment.min.js"></script>
-		<script src="./dist/js/bootstrap.js"></script>
+		<script src="./dist/js/bootstrap.min.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
-		<script src="./assets/js/docs.min.js"></script>
 		<script src="./assets/js/vue.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
 		<script src="./dist/js/fullcalendar.min.js"></script>
@@ -144,7 +143,7 @@ require("./controller/centralController.php");
 	  <button class="sidebar-minimizer brand-minimizer" type="button"></button>
 	</div>
 
-<!-- Seção 0000, PARTE CENTRAL DOS DISPLAY DOS DADOS - USAR AJAX PARA DAR NAVEGAR SEM SAIR DA CENTRAL -->
+<!-- Seção 0000, PARTE CENTRAL DOS DISPLAY DOS DADOS - USAR AJAX PARA NAVEGAR SEM SAIR DA CENTRAL -->
 <main class="main" style="background-image:url('img/back.jpg'); background-repeat: no-repeat; background-attachment: fixed; background-position: top;">
 	<div id="main">
 			<nav aria-label="breadcrumb">
@@ -157,7 +156,7 @@ require("./controller/centralController.php");
 			<div class='card-header'>
 			<div class="row mt-1">
 				<div class="col-7">
-				<h3><cite>Sistema FireSystems</cite> - Calendário de Atividades:</h3>
+				<h3><i class="nav-icon cui-home"></i><cite> Sistema FireSystems</cite> - Calendário de Atividades:</h3>
 					</div>
 					<div class='col-5'>
 						<h3 class='btn btn-outline-success float-right'>Administrador - <?php echo "Data Atual: ".date("d/m/Y", $_SERVER['REQUEST_TIME']);?></h3>

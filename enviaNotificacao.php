@@ -7,8 +7,8 @@
      exit; 
  } 
 
-require("/DB/conn.php");
-require("/controller/mailController.php");
+require("./DB/conn.php");
+require("./controller/mailController.php");
 
 
 if(isset($_POST['contato']) && ($_POST['sendNotificacao']) == 1){

@@ -15,8 +15,8 @@ function data_sql($data) {
     return $ndata;
 }
 
-if(isset($_POST['generateButton']) && $_POST['generateButton'] == 1){
-    if(isset($_POST['id_categoria']) && ($_POST['id_pedido']) != '' && ($_POST['nb_loops']) != 0){
+if(($_POST['generateButton']) && $_POST['generateButton'] == 1){
+    if(($_POST['id_categoria']) && ($_POST['id_pedido'])  && ($_POST['nb_loops']) != 0){
 	
 	$data = array();
 

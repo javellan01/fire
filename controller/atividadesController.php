@@ -32,7 +32,11 @@ function verificaQtd($conn,$id_atividade){
 }
 
 function getPedidoData($conn, $pid){
-    $stmt = $conn->query("SELECT p.*, (( p.nb_valor / 100) * p.nb_retencao) AS retencao, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
+    $stmt = $conn->query("SELECT p.*, vspt.medido_total, (( p.nb_valor / 100) * p.nb_retencao) AS retencao, c.tx_nome 
+    FROM pedido p 
+    INNER JOIN cliente c ON p.id_cliente = c.id_cliente 
+    INNER JOIN v_sum_pedido_total vspt ON p.id_pedido = vspt.id_pedido 
+    WHERE p.id_pedido = $pid");
 
     $data = $stmt->fetch(PDO::FETCH_OBJ);
 	
@@ -53,7 +57,12 @@ function getMedicoes($conn, $pid){
 }
 
 function getMedicaoResume($conn,$pid,$mid){
-    $stmt = $conn->query("SELECT a.id_categoria, a.tx_descricao, cat.tx_nome, am.nb_valor AS nb_valor, ((am.nb_valor/a.nb_valor)*100) AS percent FROM atividade_medida AS am INNER JOIN atividade AS a ON am.id_atividade = a.id_atividade INNER JOIN categoria AS cat ON a.id_categoria = cat.id_categoria WHERE am.id_pedido = ".$pid." AND am.nb_ordem = ".$mid." ORDER BY a.id_categoria ASC;");
+
+    $stmt = $conn->query("SELECT a.id_categoria, a.id_atividade, a.tx_descricao, cat.tx_nome, a.nb_valor AS nb_sum, am.nb_valor AS nb_valor, ((am.nb_valor/a.nb_valor)*100) AS percent 
+    FROM atividade_medida AS am 
+    INNER JOIN atividade AS a ON am.id_atividade = a.id_atividade 
+    INNER JOIN categoria AS cat ON a.id_categoria = cat.id_categoria
+    WHERE am.id_pedido = ".$pid." AND am.nb_ordem = ".$mid." ORDER BY a.id_categoria ASC;");
 
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -119,6 +128,19 @@ function getListaCategorias($conn){
 
     return $data;
 }
+
+function getCategoriaAtividades($conn,$pid,$mid){
+
+    $stmt = $conn->query("SELECT DISTINCT a.id_categoria, cat.tx_nome
+    FROM atividade_medida AS am 
+    INNER JOIN atividade AS a ON am.id_atividade = a.id_atividade 
+    INNER JOIN categoria AS cat ON a.id_categoria = cat.id_categoria
+    WHERE am.id_pedido = ".$pid." AND am.nb_ordem = ".$mid." ORDER BY a.id_categoria ASC;");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+};
 
 function getCategoriaPedido($conn,$pid){
     $stmt = $conn->query("SELECT c.* FROM atividade a  
@@ -232,19 +254,24 @@ function updatePedido($conn,$data){
 function verifyAtividadeExec($conn,$data){
     
         $stmt = $conn->query("SELECT * FROM atividade_executada 
-                            WHERE id_usuario = $data[0] AND id_atividade = $data[1] AND dt_data = $data[3]");
+                            WHERE id_atividade = $data[1] AND dt_data = $data[3]");
         
         $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        if(count($data) == 0) return true;
+        if(!$data) return true;
         else {
-            echo "Progresso não cadastrado! Favor selecionar outra data para cadastrar o progresso.";
+            header('HTTP/1.1 403 Forbidden');
             return false;
         }
               
 }
 //insere progresso da atividade
 function registraAtividadeExec($conn,$data){
+    // Return error message
+    //exit(json_encode(array('error' => 'Recebemos um Erro Central!')));
+    //throw new \Exception('Nos falhamos!');
+    //exit('Ok tudo bem.');
+    $conn->setAttribute(PDO::ATTR_ERRMODE, $conn::ERRMODE_EXCEPTION);
     $e = null;
     try{
         $stmt = $conn->prepare("INSERT INTO atividade_executada (id_usuario, id_atividade, nb_qtd, dt_data)
@@ -259,11 +286,14 @@ function registraAtividadeExec($conn,$data){
 
         }
 	catch(PDOException $e)
-		{
-	    	echo "Erro ao cadastrar progresso: " . $e->getMessage();
+		{   
+            // Set http header error
+	    	//echo "Erro ao cadastrar progresso: " . $e->getMessage();
+            header('HTTP/1.1 403 Forbidden');
+            exit('Está tudo bem.');
 		}
         
-		if($e == null) echo "Progresso cadastrado!XXX ";
+		if($e == null) echo "Progresso cadastrado!";
 }
 //update dos dados da atividade 
 function updateAtividade($conn, $data){
@@ -283,7 +313,6 @@ function updateAtividade($conn, $data){
         $stmt->bindParam(':id_categoria',$data[7]); 
         $stmt->bindParam(':cs_finalizada',$data[8]); 
         
-
        $stmt->execute();
        
       }
@@ -298,21 +327,20 @@ function updateAllAtividade($conn, $data){
     try{
         $conn->beginTransaction();
 
-        
         $stmt = $conn->prepare("UPDATE atividade 
         SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim, id_categoria = :id_categoria, cs_finalizada = :cs_finalizada  
         WHERE id_atividade = :id_atividade");
 
-        foreach($atividades as $atividade){
-            $stmt->bindParam(':tx_descricao',$data[0]); 
-            $stmt->bindParam(':tx_tipo',$data[1]); 
-            $stmt->bindParam(':nb_qtd',$data[2]); 
-            $stmt->bindParam(':nb_valor',$data[3]); 
-            $stmt->bindParam(':dt_inicio',$data[4]); 
-            $stmt->bindParam(':dt_fim',$data[5]); 
-            $stmt->bindParam(':id_atividade',$data[6]); 
-            $stmt->bindParam(':id_categoria',$data[7]); 
-            $stmt->bindParam(':cs_finalizada',$data[8]); 
+        foreach($data as $atividade){
+            $stmt->bindParam(':tx_descricao',$atividade['Descricao']); 
+            $stmt->bindParam(':tx_tipo',$atividade['Tipo']); 
+            $stmt->bindParam(':nb_qtd',$atividade['Qtd']); 
+            $stmt->bindParam(':nb_valor',$atividade['Valor']); 
+            $stmt->bindParam(':dt_inicio',$atividade['Inicio']); 
+            $stmt->bindParam(':dt_fim',$atividade['Fim']); 
+            $stmt->bindParam(':id_atividade',$atividade['Atividade']); 
+            $stmt->bindParam(':id_categoria',$atividade['Categoria']); 
+            $stmt->bindParam(':cs_finalizada',$atividade['Status']); 
             
             $stmt->execute();
         }
@@ -322,7 +350,7 @@ function updateAllAtividade($conn, $data){
          $conn->rollback();
          throw $e;
       }
-      if($e == null) echo "Atualizado com Sucesso!";
+      if($e == null) echo "Todas Atividades foram Salvas com Sucesso!";
 }
 
 //exclude de atividade verficica tambem se há pendencia antes de excluir

@@ -27,15 +27,16 @@
 	<div class="container-fluid">
 				<div class="card">
 					<div class='card-header'><div class='row mt-1'><div class='col-10'>
-						<h3> Lista Geral de Clientes: </h3></div>
+						<h3><i class="nav-icon cui-briefcase"></i> Lista Geral de Clientes: </h3></div>
 						<div class='col-2'>
-						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalNCliente'>+ Novo Cliente</button>
+						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' 
+						data-target='#modalNCliente'>+ Novo Cliente</button>
 						</div>
 						</div>
 					</div>	
 					<div class="card-body">
 	
-	<h4><cite>Clientes Cadastrados: </h4>
+	<h4><cite> Clientes Cadastrados: </h4>
 	<table class='table table-striped'>
 		<thead>
 			<tr>
@@ -89,7 +90,7 @@ foreach($data as $cliente){
 						  <div class="modal-dialog" role="document">
 							<div class="modal-content">
 							  <div class="modal-header">
-								<h4 class="modal-title" id="modalNCliente">Novo Cliente</h4>
+								<h4 class="modal-title">Novo Cliente</h4>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
 								  <span aria-hidden="true">&times;</span>
 								</button>

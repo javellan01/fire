@@ -3,14 +3,14 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-require("/dist/phpmailer/Exception.php");
-require("/dist/phpmailer/PHPMailer.php");
-require("/dist/phpmailer/SMTP.php");
+require("./dist/phpmailer/Exception.php");
+require("./dist/phpmailer/PHPMailer.php");
+require("./dist/phpmailer/SMTP.php");
 
 function sendNewLogin($user,$password){
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
-$mlogin = include("/config/mail.php");
+$mlogin = include("./config/mail.php");
 try {
     //Server settings
     $mail->isSMTP(true);                                        //Send using SMTP
@@ -50,7 +50,7 @@ try {
 function sendMedicao($users,$medicao){
     //Create an instance; passing `true` enables exceptions
     $mail = new PHPMailer(true);
-    $mlogin = include("/config/mail.php");
+    $mlogin = include("./config/mail.php");
     try {
         //Server settings
         $mail->isSMTP(true);                                        //Send using SMTP

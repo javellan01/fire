@@ -163,6 +163,7 @@
 				<th>Status</th>
 				<th>Situação</th>
 				<th>Nota</th>
+				<th>Emissão</th>
 				<th>Vencimento</th>
 				<th>Valor</th>
 			</tr>
@@ -183,6 +184,8 @@ foreach($medicoes AS $medicao){
 			else echo"<th class='text-success'>Fechada</th>";
 			if(is_null($medicao->tx_nota)) echo"<th class='text-warning'>Aguardando Nota</th>";
 			else echo"<th>".$medicao->tx_nota."</th>";
+			if(is_null($medicao->dt_emissao)) echo"<th class='text-warning'>Aguardando Nota</th>";
+			else echo"<th>".data_usql($medicao->dt_emissao)."</th>";
 			if(is_null($medicao->dt_vencimento)) echo"<th class='text-warning'>Aguardando Nota</th>";
 			else echo"<th>".data_usql($medicao->dt_vencimento)."</th>";
 			echo "<th> R$".moeda($medicao->v_medido)."</th>
@@ -196,11 +199,14 @@ foreach($medicoes AS $medicao){
 <!------ LISTAGEM DAS ATIVIDADES --------------------------------------->			        
 <div class='row m-auto'>  
 	<h4 class='col-6'><cite>Atividades Cadastradas:</h4>
-	<h4 class='col-6'><button type='button' class='btn btn-primary mx-2 float-right'><i class='nav-icon cui-pencil'></i> Salvar Atividades</button><button type='button' class='btn btn-primary mx-2 float-right' data-toggle='modal' data-target='#modalGenerate'><i class='nav-icon cui-pencil'></i> Criar Atividades</button></h4>
+	<h4 class='col-6'>
+		<button type='button' class='btn btn-primary mx-2 float-right' id='updateAllAtividade' value='1'><i class='nav-icon cui-pencil'></i> Salvar Atividades</button>
+		<button type='button' class='btn btn-primary mx-2 float-right' data-toggle='modal' data-target='#modalGenerate'>&plus; Criar Atividades</button>
+	</h4>
 	<table class='table table-striped'>
 		<thead>
 			<tr>
-				<th class="col-3">Atividade</th>
+				<th class='col-3'>Atividade</th>
 				<th>Categoria</th>
 				<th>Status</th>
 				<th>Quantidade</th>
@@ -224,7 +230,7 @@ foreach($categorias as $categoria){
 	$sumcat = 0.00;
 	foreach($atividades as $atividade){
 	// Aloca os users e cria a list TOTALMENTE EDITÁVEL
-	echo"<tr class='form-row'>
+	echo"<tr class='atividades'>
 			<th><input type='text' require class='form-control' id='formAtvtx_descricao".$atividade->id_atividade."' name='Atvtx_descricao".$atividade->id_atividade."' value='".$atividade->tx_descricao."'></th>
 			<th><select require class='form-control' id='formAtvCat".$atividade->id_atividade."'>
 				<option selected value='$cid'>".$categoria->tx_nome."</option>";
@@ -232,7 +238,7 @@ foreach($categorias as $categoria){
 				echo "<option value=".$catline->id_categoria.">".$catline->tx_nome."</option>";
 			 }	
 			echo"</select></th>";
-			echo"<th><select require class='form-control' id='formStatus".$atividade->id_atividade."'>";
+			echo"<th><select require class='form-control' id='formAtvStatus".$atividade->id_atividade."'>";
 			if($atividade->cs_finalizada == 0) echo"<option class='text-success' selected value='0'>Ativa</option><option class='text-danger' value='1'>Finalizar</option></select></th>";	
 			else echo"<option class='text-danger' selected value='1'>Finalizada</option><option class='text-success' value='0'>Ativar</option></select></th>";
 			echo "<th><input type='text' require class='form-control' id='formAtvnb_qtd".$atividade->id_atividade."' name='Atvnb_qtd".$atividade->id_atividade."' value='".$atividade->nb_qtd."'></th>

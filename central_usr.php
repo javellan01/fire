@@ -32,7 +32,7 @@
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
 	<link rel="stylesheet" href="./dist/css/fullcalendar.min.css">
-	<link rel="stylesheet" href="./assets/css/jquery-ui.css">
+	<link rel="stylesheet" href="./assets/css/jquery-ui.min.css">
 	<style>
       .app-body {
         overflow-x: initial;
@@ -48,10 +48,9 @@
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
 		<script src="./assets/js/popper.min.js"></script>
-		<script src="./dist/js/bootstrap.js"></script>
+		<script src="./dist/js/bootstrap.min.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
-		<script src="./assets/js/docs.min.js"></script>
 		<script src="./assets/js/vue.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
@@ -159,7 +158,7 @@
 			<div class='card-header'>
 			<div class="row mt-4">
 				<div class="col-7">
-				<h3>Sistema FireSystems.online:</h3>
+				<h3><i class="nav-icon cui-home"></i> Sistema FireSystems.online:</h3>
 					</div>
 					<div class='col-5'>
 						<h3 class='btn btn-outline-dark float-right'>Base - <?php echo "Data Atual: ".date("d/m/Y", $_SERVER['REQUEST_TIME']);?></h3>

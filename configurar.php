@@ -29,7 +29,7 @@
 	<div class="container-fluid">
 				<div class="card">
 					<div class='card-header'><div class='row mt-1'><div class='col-10'>
-						<h3> Editar Categorias: </h3></div>
+						<h3><i class="nav-icon cui-settings"></i> Editar Categorias: </h3></div>
 						<div class='col-2'>
 						<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalNewCat'>+ Nova Categoria</button>
 						</div>

@@ -7,15 +7,15 @@
      exit; 
  } 
 
-require("/DB/conn.php");
-require("/controller/atividadesController.php");
+require("./DB/conn.php");
+require("./controller/atividadesController.php");
 
 function data_sql($data) {
     $ndata = substr($data, 6, 4) ."-". substr($data, 3, 2) ."-".substr($data, 0, 2);
     return $ndata;
 }
-
-if(isset($_POST['id_atividade']) && ($_POST['nb_qtd']) != '' && ($_POST['id_atividade']) != 0){
+if($_POST['registraAtividade'] == 1){
+if(($_POST['id_atividade']) && ($_POST['nb_qtd']) != '' && ($_POST['id_atividade']) != 0){
 	
 	$data = array();
 
@@ -32,5 +32,5 @@ if(isset($_POST['id_atividade']) && ($_POST['nb_qtd']) != '' && ($_POST['id_ativ
     if(verifyAtividadeExec($conn,$data)) registraAtividadeExec($conn,$data);
 
     }
-
+}
 ?>

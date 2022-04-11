@@ -12,7 +12,7 @@
 	<div class="container-fluid">
 				<div class="card">
 					<div class='card-header'><div class="row mt-1"><div class="col-8 ">
-						<h3>Pedidos por Cliente: </h3>
+						<h3><i class="nav-icon cui-list"></i> Pedidos por Cliente: </h3>
 							</div>
 							<div class='col-4'>
 							<button type='button' class='btn btn-outline-primary float-right m-1' data-toggle='modal' data-target='#modalCliente'>+ Novo Cliente</button>
