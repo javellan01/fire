@@ -355,6 +355,7 @@ function updateAllAtividade($conn, $data){
 
 function updateMedicao($conn, $data){
     $e = null;
+    $conn->setAttribute(PDO::ATTR_ERRMODE, $conn::ERRMODE_EXCEPTION);
     try{
         $conn->beginTransaction();
 
@@ -363,15 +364,10 @@ function updateMedicao($conn, $data){
         WHERE nb_ordem = :nb_ordem AND id_pedido = :id_pedido AND id_atividade = :id_atividade");
 
         foreach($data as $atividade){
-            $stmt->bindParam(':nb_valor',$atividade['Descricao']); 
-            $stmt->bindParam(':tx_tipo',$atividade['Tipo']); 
-            $stmt->bindParam(':nb_qtd',$atividade['Qtd']); 
+            $stmt->bindParam(':id_pedido',$atividade['Id_pedido']); 
+            $stmt->bindParam(':nb_ordem',$atividade['Nb_ordem']); 
             $stmt->bindParam(':nb_valor',$atividade['Valor']); 
-            $stmt->bindParam(':dt_inicio',$atividade['Inicio']); 
-            $stmt->bindParam(':dt_fim',$atividade['Fim']); 
             $stmt->bindParam(':id_atividade',$atividade['Atividade']); 
-            $stmt->bindParam(':id_categoria',$atividade['Categoria']); 
-            $stmt->bindParam(':cs_finalizada',$atividade['Status']); 
             
             $stmt->execute();
         }
@@ -381,7 +377,7 @@ function updateMedicao($conn, $data){
          $conn->rollback();
          throw $e;
       }
-      if($e == null) echo "Todas Atividades foram Salvas com Sucesso!";
+      if($e == null) echo "Todos os Valores foram Salvos com Sucesso!";
 }
 
 //exclude de atividade verficica tambem se há pendencia antes de excluir

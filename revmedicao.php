@@ -76,7 +76,7 @@ echo $mid." do Pedido : ".$pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cit
 						<span class='input-group-text'>R$</span>
 					</div>
 				<input type='text' class='form-control col-4 parcela' id='formMAtiv' value='".number_format($line->nb_valor,2,'.','')."' 
-				data-aid='$aid' data-nb_sum='$line->nb_sum' data-nb_valor='$line->nb_valor' data-limit='$limit' name='nbVal[$aid]'></input>
+				data-aid='$aid' data-nb_sum='$line->nb_sum' data-nb_valor='$line->nb_valor' data-id_pedido='$pid' data-nb_ordem='$mid' data-limit='$limit' name='nbVal[$aid]'></input>
 				<div class='col-6 py-2'>
 				<cite ><span id='percent$aid'>$percent</span>% da Atividade.</cite>
 				- Saldo: <span id='limit$aid'>R$ ".moeda($limit)."</span></cite>
@@ -120,7 +120,7 @@ echo $mid." do Pedido : ".$pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cit
 					</div>
 				  	
 					<div class='card-footer'>
-					<button type='button' class='btn btn-primary float-left' id='updateMedicao' val='1' data-controlid=$controlid><i class='nav-icon cui-pencil'></i> Salvar e Voltar</button>";
+					<button type='button' class='btn btn-primary float-left' id='updateMedicao' value='1' data-controlid=$controlid><i class='nav-icon cui-pencil'></i> Salvar Valores</button>";
 			if(!$controlid) echo"<a role='button' class='btn btn-secondary float-right' href='javascript:atvPhp($pid);'><i class='nav-icon cui-action-undo'></i> Voltar</a>";
 			else echo"<a role='button' class='btn btn-secondary float-right' href='javascript:loadPData($pid,$cid);'><i class='nav-icon cui-action-undo'></i> Voltar</a>";
 			echo"</div>

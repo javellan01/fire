@@ -21,18 +21,18 @@ $postdata = array();
 $items = count($_POST['Atividade']);
 
 for ($i=0; $i < $items; $i++) { 
-    $postadata[$i]['Atividade'] = $_POST['Atividade'][$i];
-    $postadata[$i]['Categoria'] = $_POST['Categoria'][$i];
-    $postadata[$i]['Tipo'] = $_POST['Tipo'][$i];
-    $postadata[$i]['Descricao'] = $_POST['Descricao'][$i];
-    $postadata[$i]['Inicio'] = data_sql($_POST['Inicio'][$i]);
-    $postadata[$i]['Fim'] = data_sql($_POST['Fim'][$i]);
-    $postadata[$i]['Status'] = $_POST['Status'][$i];
-    $postadata[$i]['Valor'] = $_POST['Valor'][$i];
-    $postadata[$i]['Qtd'] = $_POST['Qtd'][$i];
+    $postdata[$i]['Atividade'] = $_POST['Atividade'][$i];
+    $postdata[$i]['Categoria'] = $_POST['Categoria'][$i];
+    $postdata[$i]['Tipo'] = $_POST['Tipo'][$i];
+    $postdata[$i]['Descricao'] = $_POST['Descricao'][$i];
+    $postdata[$i]['Inicio'] = data_sql($_POST['Inicio'][$i]);
+    $postdata[$i]['Fim'] = data_sql($_POST['Fim'][$i]);
+    $postdata[$i]['Status'] = $_POST['Status'][$i];
+    $postdata[$i]['Valor'] = $_POST['Valor'][$i];
+    $postdata[$i]['Qtd'] = $_POST['Qtd'][$i];
 }
 
-updateAllAtividade($conn, $postadata);
+updateAllAtividade($conn, $postdata);
 
 }
 ?>

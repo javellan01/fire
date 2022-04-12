@@ -579,10 +579,40 @@
 
 		});
 
-		$('button#updateMedicao').on('click', function (event){
+		$('button#updateMedicao').on('click', function (){
 			$(this).prop({disabled: true});
-		
-		});	
+			let update = $(this).val();
+			let nb_ordem = [];
+			let id_pedido = [];
+			let valor = [];
+			let atividade = [];
+
+			$( 'input.parcela' ).each(function() {
+
+				atividade.push($(this).attr("data-aid"));
+				nb_ordem.push($(this).attr("data-nb_ordem"));
+				id_pedido.push($(this).attr("data-id_pedido"));
+				valor.push($(this).val());;
+				
+			});
+
+			$.ajax({
+				type: "POST",
+				url: "updateMedicao.php",
+				data: {
+					updateMedicao: update,
+					Nb_ordem: nb_ordem,
+					Id_pedido: id_pedido,
+					Valor: valor,
+					Atividade: atividade
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					loadMData(str,str2,str3);
+					}	
+			});
+		});
 	}
 
 };
