@@ -232,6 +232,32 @@
 			$(this).find('#sendNotificacao').attr("data-id_medicao", $(event.relatedTarget).data('id_medicao'));
 		});
 
+		$('#modalExcMedicao').on('show.bs.modal', function (event) {
+			
+			$(this).find('#excluirMedicao').val($(event.relatedTarget).val());
+			
+		});
+
+		$('button#excluirMedicao').on('click', function (event){
+			
+			$.ajax({
+				type: "POST",
+				url: "updateMedicao.php",
+				data: {
+					updateMedicao: '',
+					excluirMedicao: $(this).val()
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					$('#modalExcMedicao').modal('hide');
+					atvPhp(str);
+					
+				}
+			});
+		});
+
 		$('button#sendNotificacao').on('click', function (event){
 			event.preventDefault();
 			let contatos = 0;
@@ -246,7 +272,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "/process/enviaNotificacao.php",
+				url: "enviaNotificacao.php",
 				data: {
 					sendNotificacao: $(this).val(),
 					id_medicao: $(this).attr('data-id_medicao'),
@@ -304,6 +330,64 @@
 
 		$('#formiData').mask('00/00/0000', {reverse: false});
 		$('#formfData').mask('00/00/0000', {reverse: false});
+
+		$('button#excluirMedica').on('click', function (){
+			
+			$.ajax({
+				type: "POST",
+				url: "barCodes.php",
+				data: {
+					id_pedido: '17',
+					
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					
+					atvPhp(str);
+					
+				}
+			});
+		});
+
+		const myChart = new Chart($('#myChart'), {
+			type: 'bar',
+			data: {
+				labels: ['Total', 'Concluído', '99% Progresso', '75% Progresso', '50% Progresso', '25% Progresso','0% Progresso'],
+				datasets: [{
+					label: 'Progresso Geral do Pedido',
+					data: [100, 2, 8, 13, 22, 3, 32],
+					backgroundColor: [
+						'rgba(255, 99, 132, 0.75)',
+						'rgba(54, 162, 235, 0.75)',
+						'rgba(255, 206, 86, 0.75)',
+						'rgba(75, 192, 192, 0.75)',
+						'rgba(153, 102, 255, 0.75)',
+						'rgba(255, 159, 64, 0.75)',
+						'rgba(85, 120, 164, 0.75)'
+					],
+					borderColor: [
+						'rgba(255, 99, 132, 1)',
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(153, 102, 255, 1)',
+						'rgba(255, 159, 64, 1)',
+						'rgba(85, 120, 164, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				indexAxis: 'y',
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		});
 
 		}
 		
@@ -600,6 +684,7 @@
 				type: "POST",
 				url: "updateMedicao.php",
 				data: {
+					excluirMedicao: '',
 					updateMedicao: update,
 					Nb_ordem: nb_ordem,
 					Id_pedido: id_pedido,
@@ -695,7 +780,7 @@ xhttp.send();
 
 		$('button#updateAllAtividade').on('click', function (event){
 			$(this).prop({disabled: true});
-			
+			let indice = [];
 			let status = [];
 			let categoria = [];
 			let descricao = [];
@@ -705,10 +790,11 @@ xhttp.send();
 			let inicio = [];
 			let fim = [];
 			let atividade = [];
-
+			let json_data = [];
 			$( 'tr.atividades' ).each(function() {
 				var id_atividade = 	 $(this).find('.button-update').attr("data-id_atividade");
 				atividade.push(id_atividade);
+				indice.push(($(this).find('#formAtvid_idx'+id_atividade).val().replace(/\s/g,'')));	
 				status.push($(this).find('#formAtvStatus'+id_atividade).val());	
 				categoria.push($(this).find('#formAtvCat'+id_atividade).val());
 				descricao.push($(this).find('#formAtvtx_descricao'+id_atividade).val());
@@ -718,21 +804,23 @@ xhttp.send();
 				inicio.push($(this).find('#formAtvidata'+id_atividade).val());
 				fim.push($(this).find('#formAtvfdata'+id_atividade).val());	
 			});
-
+			json_data.push(indice);
+			json_data.push(status);
+			json_data.push(categoria);
+			json_data.push(descricao);
+			json_data.push(tipo);
+			json_data.push(qtd);
+			json_data.push(valor);
+			json_data.push(inicio);
+			json_data.push(fim);
+			json_data.push(atividade);
+			json_data = JSON.stringify(json_data);
 			$.ajax({
 				type: "POST",
 				url: "updateAllAtividade.php",
 				data: {
 					updateAllAtividade: $(this).val(),
-					Status: status,
-					Categoria: categoria,
-					Descricao: descricao,
-					Tipo: tipo,
-					Qtd: qtd,
-					Valor: valor,
-					Inicio: inicio,
-					Fim: fim,
-					Atividade: atividade,
+					json_data: json_data,
 				},
 				
 				success: function(result) {
@@ -799,6 +887,7 @@ xhttp.send();
 					removerAcessoConvidado: '0',
 					grantAcessoUsuario: '0',
 					removerAcessoUsuario: '0',
+					Indice: $('#formAtvid_idx'+id_atividade).val().replace(/\s/g,''),
 					Status: $('#formAtvStatus'+id_atividade).val(),
 					Categoria: $('#formAtvCat'+id_atividade).val(),
 					Descricao: $('#formAtvtx_descricao'+id_atividade).val(),

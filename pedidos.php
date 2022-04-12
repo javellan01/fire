@@ -38,7 +38,7 @@ if(!$clientes){
 foreach($clientes as $cliente){
 			
 	echo"<div class='card-body' id='pedidoAccord'>
-	<div class='accordion b-b-1' id='accordion'>
+	<div class='accordion b-b-1 shadow rounded' id='accordion'>
 		<div class='card mb-0'>
 		<div class='card-header' id='heading".$cliente->id_cliente."'>
 			<h5 class='mb-0'>

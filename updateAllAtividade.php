@@ -16,23 +16,29 @@ function data_sql($data) {
     return $ndata;
 }
 
-if($_POST['updateAllAtividade'] == 1){
-$postdata = array();
-$items = count($_POST['Atividade']);
+
+if($_POST['updateAllAtividade'] == 1 && ($_POST['json_data'])){
+
+$postdata = json_decode($_POST['json_data']);
+$items = count($postdata[9]);
+$data = array();
 
 for ($i=0; $i < $items; $i++) { 
-    $postdata[$i]['Atividade'] = $_POST['Atividade'][$i];
-    $postdata[$i]['Categoria'] = $_POST['Categoria'][$i];
-    $postdata[$i]['Tipo'] = $_POST['Tipo'][$i];
-    $postdata[$i]['Descricao'] = $_POST['Descricao'][$i];
-    $postdata[$i]['Inicio'] = data_sql($_POST['Inicio'][$i]);
-    $postdata[$i]['Fim'] = data_sql($_POST['Fim'][$i]);
-    $postdata[$i]['Status'] = $_POST['Status'][$i];
-    $postdata[$i]['Valor'] = $_POST['Valor'][$i];
-    $postdata[$i]['Qtd'] = $_POST['Qtd'][$i];
+
+    $data[$i]['Indice'] = $postdata[0][$i];
+    $data[$i]['Atividade'] = $postdata[9][$i];
+    $data[$i]['Categoria'] = $postdata[2][$i];
+    $data[$i]['Tipo'] = $postdata[4][$i];
+    $data[$i]['Descricao'] = $postdata[3][$i];
+    $data[$i]['Inicio'] = data_sql($postdata[7][$i]);
+    $data[$i]['Fim'] = data_sql($postdata[8][$i]);
+    $data[$i]['Status'] = $postdata[1][$i];
+    $data[$i]['Valor'] = $postdata[6][$i];
+    $data[$i]['Qtd'] = $postdata[5][$i];
+    
 }
 
-updateAllAtividade($conn, $postdata);
+ updateAllAtividade($conn, $data);
 
 }
 ?>

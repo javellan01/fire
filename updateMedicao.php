@@ -25,4 +25,14 @@ for ($i=0; $i < $items; $i++) {
 updateMedicao($conn, $data);
 
 }
+
+if($_POST['excluirMedicao']){
+
+$mid = (int)$_POST['excluirMedicao'];
+
+excluirMedicao($conn, $mid);
+
+}
+
+
 ?>

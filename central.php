@@ -55,8 +55,7 @@
 		<script src="./dist/js/fullcalendar.min.js"></script>
 		<script src="./dist/js/locale/pt-br.js"></script>
 		<script src="./dist/spectrum/spectrum.min.js"></script>
-		
-		
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
 	

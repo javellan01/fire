@@ -69,12 +69,15 @@ echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 		</div>			
 		</div>
 		
-	<div class='card-body'>";
+	<div class='card-body'>
+	<canvas class='my-4 shadow rounded' id='myChart' style='display: block; box-sizing: border-box; height: 200px; width: 100%;'>
+
+	</canvas>";
 
 // Carrega as somas result das medições
 $medicoes = getMedicoes($conn, $pid);
 
-echo"<div class='accordion border border-danger rounded-top mb-3' id='accordion'>
+echo"<div class='accordion border border-danger rounded-top mb-3 shadow rounded' id='accordion'>
 		<div class='card mb-0'>
 			<div class='card-header' id='headingMedicao'>
 				<h5 class='mb-0'>
@@ -132,7 +135,8 @@ foreach($medicoes as $medicao){
 			echo"
 			<button type='button' class='btn btn-success mx-2' disabled><i class='nav-icon cui-check'></i> Finalizar / Cadastrar Nota</button>";
 		}
-		echo"	
+		echo"<button type='button' class='btn btn-danger mx-2' data-toggle='modal' 
+		data-target='#modalExcMedicao' value='$medicao->id_medicao'><i class='nav-icon cui-trash'></i> Excluir / Cancelar Medição</button>	
 			
 			</div>
 		</div>
@@ -162,7 +166,7 @@ foreach($medicoes as $medicao){
 				$item = 1;
 				foreach($medidas as $medida){
 					echo"<tr>
-							<th>".$item.".</th>
+							<th>".$medida->item.".</th>
 							<th>".$medida->tx_descricao."</th>
 							<th>".$medida->tx_nome."</th>
 							<th>".moeda($medida->percent)."%</th>
@@ -222,7 +226,7 @@ foreach($categorias as $categoria){
 	
 		//Inicia accordion para cada categoria
 	echo"
-<div class='accordion border border-success rounded-top mb-3' id='accordion'>
+<div class='accordion border border-success rounded-top mb-3 shadow rounded' id='accordion'>
   <div class='card mb-0'>
     <div class='card-header' id='headingCat$cid'>
       <h5 class='mb-0'>
@@ -294,10 +298,10 @@ foreach($atividades AS $atividade)  {
 					echo "<div class='progress-group-header align-items-end'>
 					<button type='button' class='btn btn-outline-primary p-1 m-1' 
 					data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'>
-					<strong>" . $atividade->tx_descricao . "</strong></div>";
+					<strong>" . $atividade->id_idx . " - " . $atividade->tx_descricao . "</strong></div>";
 		  if($atividade->cs_finalizada == 1) 
 					echo "<div class='progress-group-header align-items-end m-1' style='color: #777;'>
-					<strong><i class='nav-icon cui-check'></i> " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
+					<strong><i class='nav-icon cui-check'></i> " . $atividade->id_idx . " - " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
 		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $atividade->qtd_sum . " / " . $atividade->nb_qtd ." ". $atividade->tx_tipo . "</div>";
@@ -542,7 +546,7 @@ foreach($atividades AS $atividade)  {
 		$percent = ($balance[$aid] / $row5->nb_valor) * 100;
 		$percent = number_format($percent,2,'.','');
 		echo"<div class='input-group py-2 border-bottom border-primary'>
-				<label class='col-12' for='formMAtiv'><small><i class='nav-icon cui-chevron-right'></i> ".$row5->tx_descricao."<cite> (".$row5->tx_nome.") </cite></small></label>
+				<label class='col-12' for='formMAtiv'><small><i class='nav-icon cui-chevron-right'></i> ".$row5->id_idx." - ".$row5->tx_descricao."<cite> (".$row5->tx_nome.") </cite></small></label>
 				
 					<div class='input-group-prepend'>
 						<span class='input-group-text'>R$</span>
@@ -569,14 +573,23 @@ foreach($atividades AS $atividade)  {
 	?>		</h5></form>	
 					<div id='process'></div>
 							  </div>
-							  <div class="modal-footer">
-								
-								<div class="alert alert-success mr-auto ml-auto" role="alert">
-								<h4>Total: <span id="resultado"></span>% do Pedido.
-									<br><?php echo"<span id='soma'></span> em ".count($balance)." Atividades.";?> 
-								</h4>
-								</div>
-								
+					<div class="modal-footer">
+						<table class="table table-borderless">
+						<thead>
+							<tr>
+							<th><h5>Avanço Medição (% do Pedido)</h5></th>
+							<th><h5>Total Medição</h5></th>
+							
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+							<th><h5><span id='resultado'></span> %</h5></th>
+							<th><h5><span id='soma'></span></h5></th>
+							
+							</tr>
+						</tbody>	
+						</table>								
 							  </div>
 							  <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Fechar</button>
 							</div>
@@ -677,3 +690,32 @@ foreach($atividades AS $atividade)  {
 		</div>
 		
 	</div>
+<!-- Modal Excluir Medicao ------------------------->
+<div class="modal" style="text-align: left" id="modalExcMedicao" tabindex="-1" role="dialog" aria-labelledby="modalExcMedicao" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title"><cite>Excluir Medição:</cite></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body">
+	<h4>Confirma a exclusão desta medição do sistema?</h4><br>
+	<div class='row'>
+		<div class='col-6'>
+		<p>Todas as atividades medidas também terão seu respectivo progresso financeiro retrocedido.</p>
+		</div>
+		<div class='col-6'>
+	<button type="button" class="btn btn-danger float-left" value="0" id="excluirMedicao"><i class='nav-icon cui-trash'></i> Excluir</button>
+	<button type="button" class="btn btn-primary float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
+		</div>
+			</div>
+			  </div>
+			    <div class="modal-footer">
+					
+				</div>
+				
+			  </div>
+			</div>
+		  </div>

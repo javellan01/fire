@@ -61,7 +61,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	
 		//Inicia accordion para cada categoria
 	echo"
-<div class='accordion border border-success rounded-top mb-3' id='accordion'>
+<div class='accordion border border-success rounded-top mb-3 shadow rounded' id='accordion'>
   <div class='card mb-0'>
     <div class='card-header' id='headingCat$cid'>
       <h5 class='mb-0'>
@@ -104,7 +104,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		  if($row->cs_finalizada == 0) 
 
 					echo "<div class='progress-group-header align-items-end' style='color: #27b;'>
-					<button type='button' class='btn btn-outline-dark p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $row->tx_descricao . "</strong></div>";
+					<button type='button' class='btn btn-outline-dark p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $atividade->id_idx . " - " . $row->tx_descricao . "</strong></div>";
 		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $row->qtd_sum . " / " . $row->nb_qtd ." ". $row->tx_tipo . "</div>";

@@ -58,7 +58,7 @@ function getMedicoes($conn, $pid){
 
 function getMedicaoResume($conn,$pid,$mid){
 
-    $stmt = $conn->query("SELECT a.id_categoria, a.id_atividade, a.tx_descricao, cat.tx_nome, a.nb_valor AS nb_sum, am.nb_valor AS nb_valor, ((am.nb_valor/a.nb_valor)*100) AS percent 
+    $stmt = $conn->query("SELECT a.id_categoria, a.id_atividade, a.tx_descricao, a.id_idx AS item, cat.tx_nome, a.nb_valor AS nb_sum, am.nb_valor AS nb_valor, ((am.nb_valor/a.nb_valor)*100) AS percent 
     FROM atividade_medida AS am 
     INNER JOIN atividade AS a ON am.id_atividade = a.id_atividade 
     INNER JOIN categoria AS cat ON a.id_categoria = cat.id_categoria
@@ -178,6 +178,23 @@ function getAtividades($conn,$pid,$cid){
     return $data;
 }
 
+function getGraphProgressoPedido($conn,$pid){
+
+    $stmt = $conn->query("SELECT COUNT(*) AS total,
+    COUNT(CASE WHEN done = 1 THEN 1 END) AS pronto,
+    COUNT(CASE WHEN done < 1 AND done > 0.75 THEN 1 END) AS quasepronto,
+    COUNT(CASE WHEN done <= 0.75 AND done > 0.50 THEN 1 END) AS meiocheio,
+    COUNT(CASE WHEN done <= 0.50 AND done > 0.25 THEN 1 END) AS meiovazio,
+    COUNT(CASE WHEN done <= 0.25 AND done > 0 THEN 1 END) AS umquarto,
+    COUNT(CASE WHEN done = 0 THEN 1 END) AS semprogresso
+    FROM (SELECT qtd_sum /nb_qtd AS done FROM v_categoria_sums WHERE id_pedido = $pid) AS temp");
+
+    $data = $stmt->fetch(PDO::FETCH_OBJ);
+    //$data = json_encode($data);
+    
+    print_r($data);
+
+}
 function getAtividade($conn, $id){
     $stmt = $conn->query("SELECT * FROM atividades WHERE id_atividade = $id");
 
@@ -187,7 +204,8 @@ function getAtividade($conn, $id){
 }
 
 function medirAtividades($conn,$pid){
-    $stmt = $conn->query("SELECT a.id_atividade, a.tx_descricao, c.tx_nome, vsam.valor_sum, vsam.nb_valor FROM atividade a 
+    $stmt = $conn->query("SELECT a.id_atividade, a.id_idx, a.tx_descricao, c.tx_nome, vsam.valor_sum, vsam.nb_valor 
+    FROM atividade a 
 	INNER JOIN categoria c ON a.id_categoria = c.id_categoria
 	INNER JOIN v_sum_atividade_medd vsam ON a.id_atividade = vsam.id_atividade
 	WHERE a.id_pedido = $pid AND cs_medida = 0");
@@ -300,7 +318,7 @@ function updateAtividade($conn, $data){
     $e = null;
     try{
         $stmt = $conn->prepare("UPDATE atividade 
-        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim, id_categoria = :id_categoria, cs_finalizada = :cs_finalizada  
+        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim, id_categoria = :id_categoria, cs_finalizada = :cs_finalizada, id_idx = :id_idx  
         WHERE id_atividade = :id_atividade");
 
         $stmt->bindParam(':tx_descricao',$data[0]); 
@@ -312,6 +330,7 @@ function updateAtividade($conn, $data){
         $stmt->bindParam(':id_atividade',$data[6]); 
         $stmt->bindParam(':id_categoria',$data[7]); 
         $stmt->bindParam(':cs_finalizada',$data[8]); 
+        $stmt->bindParam(':id_idx',$data[9]); 
         
        $stmt->execute();
        
@@ -328,7 +347,7 @@ function updateAllAtividade($conn, $data){
         $conn->beginTransaction();
 
         $stmt = $conn->prepare("UPDATE atividade 
-        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio , dt_fim = :dt_fim, id_categoria = :id_categoria, cs_finalizada = :cs_finalizada  
+        SET tx_descricao = :tx_descricao, tx_tipo = :tx_tipo, nb_qtd = :nb_qtd, nb_valor = :nb_valor, dt_inicio = :dt_inicio, dt_fim = :dt_fim, id_categoria = :id_categoria, cs_finalizada = :cs_finalizada, id_idx = :id_idx  
         WHERE id_atividade = :id_atividade");
 
         foreach($data as $atividade){
@@ -341,6 +360,7 @@ function updateAllAtividade($conn, $data){
             $stmt->bindParam(':id_atividade',$atividade['Atividade']); 
             $stmt->bindParam(':id_categoria',$atividade['Categoria']); 
             $stmt->bindParam(':cs_finalizada',$atividade['Status']); 
+            $stmt->bindParam(':id_idx',$atividade['Indice']); 
             
             $stmt->execute();
         }
@@ -379,8 +399,31 @@ function updateMedicao($conn, $data){
       }
       if($e == null) echo "Todos os Valores foram Salvos com Sucesso!";
 }
+//remove medicao e atividades medidas associadas atividades.php
+function excluirMedicao($conn,$mid){
+    $e=null;
+    $stmt = $conn->query("SELECT id_pedido, nb_ordem FROM medicao WHERE id_medicao = $mid");
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    
+    try{
+        $stmt = $conn->prepare("DELETE FROM atividade_medida WHERE id_pedido = :id_pedido AND nb_ordem = :nb_ordem");
+        $stmt->bindParam(':id_pedido',$result->id_pedido);
+        $stmt->bindParam(':nb_ordem',$result->nb_ordem);
+        $stmt->execute();
 
-//exclude de atividade verficica tambem se há pendencia antes de excluir
+        $stmt = $conn->prepare("DELETE FROM medicao WHERE id_medicao = :id_medicao");
+        $stmt->bindParam(':id_medicao',$mid);
+        $stmt->execute();
+        
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+            }
+            if($e == null) echo "Medição Excluída com Sucesso!";
+            
+}
+
+//exclude de atividade verficica tambem se há pendencia antes de excluir detpedido.php
 function excluirAtividade($conn,$data){
     $e = null;
 
@@ -397,7 +440,7 @@ function excluirAtividade($conn,$data){
                 echo  $e->getMessage();
                 }
                 if($e == null) echo "Atividade Excluída com Sucesso!";
-
+                
         }
         else echo "Erro: Atividade com Execução Registrada!";
    

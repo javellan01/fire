@@ -63,6 +63,7 @@
 			$data[6] = $_GET['Atividade'];	//id_atividade
 			$data[7] = $_GET['Categoria'];	//id_categoria
 			$data[8] = $_GET['Status'];
+			$data[9] = $_GET['Indice'];
 
             updateAtividade($conn,$data);
            

@@ -154,7 +154,7 @@
 
 <!------ LISTAGEM GERAL DAS MEDIÇÕES --------------------------------------->
   <div class="row m-auto">
-	<h4><cite>Medições Cadastradas: </h4>
+ 	<h4 class='col-6'><cite>Medições Cadastradas: </h4>
 	<table class='table table-striped'>
 		<thead>
 			<tr>
@@ -213,8 +213,9 @@ foreach($medicoes AS $medicao){
 	<table class='table table-striped'>
 		<thead>
 			<tr>
-				<th class='col-3'>Atividade</th>
-				<th>Categoria</th>
+				<th>Item-MD</th>
+				<th class='col-4'>Atividade</th>
+				<th class='col-2'>Categoria</th>
 				<th>Status</th>
 				<th>Quantidade</th>
 				<th>Tipo</th>
@@ -238,6 +239,7 @@ foreach($categorias as $categoria){
 	foreach($atividades as $atividade){
 	// Aloca os users e cria a list TOTALMENTE EDITÁVEL
 	echo"<tr class='atividades'>
+			<th><input type='text' require class='form-control' id='formAtvid_idx".$atividade->id_atividade."' name='Atvid_idx".$atividade->id_atividade."' value='".$atividade->id_idx."'></th>
 			<th><input type='text' require class='form-control' id='formAtvtx_descricao".$atividade->id_atividade."' name='Atvtx_descricao".$atividade->id_atividade."' value='".$atividade->tx_descricao."'></th>
 			<th><select require class='form-control' id='formAtvCat".$atividade->id_atividade."'>
 				<option selected value='$cid'>".$categoria->tx_nome."</option>";
@@ -253,19 +255,19 @@ foreach($categorias as $categoria){
 			<th><input type='text' require class='form-control date' id='formAtvidata".$atividade->id_atividade."' name='Atvidata".$atividade->id_atividade."' value='".data_usql($atividade->dt_inicio)."'></th>
 			<th><input type='text' require class='form-control date' id='formAtvfdata".$atividade->id_atividade."' name='Atvfdata".$atividade->id_atividade."' value='".data_usql($atividade->dt_fim)."'></th>
 			<th><input type='text' require class='form-control valores' id='formAtvnb_valor".$atividade->id_atividade."' name='Atvnb_valor".$atividade->id_atividade."' value='".$atividade->nb_valor."'></th>
-			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."'><i class='nav-icon cui-pencil'></i> Atualizar</button></th>
-			<th><button type='button' class='btn btn-danger float-center' data-toggle='modal' data-target='#modalExAtividade' value='".$atividade->id_atividade."'><i class='nav-icon cui-trash'></i></button></th>
+			<th><button type='button' class='btn btn-primary float-center button-update'  value='1' id='updateAtividade' data-id_atividade='".$atividade->id_atividade."' data-toggle='tooltip' data-placement='left' title='Salvar Atividade'><i class='nav-icon cui-pencil'></i></button></th>
+			<th><button type='button' class='btn btn-danger float-center' data-toggle='modal' data-target='#modalExAtividade' value='".$atividade->id_atividade."' data-toggle='tooltip' data-placement='left' title='Excluir Atividade'><i class='nav-icon cui-trash'></i></button></th>
 		</tr>";	
 			$sumcat += $atividade->nb_valor;
 		}
-		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th><span id='subtotal'>R$ ".moeda($sumcat)."</span></th></th><th></th><th></tr>";
-		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
+		echo "<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>Subtotal:</th><th><span id='subtotal'>R$ ".moeda($sumcat)."</span></th><th><th></th></tr>";
+		echo"<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
 		$sumatv += $sumcat;
 		echo "</tbody>";
 	}	
 
-	echo"<tbody><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th><th></th></tr>
-	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th><h5>Total:</th></h5><th><h5><span id='totalfinal'>R$ ".moeda($sumatv)."</span></h5></th><th></th><th></th></tr></tbody>";
+	echo"<tbody><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th><th></th><th></th></tr>
+	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th><h5>Total:</th></h5><th><h5><span id='totalfinal'>R$ ".moeda($sumatv)."</span></h5></th><th></th><th></th></tr></tbody>";
 
 
 ?>
