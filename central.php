@@ -16,7 +16,10 @@
 
 	require("./controller/agentController.php");
 	Auth::accessControl($_SESSION['catuser'],0);
+	require("./DB/conn.php");	
+	require("./controller/centralController.php");	
 
+	
 ?>
 <!DOCTYPE html>
 <html><head>
@@ -29,7 +32,7 @@
 	<link rel="stylesheet" href="./assets/css/jquery-ui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
-	<link rel="stylesheet" href="./dist/css/fullcalendar.min.css">
+	<link rel="stylesheet" href="./dist/fullcalendar/main.min.css">
 	<link rel="stylesheet" href="./dist/css/spectrum.min.css">
 
 	<style>
@@ -50,10 +53,9 @@
 		<script src="./dist/js/bootstrap.min.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
-		<script src="./assets/js/vue.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
-		<script src="./dist/js/fullcalendar.min.js"></script>
-		<script src="./dist/js/locale/pt-br.js"></script>
+		<script src="./dist/fullcalendar/main.min.js"></script>
+		<script src="./dist/fullcalendar/pt-br.js"></script>
 		<script src="./dist/spectrum/spectrum.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
@@ -61,12 +63,7 @@
 	
 
 </head>
-<?php
 
-require("./DB/conn.php");	
-require("./controller/centralController.php");	
-
-?>
 <body class="app header-fixed sidebar-md-show sidebar-fixed">
 <header class='app-header navbar' style='background: #2f353a; border-bottom: 4px solid #a60117;'>
 	<button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
@@ -175,7 +172,7 @@ require("./controller/centralController.php");
 						</select>
 				</div>
 			</div>	
-			</div>
+			</div>			
 					<div class="m-4" id="calendar"></div>
 			</div>
 		</div>
@@ -183,7 +180,6 @@ require("./controller/centralController.php");
 	
 	</div>
 </main>
-
 <!-- Div body-app Encerramento -->
 	</div>
 	
@@ -200,21 +196,30 @@ require("./controller/centralController.php");
 	</footer>
 		<!-- fullCallendar ----------------------------------------------------->
 		<script>
-		$(document).ready(function() {
+		/*$(document).ready(function() {
 
 			$('#calendar').fullCalendar({
 
-				aspectRatio: 1.8,
-			  defaultDate: '<?php echo date('Y-m-d', $_SERVER['REQUEST_TIME']);?>',
+				aspectRatio: 3.2,
+			  defaultDate: '<?php// echo date('Y-m-d', $_SERVER['REQUEST_TIME']);?>',
 			  editable: false,
 			  eventLimit: true,
-			  events:	<?php echo getEvents($conn);?>,
+			  events:	<?php //getEvents($conn);?>,
+			  eventRender: function(eventObj, $el) {
+				  $el.popover({
+					title: eventObj.title+', Pedido: '+eventObj.pedido,
+					content: eventObj.periodo,
+					trigger: 'hover',
+					placement: 'top',
+					container: 'body'
+				});
+			  },
 			  weekNumbers: true,
 			  weekNumberTitle: 'W',
 			  weekNumberCalculation: 'ISO'
 			});
 
-			});
+			});*/
 		</script>
  </body> 
  

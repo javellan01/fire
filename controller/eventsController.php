@@ -1,9 +1,9 @@
 <?php
 
-	function data_usql($data) {
+/* 	function data_usql($data) {
 		$ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4);
 		return $ndata;
-	}
+	} */
 	
 	function cat_color($cat){
 		$color = '#343236';
@@ -56,6 +56,84 @@ function fillUCalendar($conn,$uid){
         echo "{ title: '".$event->tx_descricao."', start:'".$event->dt_inicio."', end:'".$event->dt_fim."T18:00:00',url:'".$url."', color:'".$color."', status:'".$status."', pedido:'".$event->tx_codigo."', categoria:'".$event->tx_nome."', periodo:'".$periodo."', allDay: false},";
     }
     echo " ]";
+}
+
+function getEventAtividadeExecutada($conn,$aid){
+
+    $stmt = $conn->query("SELECT aex.*, u.tx_name, a.tx_tipo FROM atividade_executada AS aex  
+                        INNER JOIN atividade AS a ON aex.id_atividade = a.id_atividade
+                        INNER JOIN usuario AS u ON aex.id_usuario = u.id_usuario
+                        WHERE aex.id_atividade = $aid");
+    
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    return $data;
+
+	}
+
+    function getEventAtividadeMedida($conn,$aid){
+
+        $stmt = $conn->query("SELECT aem.*, m.dt_data, a.nb_valor AS nb_total FROM atividade_medida AS aem  
+                            INNER JOIN medicao AS m ON aem.id_pedido = m.id_pedido
+                            INNER JOIN atividade AS a ON aem.id_atividade = a.id_atividade
+                            WHERE aem.id_atividade = $aid");
+        
+        $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+        return $data;
+    
+        }
+
+function fillInfoAtividadeCalendar($conn,$aid){
+
+    $data0 = getEventAtividadeExecutada($conn,$aid);
+    $data1 = getEventAtividadeMedida($conn,$aid);
+    $events= array();
+    echo "[ ";
+    foreach($data0 as $event){
+        $color = cat_color(6); 
+
+        $evento = array();
+            
+        $evento['title'] = 'Cadastro de Progresso';
+        $evento['start'] = $event->dt_data;
+        $evento['end'] = $event->dt_data;
+        $evento['color'] = $color;
+        $evento['quantidade'] = $event->nb_qtd.$event->tx_tipo;
+        $evento['usuario'] = $event->tx_name;
+        $evento['allDay'] = 'true';
+
+        $events += $evento;        
+        echo "{ title: 'Cadastro de Progresso', start:'".$event->dt_data."', end:'".$event->dt_data."',
+             color:'".$color."', quantidade:'".$event->nb_qtd."', usuario:'".$event->tx_name."', allDay: true},";
+        
+    }
+    foreach($data1 as $event){
+        $percent = ($event->nb_valor / $event->nb_total)*100;
+        $percent = number_format($percent,2,',','.');
+        $color = cat_color(3);
+        $evento = array();
+            
+        $evento['title'] = 'Progresso Medido';
+        $evento['start'] = $event->dt_data;
+        $evento['end'] = $event->dt_data;
+        $evento['color'] = $color;
+        $evento['medidos'] = $percent;
+        $evento['medicao'] = $event->nb_ordem;
+        $evento['allDay'] = 'true';
+
+        $events += $evento;
+
+        echo "{ title: 'Progresso Medido', start:'".$event->dt_data."', end:'".$event->dt_data."', 
+            color:'".$color."', url:'#', medicao:'".$event->nb_ordem."', medidos:'".$percent."', allDay: true},";
+
+        }        
+
+        //$output = json_encode($events);
+        //echo $output;
+        echo " ]";
+
+
 }
 
 ?>

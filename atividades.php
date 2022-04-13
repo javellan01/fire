@@ -297,11 +297,15 @@ foreach($atividades AS $atividade)  {
 			<div class='progress-group-prepend'>";
 		  if($atividade->cs_finalizada == 0) 
 					echo "<div class='progress-group-header align-items-end'>
+					<button type='button' class='btn btn-outline-primary px-2 py-1 m-1' 
+					data-toggle='modal' data-target='#modalAtividadeCalendario' value='".$atividade->id_atividade."' data-descricao='" . $atividade->id_idx . " - " . $atividade->tx_descricao . "'><i class='nav-icon cui-calendar'></i></button>
 					<button type='button' class='btn btn-outline-primary p-1 m-1' 
 					data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'>
 					<strong>" . $atividade->id_idx . " - " . $atividade->tx_descricao . "</strong></div>";
 		  if($atividade->cs_finalizada == 1) 
 					echo "<div class='progress-group-header align-items-end m-1' style='color: #777;'>
+					<button type='button' class='btn btn-outline-primary px-2 py-1 m-1' 
+					data-toggle='modal' data-target='#modalAtividadeCalendario' value='".$atividade->id_atividade."' data-descricao='" . $atividade->id_idx . " - " . $atividade->tx_descricao . "'><i class='nav-icon cui-calendar'></i></button>
 					<strong><i class='nav-icon cui-check'></i> " . $atividade->id_idx . " - " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
 		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
 		  $percent = round($percent,1);
@@ -720,3 +724,25 @@ foreach($atividades AS $atividade)  {
 			  </div>
 			</div>
 		  </div>
+<!-- Modal CALENDARIO ------------------------->
+<div class="modal" id="modalAtividadeCalendario" tabindex="-1" role="dialog" aria-labelledby="modalAtividadeCalendario" aria-hidden="true">
+						  <div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title"><cite>Eventos da Atividade:</cite></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body">
+	<h5 id='descricao'></h5><br>
+	<div class="m-3" id="calendario">
+
+			</div>
+			  </div>
+			    <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-action-undo'></i> Voltar</button>
+				</div>
+			  </div>
+			</div>
+		  </div>		  
