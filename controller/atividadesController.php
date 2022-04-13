@@ -187,12 +187,21 @@ function getGraphProgressoPedido($conn,$pid){
     COUNT(CASE WHEN done <= 0.50 AND done > 0.25 THEN 1 END) AS meiovazio,
     COUNT(CASE WHEN done <= 0.25 AND done > 0 THEN 1 END) AS umquarto,
     COUNT(CASE WHEN done = 0 THEN 1 END) AS semprogresso
-    FROM (SELECT qtd_sum /nb_qtd AS done FROM v_categoria_sums WHERE id_pedido = $pid) AS temp");
+    FROM (SELECT qtd_sum /nb_qtd AS done FROM v_categoria_sums WHERE id_pedido = $pid) AS tabela001");
 
     $data = $stmt->fetch(PDO::FETCH_OBJ);
-    //$data = json_encode($data);
+
+    $output = array();
     
-    print_r($data);
+    $output[0]=$data->total;
+    $output[1]=$data->pronto;
+    $output[2]=$data->quasepronto;
+    $output[3]=$data->meiocheio;
+    $output[4]=$data->meiovazio;
+    $output[5]=$data->umquarto;
+    $output[6]=$data->semprogresso;
+    
+    echo json_encode($output);
 
 }
 function getAtividade($conn, $id){

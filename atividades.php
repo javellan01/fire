@@ -70,7 +70,8 @@ echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 		</div>
 		
 	<div class='card-body'>
-	<canvas class='my-4 shadow rounded' id='myChart' style='display: block; box-sizing: border-box; height: 200px; width: 100%;'>
+	<p id='dataChart'></p>
+	<canvas class='px-4 my-4 shadow rounded' id='myChart' style='display: block; box-sizing: border-box; height: 400px; width: 100%;'>
 
 	</canvas>";
 
@@ -137,7 +138,7 @@ foreach($medicoes as $medicao){
 		}
 		echo"<button type='button' class='btn btn-danger mx-2' data-toggle='modal' 
 		data-target='#modalExcMedicao' value='$medicao->id_medicao'><i class='nav-icon cui-trash'></i> Excluir / Cancelar Medição</button>	
-			
+		<button type='button' id='excluirMedica' class='btn btn-danger mx-2'><i class='nav-icon cui-note'></i> Teste!</button>
 			</div>
 		</div>
 	<!!----- MODAL PARA LISTAR ATIVIDADES --------------------------------------->
@@ -520,7 +521,7 @@ foreach($atividades AS $atividade)  {
 			<label for="formMPed">Pedido</label>	
 			<input type="text" class="form-control" value="<?php echo $pedido->tx_codigo." - ".$pedido->tx_nome;?>" disabled>
 			<input type="text" class="form-control" id="formMPed" value="<?php echo $pid;?>" name="idPedido" hidden>
-			<input type="text" class="form-control" id="formMPed" value="<?php echo $mid;?>" name="nbOrdem" hidden>
+			<input type="text" class="form-control" value="<?php echo $mid;?>" name="nbOrdem" hidden>
 			<input type="text" class="form-control" id="pedidoValor" value="<?php echo $pedido->nb_valor;?>" hidden>
 	  </div>
 	

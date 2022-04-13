@@ -331,50 +331,51 @@
 		$('#formiData').mask('00/00/0000', {reverse: false});
 		$('#formfData').mask('00/00/0000', {reverse: false});
 
-		$('button#excluirMedica').on('click', function (){
-			
+		
+		function getdataChart(id_pedido){
+			let portable;
 			$.ajax({
 				type: "POST",
 				url: "barCodes.php",
+				async: false,
 				data: {
-					id_pedido: '17',
-					
-					
+					id_pedido: id_pedido,	
 				},
-				
 				success: function(result) {
-					window.alert(result);
-					
-					atvPhp(str);
+					portable = result;
 					
 				}
+				
 			});
-		});
+			return portable;
+		}
 
 		const myChart = new Chart($('#myChart'), {
 			type: 'bar',
 			data: {
+				showTooltips: false,
 				labels: ['Total', 'Concluído', '99% Progresso', '75% Progresso', '50% Progresso', '25% Progresso','0% Progresso'],
 				datasets: [{
-					label: 'Progresso Geral do Pedido',
-					data: [100, 2, 8, 13, 22, 3, 32],
+					label: 'Dados Gerais do Pedido',
+					data: JSON.parse(getdataChart($('input#formMPed').val())),
+					barPercentage: 0.5,
 					backgroundColor: [
-						'rgba(255, 99, 132, 0.75)',
-						'rgba(54, 162, 235, 0.75)',
-						'rgba(255, 206, 86, 0.75)',
-						'rgba(75, 192, 192, 0.75)',
-						'rgba(153, 102, 255, 0.75)',
-						'rgba(255, 159, 64, 0.75)',
-						'rgba(85, 120, 164, 0.75)'
+						'rgba(11, 83, 148, 0.75)',
+						'rgba(106, 168, 79, 0.75)',
+						'rgba(143, 206, 0, 0.75)',
+						'rgba(53, 162, 240, 0.75)',
+						'rgba(241, 194, 50, 0.75)',
+						'rgba(230, 145, 56, 0.75)',
+						'rgba(204, 30, 0, 0.75)'
 					],
 					borderColor: [
-						'rgba(255, 99, 132, 1)',
-						'rgba(54, 162, 235, 1)',
-						'rgba(255, 206, 86, 1)',
-						'rgba(75, 192, 192, 1)',
-						'rgba(153, 102, 255, 1)',
-						'rgba(255, 159, 64, 1)',
-						'rgba(85, 120, 164, 1)'
+						'rgba(11, 83, 148, 1)',
+						'rgba(106, 168, 79, 1)',
+						'rgba(143, 206, 0, 1)',
+						'rgba(53, 162, 240, 1)',
+						'rgba(241, 194, 50, 1)',
+						'rgba(230, 145, 56, 1)',
+						'rgba(204, 30, 0, 1)'
 					],
 					borderWidth: 1
 				}]
@@ -384,13 +385,19 @@
 				scales: {
 					y: {
 						beginAtZero: true
+					},
+					x: {
+						beginAtZero: true
+						
 					}
 				}
 			}
+
 		});
+		
 
 		}
-		
+
 		};
 		xhttp.open("GET", "atividades.php?pid="+str, true);
 		xhttp.send();
