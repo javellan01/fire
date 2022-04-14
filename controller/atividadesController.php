@@ -107,17 +107,14 @@ function getMessage($conn, $mid){
 
     $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-    if(count($data) == 0){
-        return true;
-    } else{ 
+    if($data){
         $e = '
-                <h5 class="card-title">Comentário:</h5>
-                <p class="card-text text-primary">'.$data[0]->tx_comentario.'</p>';
+        <h5 class="card-title">Comentário:</h5>
+        <p class="card-text text-primary">'.$data[0]->tx_comentario.'</p>';
         return $e;
+    } 
 
-    }
-
-    return $data;
+    
 }
 
 function getListaCategorias($conn){
@@ -348,6 +345,29 @@ function updateAtividade($conn, $data){
          echo  $e->getMessage();
       }
       if($e == null) echo "Atualizado com Sucesso!";
+}
+
+//update dos dados para finalizar a medição
+function finalizarMedicao($conn, $data){
+    $e = null;
+    try{
+        $stmt = $conn->prepare("UPDATE medicao 
+        SET cs_finalizada = :cs_finalizada, tx_nota = :tx_nota, dt_emissao = :dt_emissao, dt_vencimento = :dt_vencimento
+        WHERE id_medicao = :id_medicao");
+
+        $stmt->bindParam(':tx_nota',$data['DadoNota']); 
+        $stmt->bindParam(':cs_finalizada',$data['cs_finalizada']); 
+        $stmt->bindParam(':id_medicao',$data['id_medicao']); 
+        $stmt->bindParam(':dt_emissao',$data['EmData']); 
+        $stmt->bindParam(':dt_vencimento',$data['VeData']); 
+
+        $stmt->execute();
+
+        }
+        catch(PDOException $e){
+        echo  $e->getMessage();
+        }
+    if($e == null) echo "Nota Cadastrada com Sucesso!";
 }
 
 function updateAllAtividade($conn, $data){

@@ -130,7 +130,7 @@ foreach($medicoes as $medicao){
 		if($medicao->cs_aprovada == 1 && $medicao->cs_finalizada == 0){
 		echo"	
 			<button type='button' class='btn btn-success mx-2 finalize' data-ordem='$mid' data-toggle='modal' 
-			data-target='#modalFAtv' value='$medicao->id_medicao'><i class='nav-icon cui-check'></i> Finalizar / Cadastrar Nota</button>";
+			data-target='#modalFinalizarMedicao' value='$medicao->id_medicao'><i class='nav-icon cui-check'></i> Finalizar / Cadastrar Nota</button>";
 		}
 		else{
 			echo"
@@ -138,7 +138,6 @@ foreach($medicoes as $medicao){
 		}
 		echo"<button type='button' class='btn btn-danger mx-2' data-toggle='modal' 
 		data-target='#modalExcMedicao' value='$medicao->id_medicao'><i class='nav-icon cui-trash'></i> Excluir / Cancelar Medição</button>	
-		<button type='button' id='excluirMedica' class='btn btn-danger mx-2'><i class='nav-icon cui-note'></i> Teste!</button>
 			</div>
 		</div>
 	<!!----- MODAL PARA LISTAR ATIVIDADES --------------------------------------->
@@ -609,10 +608,10 @@ foreach($atividades AS $atividade)  {
 	</div>	
 
 <!-- Modal Finalizar Medição  -->
-<div class="modal" style="text-align: left" id="modalFAtv" tabindex="-1" role="dialog" aria-labelledby="modalFAtv" aria-hidden="true">
+<div class="modal" style="text-align: left" id="modalFinalizarMedicao" tabindex="-1" role="dialog" aria-labelledby="modalFinalizarMedicao" aria-hidden="true">
 						  <div class="modal-dialog modal-lg" role="document">
 							<div class="modal-content">
-							  <div class="modal-header border border-danger rounded-top">
+							  <div class="modal-header border border-success rounded-top">
 								<h5 class="modal-title">Finalizar Medição <span id="ordemMedicao"></span> - <?php echo $pedido->tx_codigo;?></h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								  <span aria-hidden="true">&times;</span>
@@ -627,14 +626,14 @@ foreach($atividades AS $atividade)  {
 	  </div>
 	  <div class="form-group col-3">
 			<label for="formData">Data Emissão:</label>
-			<input type="text" class="form-control date" id="formEmData" value="<?php echo date('d/m/Y');?>" name="EmData">
+			<input type="text" class="form-control date" id="formEmData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	  <div class="form-group col-3">
 			<label for="formData">Data Vencimento:</label>
-			<input type="text" class="form-control date" id="formVeData" value="<?php echo date('d/m/Y');?>" name="VeData">
+			<input type="text" class="form-control date" id="formVeData" value="<?php echo date('d/m/Y');?>">
 	  </div>
 	</div>
-	<button type='button' class='btn btn-success mx-2' data-id_medicao='' id='finalizarMedicao' value='1'
+	<button type='button' class='btn btn-success mx-2 float-right' data-id_medicao='' id='finalizarMedicao' value='1'>
 			<i class='nav-icon cui-check'></i> Finalizar / Cadastrar Nota</button>
 	</div>
 				<div class="modal-footer">
@@ -736,10 +735,11 @@ foreach($atividades AS $atividade)  {
 							  </div>
 							  <div class="modal-body">
 	<h5 id='descricao'></h5><br>
-	<div class="m-3" id="calendario">
 
-			</div>
-			  </div>
+		<div class='m-1 p-2 shadow rounded' id="calendario">
+		</div>
+		</div>
+
 			    <div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-action-undo'></i> Voltar</button>
 				</div>

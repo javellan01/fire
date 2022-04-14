@@ -8,6 +8,11 @@
      exit; 
  } 
 
+ function data_sqlS($data) {
+    $ndata = substr($data, 6, 4) ."-". substr($data, 3, 2) ."-".substr($data, 0, 2);
+    return $ndata;
+}
+
 require("./DB/conn.php");
 require("./controller/atividadesController.php");
 
@@ -25,6 +30,26 @@ for ($i=0; $i < $items; $i++) {
 updateMedicao($conn, $data);
 
 }
+
+if($_POST['finalizarMedicao'] == 1){
+
+    if(!$_POST['DadoNota']) {
+        header('HTTP/1.1 403 Forbidden');
+        exit('Por favor preencher o número da nota!');
+    }
+
+    $data = array();
+    
+    $data['cs_finalizada'] = 1;
+    $data['id_medicao'] = $_POST['id_medicao'];
+    $data['DadoNota'] = $_POST['DadoNota'];
+    $data['EmData'] = data_sqlS($_POST['EmData']);
+    $data['VeData'] = data_sqlS($_POST['VeData']);
+    
+
+    finalizarMedicao($conn, $data);
+    
+    }
 
 if($_POST['excluirMedicao']){
 

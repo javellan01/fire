@@ -22,15 +22,14 @@
 	require("./controller/agentController.php");
 	Auth::accessControl($_SESSION['catuser'],2);	
 	require("./DB/conn.php");
+	require("./controller/atividadesUsrController.php");
 	$pid = $_REQUEST["pid"];
-
-//Carrega dados do pedido
-$stmt3 = $conn->query("SELECT p.*, c.tx_nome FROM pedido p INNER JOIN cliente c ON p.id_cliente = c.id_cliente WHERE p.id_pedido = $pid");
-$row3 = $stmt3->fetch(PDO::FETCH_OBJ);
+	$pedido = getUsrPedidoData($conn,$pid);
+//Carrega dados do <pedido>
 echo"<div class='card-body border border-primary rounded-top'>
 			
-			<h2>Atividades na <cite>".$row3->tx_nome."</cite></h2>
-			<h3>Área: <label class='border border-secondary rounded p-1'>".$row3->tx_local."</label></h3>
+			<h2><i class='nav-icon cui-briefcase'></i> Atividades na <cite>".$pedido->tx_nome."</cite></h2>
+			<h3><i class='nav-icon cui-location-pin'></i> Área: <label class='border border-secondary rounded p-1'>".$pedido->tx_local."</label></h3>
 	
 		
 	 </div>";
@@ -39,27 +38,16 @@ echo"<div class='card-body border border-primary rounded-top'>
 			<h3>Atividades por Categoria:</h3>
 			";
 			
-// Carrega o grupo das atividades result das atividades
-$stmt1 = $conn->query("SELECT c.*, (a.nb_valor / a.nb_qtd) v_unit FROM atividade a  
-		INNER JOIN categoria c ON a.id_categoria=c.id_categoria
-		WHERE a.id_pedido = $pid GROUP BY a.id_categoria ASC");
+// Carrega as categorias das atividades result das atividades
+$categorias = getUsrCategoriaPedido($conn,$pid);
 		
-if(!$stmt1){
+if(!$categorias){
 		echo"<h4 class='text-danger'>Não há atividades cadastradas para este pedido.</h4>";}
 	else{	
-
 //Inicia card para organização das Categorias
-
-while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){	
-
-	$cid = $row1->id_categoria;
-	$cpercent = $count = $execpercent = $medpercent = $balpercent = $balance = 0;	
-
-	$stmt2 = $conn->query("SELECT id_categoria, SUM(nb_valor) nbvalor, SUM(valor_sum) valorsum, SUM(qtd_sum) qtdsum, SUM(nb_qtd) nbqtd, CAST(SUM(progresso) AS DECIMAL(10,2)) progresso, v_unit FROM v_categoria_sums WHERE id_pedido = $pid AND id_categoria = $cid GROUP BY id_categoria");
-	$row2 = $stmt2->fetch(PDO::FETCH_OBJ);
-	
-	
-		//Inicia accordion para cada categoria
+foreach($categorias AS $categoria){	
+	$cid = $categoria->id_categoria;
+	//Inicia accordion para cada categoria
 	echo"
 <div class='accordion border border-success rounded-top mb-3 shadow rounded' id='accordion'>
   <div class='card mb-0'>
@@ -69,14 +57,12 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		
 		<div class='col-5'>";
 		echo"<button class='btn btn-outline-success float-left' type='button' data-toggle='collapse' data-target='#collapseCat$cid' aria-expanded='true' aria-controls='collapseCat$cid'><strong>";
-		echo $row1->tx_nome;
+		echo $categoria->tx_nome;
 		echo" <i class='nav-icon cui-chevron-bottom'></i></strong></button>
 		</div>
-		 
 		</div>
 		</div>
       </h5>
-    
 	</div>
 
     <div id='collapseCat$cid' class='collapse show' aria-labelledby='headingCat$cid' data-parent='#accordion'>
@@ -84,30 +70,26 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 	  
 	//  <!-- MAIN WHILE FOR ATIVIDADES DA CATEGORIA -->
 	$encerradas = 0;
-		
-		
-        $stmt2 = $conn->query("SELECT a.*, v1.qtd_sum, v1.progresso, v1.nb_valor, v1.valor_sum FROM atividade a 
-		LEFT JOIN v_categoria_sums v1 ON a.id_atividade=v1.id_atividade 
-		WHERE a.id_pedido = $pid AND a.id_categoria = $cid AND a.cs_finalizada = 0 AND NOT a.dt_inicio = '00-00-0000' ");
-		
-		
-		while($row = $stmt2->fetch(PDO::FETCH_OBJ)){
-		if($row->cs_finalizada	== 1) $encerradas += 1;
+	$atividades = getUsrAtividades($conn,$pid,$cid);
+
+	foreach($atividades AS $atividade){	
+
+		if($atividade->cs_finalizada == 1) $encerradas += 1;
 		echo"	
 		<div class='row align-items-center'>
-						
-						
+		
 		<div class='col-12 p-1'>
 			<div class='callout callout-success b-t-1 b-r-1 b-b-1 m-1 col-12 p-2 float-left'>
 			
 			<div class='progress-group-prepend'>";
-		  if($row->cs_finalizada == 0) 
-
-					echo "<div class='progress-group-header align-items-end' style='color: #27b;'>
-					<button type='button' class='btn btn-outline-dark p-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $row->tx_descricao . "' data-id_atividade='" . $row->id_atividade . "'><strong>" . $atividade->id_idx . " - " . $row->tx_descricao . "</strong></div>";
-		  $percent = ($row->qtd_sum / $row->nb_qtd) * 100;
+		  if($atividade->cs_finalizada == 0) 
+			echo "<div class='progress-group-header align-items-end' style='color: #27b;'>
+			<button type='button' class='btn btn-outline-dark px-2 py-1 m-1' 
+			data-toggle='modal' data-target='#modalAtividadeCalendario' value='".$atividade->id_atividade."' data-descricao='" . $atividade->id_idx . " - " . $atividade->tx_descricao . "'><i class='nav-icon cui-calendar'></i></button>
+			<button type='button' class='btn btn-outline-dark py-1 m-1' data-toggle='modal' data-target='#modalUpdate' data-atividade='" . $atividade->tx_descricao . "' data-id_atividade='" . $atividade->id_atividade . "'><strong>" . $atividade->id_idx . " - " . $atividade->tx_descricao . "</strong></div>";
+		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
 		  $percent = round($percent,1);
-		  echo "<div class='ml-auto'>Progresso: " . $row->qtd_sum . " / " . $row->nb_qtd ." ". $row->tx_tipo . "</div>";
+		  echo "<div class='ml-auto'>Progresso: " . $atividade->qtd_sum . " / " . $atividade->nb_qtd ." ". $atividade->tx_tipo . "</div>";
 		  echo"	  
 		  <div class='progress-group-bars mb-1'>
 			<div class='progress progress-lg'>
@@ -119,12 +101,11 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 				</div><!--/.col-->
 		</div><!--/.BAR CALLOUT INFO GROUP END ROW -->";
 		if($percent >= 100){
-			$stmt3 = $conn->prepare("UPDATE atividade SET cs_finalizada = 1 WHERE id_atividade = :aid");
-			$stmt3->bindParam(':aid', $row->id_atividade);
-			$stmt3->execute();
+			setUsrAtividadeFinalizada($conn,$atividade->id_atividade);	
 		}
+
 		}
-		$pendentes = $stmt2->rowCount() - $encerradas;
+		$pendentes = count($atividades) - $encerradas;
 	echo"	
       </div>
     </div>
@@ -176,7 +157,7 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 							  </div>
 							  <div class="modal-footer">
 								<div class="alert alert-secondary mx-auto" role="alert">
-								<h6><?php echo"Obra: ".$row3->tx_nome.", ".$row3->tx_local.".";?> </h6>
+								<h6><?php echo"Obra: ".$pedido->tx_nome.", ".$pedido->tx_local.".";?> </h6>
 								</div>
 								
 							  </div>
@@ -191,3 +172,27 @@ while($row1 = $stmt1->fetch(PDO::FETCH_OBJ)){
 		</div>
 		
 	</div>	
+
+<!-- Modal CALENDARIO ------------------------->
+<div class="modal" id="modalAtividadeCalendario" tabindex="-1" role="dialog" aria-labelledby="modalAtividadeCalendario" aria-hidden="true">
+						  <div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title"><cite>Eventos da Atividade:</cite></h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body">
+	<h5 id='descricao'></h5><br>
+	
+		<div class='m-1 p-2 shadow rounded' id="calendario">
+		</div>
+		</div>
+
+			    <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class='nav-icon cui-action-undo'></i> Voltar</button>
+				</div>
+			  </div>
+			</div>
+		  </div>		  

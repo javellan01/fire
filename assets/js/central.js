@@ -183,7 +183,7 @@
 		let soma = 0;
 		let total = $('input#pedidoValor').val()*1;
 
-		$( 'input.parcela' ).each(function() {
+		$('input.parcela').each(function() {
 			soma = soma + $( this ).val()*1;
 		  });
 		
@@ -209,138 +209,60 @@
 
 		});
 
-		function geteventChart(id_atividade){
-
-			let portable;
-			$.ajax({
-				type: "POST",
-				url: "loadEventsAtividade.php",
-				async: false,
-				data: {
-					id_atividade: id_atividade,	
-				},
-				success: function(result) {
-					portable = result;
-					
-				}
-				
-			});
-			return portable;
-		}
-		var calendarEl = document.getElementById('calendario');
-
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-			headerToolbar: {
-			  left: 'prevYear,prev,next,nextYear today',
-			  center: 'title',
-			  right: 'dayGridMonth,dayGridWeek,dayGridDay'
-			},
-			initialDate: '2020-09-12',
-			navLinks: true, // can click day/week names to navigate views
-			editable: true,
-			dayMaxEvents: true, // allow "more" link when too many events
-			events: [
-			  {
-				title: 'All Day Event',
-				start: '2020-09-01'
-			  },
-			  {
-				title: 'Long Event',
-				start: '2020-09-07',
-				end: '2020-09-10'
-			  },
-			  {
-				groupId: 999,
-				title: 'Repeating Event',
-				start: '2020-09-09T16:00:00'
-			  },
-			  {
-				groupId: 999,
-				title: 'Repeating Event',
-				start: '2020-09-16T16:00:00'
-			  },
-			  {
-				title: 'Conference',
-				start: '2020-09-11',
-				end: '2020-09-13'
-			  },
-			  {
-				title: 'Meeting',
-				start: '2020-09-12T10:30:00',
-				end: '2020-09-12T12:30:00'
-			  },
-			  {
-				title: 'Lunch',
-				start: '2020-09-12T12:00:00'
-			  },
-			  {
-				title: 'Meeting',
-				start: '2020-09-12T14:30:00'
-			  },
-			  {
-				title: 'Happy Hour',
-				start: '2020-09-12T17:30:00'
-			  },
-			  {
-				title: 'Dinner',
-				start: '2020-09-12T20:00:00'
-			  },
-			  {
-				title: 'Birthday Party',
-				start: '2020-09-13T07:00:00'
-			  },
-			  {
-				title: 'Click for Google',
-				url: 'http://google.com/',
-				start: '2020-09-28'
-			  }
-			]
-		  });
-	  
-		 
-		
-
-		/* const calendario = new FullCalendar.Calendar($('#calendario'), {
-
-			aspectRatio: 3.2,
-			editable: false,
-			eventLimit: true,
-			events:	'',
-			eventRender: function(eventObj, $el) {
-				if(eventObj.quantidade){
-				$el.popover({
-				  title: eventObj.title,
-				  content: 'Cadastrado: '+eventObj.quantidade+', por: '+eventObj.usuario,
-				  trigger: 'hover',
-				  placement: 'top',
-				  container: 'body'
-			  });
-			  }
-			  else{
-				  $el.popover({
-				  title: eventObj.title+', Pedido: '+eventObj.pedido,
-				  content: 'Medição '+eventObj.medicao+', avanço: '+eventObj.medidos+'%.',
-				  trigger: 'hover',
-				  placement: 'top',
-				  container: 'body'
-			  });
-			  }
-			},
-			weekNumbers: true,
-			weekNumberTitle: 'W',
-			weekNumberCalculation: 'ISO'
-		  }); */
-
 		$('#modalAtividadeCalendario').on('show.bs.modal', function(event){ 
 			let button = $(event.relatedTarget);
 			$(this).find('#descricao').text(button.data('descricao'));
-			let events = geteventChart(button.val());
+			//let events = geteventChart(button.val());
+			var calendarEl = document.getElementById('calendario');
+			
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				locale: 'pt-br',
+				headerToolbar: {
+				  left: 'prevYear,prev,next,nextYear today',
+				  center: 'title',
+				  right: 'dayGridMonth,dayGridWeek'
+				},
+				weekNumbers: true,
+				weekNumberTitle: 'W',
+				weekNumberCalculation: 'ISO',
+				editable: false,
+				height: 480,
+				dayMaxEvents: true, // allow "more" link when too many events
+				events: {
+					url: 'loadEventsAtividade.php',
+					method: 'POST',
+					extraParams: {
+						id_atividade: button.val(),
+						
+					  }
+				},
+				eventDidMount: function(info){
+					if(info.event.extendedProps.quantidade){
+					 $(info.el).popover({
+					  title: info.event.title,
+					  content: 'Cadastrado: '+info.event.extendedProps.quantidade+', por: '+info.event.extendedProps.usuario+'.',
+					  placement: 'top',
+					  trigger: 'hover',
+					  container: 'body'
+					});
+					}else{
+						$(info.el).popover({
+						title: info.event.title,
+						content: 'Medição '+info.event.extendedProps.medicao+', avanço: '+info.event.extendedProps.medidos+' %.',
+						placement: 'top',
+						trigger: 'hover',
+						container: 'body'
+						  });
+					}
+
+				  },
+			  });
+
 			calendar.render();
-		
 			
 		});
 
-		$('#modalFAtv').on('show.bs.modal', function(event){ 
+		$('#modalFinalizarMedicao').on('show.bs.modal', function(event){ 
 			let button = $(event.relatedTarget);
 			let id_medicao = button.val();
 			let nb_ordem = button.data('ordem');
@@ -376,6 +298,7 @@
 				url: "updateMedicao.php",
 				data: {
 					updateMedicao: '',
+					finalizarMedicao: '',
 					excluirMedicao: $(this).val()
 					
 				},
@@ -456,6 +379,39 @@
 			let mid = $(this).val();
 
 			loadMData(pid,mid,'');
+		});
+
+		$('button#finalizarMedicao').on('click', function (){
+	
+			let pid = $(this).attr("data-id_medicao");
+			let mid = $(this).val();
+
+			$.ajax({
+				type: "POST",
+				url: "updateMedicao.php",
+				data: {
+					updateMedicao: '',
+					excluirMedicao: '',
+					finalizarMedicao: $(this).val(),
+					id_medicao: $(this).attr("data-id_medicao"),
+					DadoNota: $("#formDadoNota").val(),
+					EmData: $("#formEmData").val(),
+					VeData: $("#formVeData").val()
+					
+				},
+				
+				success: function(result) {
+					window.alert(result);
+					$('#modalFinalizarMedicao').modal('hide');
+					atvPhp(str);
+					
+				},
+				error: function(result) {
+					window.alert(result);
+					
+				}
+			});
+			
 		});
 		
 
@@ -544,7 +500,11 @@
 		$('#formQtdin').mask('###0', {reverse: false});
 
 		$( function() {
-			$( ".date" ).datepicker();
+			$( ".date" ).datepicker({
+				maxDate: 0,
+
+			});
+
 		  } );
 		  
 		$('#modalUpdate').on('show.bs.modal', function (event) {
@@ -553,16 +513,69 @@
 			var id_atividade = button.data('id_atividade');
 			var modal = $(this);
 			modal.find('.modal-title').text(atividade);
-			modal.find('#formAid.form-control').val(id_atividade);
+			modal.find('#formAid').val(id_atividade);
 		});
 		
-		
-		$('button#updateAtividade').on('click', function (){
+		$('#modalAtividadeCalendario').on('show.bs.modal', function(event){ 
+			let button = $(event.relatedTarget);
+			$(this).find('#descricao').text(button.data('descricao'));
+			//let events = geteventChart(button.val());
+			var calendarEl = document.getElementById('calendario');
+			
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				locale: 'pt-br',
+				headerToolbar: {
+				  left: 'prevYear,prev,next,nextYear today',
+				  center: 'title',
+				  right: 'dayGridMonth,dayGridWeek'
+				},
+				weekNumbers: true,
+				weekNumberTitle: 'W',
+				weekNumberCalculation: 'ISO',
+				editable: false,
+				height: 480,
+				dayMaxEvents: true, // allow "more" link when too many events
+				events: {
+					url: 'loadEventsAtividade.php',
+					method: 'POST',
+					extraParams: {
+						id_atividade: button.val(),
+						
+					  }
+				},
+				eventDidMount: function(info){
+					if(info.event.extendedProps.quantidade){
+					 $(info.el).popover({
+					  title: info.event.title,
+					  content: 'Cadastrado: '+info.event.extendedProps.quantidade+', por: '+info.event.extendedProps.usuario+'.',
+					  placement: 'top',
+					  trigger: 'hover',
+					  container: 'body'
+					});
+					}else{
+						$(info.el).popover({
+						title: info.event.title,
+						content: 'Medição '+info.event.extendedProps.medicao+', avanço: '+info.event.extendedProps.medidos+' %.',
+						placement: 'top',
+						trigger: 'hover',
+						container: 'body'
+						  });
+					}
+
+				  },
+			  });
+
+			calendar.render();
+			
+		});
+
+		$('button#registraAtividade').on('click', function (){
 
 			$.ajax({
 				type: "POST",
-				url: "updateAtividade.php",
+				url: "registraAtividade.php",
 				data: {
+					registraAtividade: $(this).val(),
 					id_atividade: $('#formAid').val(),
 					nb_qtd: $('#formUqtd').val(),
 					dt_date : $('#formUdata').val()
@@ -617,7 +630,7 @@
 		document.getElementById("process").innerHTML = this.responseText;
 		}
 		};
-		
+		var formData = $('form').serialize();
 	
 		xhttp.open("GET", "process.php?"+formData, true);
 		xhttp.send();
@@ -823,6 +836,7 @@
 				url: "updateMedicao.php",
 				data: {
 					excluirMedicao: '',
+					finalizarMedicao:'',
 					updateMedicao: update,
 					Nb_ordem: nb_ordem,
 					Id_pedido: id_pedido,

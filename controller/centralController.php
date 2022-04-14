@@ -48,15 +48,15 @@
                 $color = cat_color($item);
                 $status = 'Ativo';
                 }
-            $url = "javascript:atvPhp(".$pedido->id_pedido.")";
+            $url = "#";
             $periodo = 'Início: '.data_usql($pedido->dt_idata).' - Término: '.data_usql($pedido->dt_tdata);
             
-            $data .= "{ title: '".$pedido->tx_nome." - ".$pedido->tx_codigo."', start:'".$pedido->dt_idata."', end:'".$pedido->dt_tdata."T18:00:00',url:'".$url."', color:'".$color."', status:'".$status."', periodo:'".$periodo."', allDay: false},";
+            $data .= "{ title: '".$pedido->tx_nome."', pedido:'".$pedido->tx_codigo."', start:'".$pedido->dt_idata."', end:'".$pedido->dt_tdata."T18:00:00',url:'".$url."', color:'".$color."', status:'".$status."', periodo:'".$periodo."', allDay: false},";
             $item += 1;
         }
         $data .= ']';
 
-        return $data;
+        echo $data;
     }
     
     function selectPedidos($conn){

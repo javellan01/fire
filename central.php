@@ -37,20 +37,19 @@
 
 	<style>
       .app-body { overflow-x: initial;}
-	  .fc-sat {background-color: #eee;}
-	  .fc-sun {background-color: #eee;}
-	  .fc-week-number {background-color: #09568d; color: white;}
-	  .fc-day-top {color: #09568d;}
-	  .fc-day-header {color: #09568d;}
+	  .fc-daygrid-day.fc-day-sat {background-color: #eee;}
+	  .fc-daygrid-day.fc-day-sun {background-color: #eee;}
+	  .fc-daygrid-week-number {background-color: #ce3500; color: white;}
+	  .fc-col-header {background-color: #09568d; color: white;}
 	  th {font-weight: normal;}
     </style>
 		<script src="./assets/js/jquery-3.6.0.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
+		<script src="./assets/js/datepicker-pt-br.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
-		<script src="./assets/js/popper.min.js"></script>
 		<script src="./assets/js/moment.min.js"></script>
-		<script src="./dist/js/bootstrap.min.js"></script>
+		<script src="./dist/js/bootstrap.bundle.min.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
@@ -173,7 +172,7 @@
 				</div>
 			</div>	
 			</div>			
-					<div class="m-4" id="calendar"></div>
+					<div class="m-3 p-3 shadow rounded" id="calendar"></div>
 			</div>
 		</div>
     </div>			
@@ -195,31 +194,43 @@
 		</div>
 	</footer>
 		<!-- fullCallendar ----------------------------------------------------->
-		<script>
-		/*$(document).ready(function() {
+		
+			<script>
+			$(document).ready(function() {
+			var calendarEl = document.getElementById('calendar');
+			
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				displayEventTime : false,
+				locale: 'pt-br',
+				headerToolbar: {
+				  left: '',
+				  center: 'title',
+				  right: 'prevYear,prev,next,nextYear today'
+				},
+				weekNumbers: true,
+				weekNumberTitle: 'W',
+				weekNumberCalculation: 'ISO',
+				editable: false,
+				height: 600,
+				dayMaxEvents: true, // allow "more" link when too many events
+				events: <?php getEvents($conn);?>,
+				eventDidMount: function(info){
+					
+					 $(info.el).popover({
+					  title: info.event.title+', Pedido: '+info.event.extendedProps.pedido,
+					  content: info.event.extendedProps.periodo,
+					  placement: 'top',
+					  trigger: 'hover',
+					  container: 'body'
+					});
+					
 
-			$('#calendar').fullCalendar({
+				  },
+			  });
 
-				aspectRatio: 3.2,
-			  defaultDate: '<?php// echo date('Y-m-d', $_SERVER['REQUEST_TIME']);?>',
-			  editable: false,
-			  eventLimit: true,
-			  events:	<?php //getEvents($conn);?>,
-			  eventRender: function(eventObj, $el) {
-				  $el.popover({
-					title: eventObj.title+', Pedido: '+eventObj.pedido,
-					content: eventObj.periodo,
-					trigger: 'hover',
-					placement: 'top',
-					container: 'body'
-				});
-			  },
-			  weekNumbers: true,
-			  weekNumberTitle: 'W',
-			  weekNumberCalculation: 'ISO'
+			calendar.render();
+
 			});
-
-			});*/
 		</script>
  </body> 
  

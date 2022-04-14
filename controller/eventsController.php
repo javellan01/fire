@@ -1,9 +1,8 @@
 <?php
-
-/* 	function data_usql($data) {
+	function data_usqlS($data) {
 		$ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4);
 		return $ndata;
-	} */
+	} 
 	
 	function cat_color($cat){
 		$color = '#343236';
@@ -51,7 +50,7 @@ function fillUCalendar($conn,$uid){
             $status = 'Ativa';
             }
         $url = "#";
-        $periodo = 'Início: '.data_usql($event->dt_inicio).' - Término: '.data_usql($event->dt_fim);
+        $periodo = 'Início: '.data_usqlS($event->dt_inicio).' - Término: '.data_usqlS($event->dt_fim);
         
         echo "{ title: '".$event->tx_descricao."', start:'".$event->dt_inicio."', end:'".$event->dt_fim."T18:00:00',url:'".$url."', color:'".$color."', status:'".$status."', pedido:'".$event->tx_codigo."', categoria:'".$event->tx_nome."', periodo:'".$periodo."', allDay: false},";
     }
@@ -89,7 +88,7 @@ function fillInfoAtividadeCalendar($conn,$aid){
     $data0 = getEventAtividadeExecutada($conn,$aid);
     $data1 = getEventAtividadeMedida($conn,$aid);
     $events= array();
-    echo "[ ";
+    //echo "[ ";
     foreach($data0 as $event){
         $color = cat_color(6); 
 
@@ -99,13 +98,14 @@ function fillInfoAtividadeCalendar($conn,$aid){
         $evento['start'] = $event->dt_data;
         $evento['end'] = $event->dt_data;
         $evento['color'] = $color;
-        $evento['quantidade'] = $event->nb_qtd.$event->tx_tipo;
+        $evento['url'] = '#';
+        $evento['quantidade'] = $event->nb_qtd.' '.$event->tx_tipo;
         $evento['usuario'] = $event->tx_name;
         $evento['allDay'] = 'true';
 
-        $events += $evento;        
-        echo "{ title: 'Cadastro de Progresso', start:'".$event->dt_data."', end:'".$event->dt_data."',
-             color:'".$color."', quantidade:'".$event->nb_qtd."', usuario:'".$event->tx_name."', allDay: true},";
+        array_push($events, $evento);    
+        //echo "{ title: 'Cadastro de Progresso', start:'".$event->dt_data."', end:'".$event->dt_data."',
+        //     color:'".$color."', quantidade:'".$event->nb_qtd."', usuario:'".$event->tx_name."', allDay: true},";
         
     }
     foreach($data1 as $event){
@@ -118,20 +118,22 @@ function fillInfoAtividadeCalendar($conn,$aid){
         $evento['start'] = $event->dt_data;
         $evento['end'] = $event->dt_data;
         $evento['color'] = $color;
+        $evento['url'] = '#';
         $evento['medidos'] = $percent;
         $evento['medicao'] = $event->nb_ordem;
         $evento['allDay'] = 'true';
 
-        $events += $evento;
+        array_push($events, $evento);
 
-        echo "{ title: 'Progresso Medido', start:'".$event->dt_data."', end:'".$event->dt_data."', 
-            color:'".$color."', url:'#', medicao:'".$event->nb_ordem."', medidos:'".$percent."', allDay: true},";
+        //echo "{ title: 'Progresso Medido', start:'".$event->dt_data."', end:'".$event->dt_data."', 
+        //    color:'".$color."', url:'#', medicao:'".$event->nb_ordem."', medidos:'".$percent."', allDay: true},";
 
         }        
 
-        //$output = json_encode($events);
-        //echo $output;
-        echo " ]";
+        header('Content-type:application/json');
+        $output = json_encode($events);
+        echo $output;
+        //echo " ]";
 
 
 }

@@ -29,63 +29,75 @@
 	
 	<title>Central | FireSystems.online</title>
 	<link rel="stylesheet" href="./assets/css/toastr.min.css">
+	<link rel="stylesheet" href="./assets/css/jquery-ui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui.min.css">
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
-	<link rel="stylesheet" href="./dist/css/fullcalendar.min.css">
-	<link rel="stylesheet" href="./assets/css/jquery-ui.min.css">
+	<link rel="stylesheet" href="./dist/fullcalendar/main.min.css">
+	<link rel="stylesheet" href="./dist/css/spectrum.min.css">
+
 	<style>
-      .app-body {
-        overflow-x: initial;
-      }
-	  .fc-sat {background-color: #eee;}
-	  .fc-sun {background-color: #eee;}
-	  .fc-week-number {background-color: #09568d; color: white;}
-	  .fc-day-top {color: #09568d;}
-	  .fc-day-header {color: #09568d;}
+      .app-body { overflow-x: initial;}
+	  .fc-daygrid-day.fc-day-sat {background-color: #eee;}
+	  .fc-daygrid-day.fc-day-sun {background-color: #eee;}
+	  .fc-daygrid-week-number {background-color: #ce3500; color: white;}
+	  .fc-col-header {background-color: #09568d; color: white;}
+	  th {font-weight: normal;}
     </style>
 		<script src="./assets/js/jquery-3.6.0.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
+		<script src="./assets/js/datepicker-pt-br.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
 		<script src="./assets/js/jquery.mask.min.js"></script>
-		<script src="./assets/js/popper.min.js"></script>
-		<script src="./dist/js/bootstrap.min.js"></script>
+		<script src="./assets/js/moment.min.js"></script>
+		<script src="./dist/js/bootstrap.bundle.min.js"></script>
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
-		<script src="./assets/js/vue.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
+		<script src="./dist/fullcalendar/main.min.js"></script>
+		<script src="./dist/fullcalendar/pt-br.js"></script>
+		<script src="./dist/spectrum/spectrum.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
-		<script src="./assets/js/moment.min.js"></script>
-		<script src="./dist/js/fullcalendar.min.js"></script>
-		<script src="./dist/js/locale/pt-br.js"></script>
 		<script src="./assets/js/central.js"></script>
 		<script>
-		$(document).ready(function() {
+			$(document).ready(function() {
+			var calendarEl = document.getElementById('calendar');
+			
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				displayEventTime : false,
+				initialView: 'dayGridWeek',
+				locale: 'pt-br',
+				headerToolbar: {
+				  left: 'prevYear,prev,next,nextYear today',
+				  center: 'title',
+				  right: 'dayGridMonth,dayGridWeek'
+				},
+				weekNumbers: true,
+				weekNumberTitle: 'W',
+				weekNumberCalculation: 'ISO',
+				editable: false,
+				height: 480,
+				dayMaxEvents: true, // allow "more" link when too many events
+				events: <?php fillUCalendar($conn,$_SESSION["userid"]);?>,
+				eventDidMount: function(info){
+					
+					 $(info.el).popover({
+					  title: info.event.title+', Pedido: '+info.event.extendedProps.pedido,
+					  content: info.event.extendedProps.periodo,
+					  placement: 'top',
+					  trigger: 'hover',
+					  container: 'body'
+					});
+					
 
-			$('#calendar').fullCalendar({
-			  defaultView: 'basicWeek',	
-			  aspectRatio: 4,
-			  defaultDate: '<?php echo date("Y-m-d", $_SERVER['REQUEST_TIME']);?>',
-			  eventRender: function(eventObj, $el) {
-				  $el.popover({
-					title: eventObj.title+', Pedido: '+eventObj.pedido,
-					content: eventObj.periodo,
-					trigger: 'hover',
-					placement: 'top',
-					container: 'body'
-				});
-			  },
-			  
-			  editable: false,
-			  eventLimit: true,
-			  events: 	<?php fillUCalendar($conn,$_SESSION["userid"]);?>,
-			  
-			  weekNumbers: true,
-			  weekNumberTitle: 'W',
-			  weekNumberCalculation: 'ISO'
-			});
+				  },
+			  });
+
+			calendar.render();
 
 			});
-		</script>
+		</script> 
+		
 </head>
 <?php
 
@@ -174,7 +186,7 @@
 				</div>	
 				<div class='row'>
 				<div class="card-body"><h4><cite>Visão Geral:</cite></h4>
-					<div class="m-4" id="calendar">	</div>
+				<div class="m-3 p-3 shadow rounded" id="calendar"></div>
 				</div>
 				</div>
 			</div>

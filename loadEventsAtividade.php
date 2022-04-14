@@ -11,7 +11,7 @@ require("./DB/conn.php");
 require("./controller/eventsController.php");
 
 	$data = $_POST['id_atividade'];
-
+    
     fillInfoAtividadeCalendar($conn,$data);
     
 

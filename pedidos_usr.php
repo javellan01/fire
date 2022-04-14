@@ -12,7 +12,7 @@
 	<div class="container-fluid">
 				<div class="card">
 					<div class='card-header'><div class="row mt-1"><div class="col-8 ">
-						<h3>Pedidos: </h3>
+						<h3><i class="nav-icon cui-list"></i> Pedidos: </h3>
 							</div>
 							<div class='col-4'>
 							
@@ -34,13 +34,13 @@
 //Carrrga as empresas pra colocar no titulo dos cards
 $clientes = getUserClientes($conn,$_SESSION['userid']);
 
-if(count($clientes) == 0){
+if(!$clientes){
 	echo"<p class='h4'> Ainda não há pedidos disponíveis para visualizar.</p>";}
 else{
 	foreach($clientes as $cliente){
 
 	echo"<div class='card-body' id='pedidoAccord'>
-	<div class='accordion b-b-1' id='accordion'>
+	<div class='accordion b-b-1 shadow rounded' id='accordion'>
 		<div class='card mb-0'>
 		<div class='card-header' id='heading".$cliente->id_cliente."'>
 			<h5 class='mb-0'>
@@ -55,7 +55,7 @@ else{
 	// Carrega os pedidos e coloca nos cards
 	$pedidos = getUserPedidos($conn,$_SESSION['userid']);
 
-	if(count($pedidos) == 0){
+	if(!$pedidos){
 		echo"<p class='h4'> Ainda não há pedidos disponíveis para visualizar neste cliente.</p>";}
 	else{
 	foreach($pedidos as $pedido){
