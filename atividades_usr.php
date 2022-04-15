@@ -35,8 +35,18 @@ echo"<div class='card-body border border-primary rounded-top'>
 	 </div>";
 				
 	echo"<div class='card-body'>
-			<h3>Atividades por Categoria:</h3>
-			";
+	<p id='dataChart'></p>
+	<canvas class='px-4 my-4 shadow rounded' id='myChart' style='display: block; box-sizing: border-box; height: 400px; width: 100%;'>
+
+	</canvas>";
+	$fisico = getProgressoFisico($conn,$pedido->id_pedido);
+
+	echo "<div class='row mx-1 my-2 '><div class='callout callout-primary b-t-1 b-r-1 b-b-1 m-1 col-12 float-left shadow rounded'> <div class='progress-group'>";
+	echo "<div class='progress-group-header align-items-center text-center my-1' style='color: #27b;'><strong><i class='nav-icon cui-chart'></i> Progresso da Obra: </strong></div>";
+	echo "<div class='progress-group-bars'> <div class='progress progress-lg' style='height: 1.25rem'>";
+	echo "<div class='progress-bar progress-bar-striped bg-warning' role='progressbar' style='width: ". $fisico->execpercent ."%; color:'black'; 
+		aria-valuenow='". $fisico->execpercent ."' aria-valuemin='0' aria-valuemax='100'><strong class='text-primary' >". $fisico->execpercent ."%</strong></div></div></div></div></div></div>
+		<br><h3>Atividades por Categoria:</h3>";
 			
 // Carrega as categorias das atividades result das atividades
 $categorias = getUsrCategoriaPedido($conn,$pid);
@@ -50,9 +60,9 @@ foreach($categorias AS $categoria){
 	//Inicia accordion para cada categoria
 	echo"
 <div class='accordion border border-success rounded-top mb-3 shadow rounded' id='accordion'>
-  <div class='card mb-0'>
+<div class='card mb-0'>
     <div class='card-header' id='headingCat$cid'>
-      <h5 class='mb-0'>
+    <h5 class='mb-0'>
 	    <div class='row'>
 		
 		<div class='col-5'>";
@@ -62,13 +72,14 @@ foreach($categorias AS $categoria){
 		</div>
 		</div>
 		</div>
-      </h5>
+    </h5>
 	</div>
 
     <div id='collapseCat$cid' class='collapse show' aria-labelledby='headingCat$cid' data-parent='#accordion'>
-      <div class='card-body'>";
-	  
-	//  <!-- MAIN WHILE FOR ATIVIDADES DA CATEGORIA -->
+    <div class='card-body' style='overflow-y: scroll; overflow-x: clip; max-height: 600px;'>";
+	
+	
+//  <!-- MAIN WHILE FOR ATIVIDADES DA CATEGORIA -->
 	$encerradas = 0;
 	$atividades = getUsrAtividades($conn,$pid,$cid);
 
@@ -77,10 +88,8 @@ foreach($categorias AS $categoria){
 		if($atividade->cs_finalizada == 1) $encerradas += 1;
 		echo"	
 		<div class='row align-items-center'>
-		
 		<div class='col-12 p-1'>
 			<div class='callout callout-success b-t-1 b-r-1 b-b-1 m-1 col-12 p-2 float-left'>
-			
 			<div class='progress-group-prepend'>";
 		  if($atividade->cs_finalizada == 0) 
 			echo "<div class='progress-group-header align-items-end' style='color: #27b;'>
@@ -142,6 +151,7 @@ foreach($categorias AS $categoria){
 		<label for="formUqtd"><i class='nav-icon cui-note'></i> Quantidade:</label>
 		<input type="text" class="form-control" id="formUqtd" placeholder="Insira Quantidade">
 		<input type="text" class="form-control" id="formAid" hidden>
+		<input type="text" class="form-control" id="formMPed" value="<?php echo $pid;?>" hidden>
 	  </div>
 	  <div class="form-group col-4">
 			<label for="formData"><i class='nav-icon cui-calendar'></i> Data:</label>

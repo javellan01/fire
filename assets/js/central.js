@@ -521,8 +521,77 @@
 
 			});
 
-		  } );
-		  
+		});
+		
+		function getdataChart(id_pedido){
+			let portable;
+			$.ajax({
+				type: "POST",
+				url: "barCodes.php",
+				async: false,
+				data: {
+					id_pedido: id_pedido,	
+				},
+				success: function(result) {
+					portable = result;
+					
+				}
+				
+			});
+			return portable;
+		}
+
+		const myChart = new Chart($('#myChart'), {
+			type: 'bar',
+			data: {
+				plugins: [ChartDataLabels],
+				
+				labels: ['Total', 'Concluído', '99% Progresso', '75% Progresso', '50% Progresso', '25% Progresso','0% Progresso'],
+				datasets: [{
+					label: 'Dados',
+					fill: false,
+					data: JSON.parse(getdataChart($('input#formMPed').val())),
+					barPercentage: 0.5,
+					backgroundColor: [
+						'rgba(11, 83, 148, 0.75)',
+						'rgba(106, 168, 79, 0.75)',
+						'rgba(143, 206, 0, 0.75)',
+						'rgba(53, 162, 240, 0.75)',
+						'rgba(241, 194, 50, 0.75)',
+						'rgba(230, 145, 56, 0.75)',
+						'rgba(204, 30, 0, 0.75)'
+					],
+					borderColor: [
+						'rgba(11, 83, 148, 1)',
+						'rgba(106, 168, 79, 1)',
+						'rgba(143, 206, 0, 1)',
+						'rgba(53, 162, 240, 1)',
+						'rgba(241, 194, 50, 1)',
+						'rgba(230, 145, 56, 1)',
+						'rgba(204, 30, 0, 1)'
+					],
+					borderWidth: 2
+				}]
+			},
+			options: {
+				indexAxis: 'y',
+				scales: {
+					y: {
+						beginAtZero: true
+					},
+					x: {
+						beginAtZero: true,
+						title: {
+							font: {weight: 'bold'},
+							display: true,
+							text: 'Dados Gerais do Pedido'
+						  }
+					}
+				}
+			}
+
+		});
+		
 		$('#modalUpdate').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);
 			var atividade = button.data('atividade');
@@ -707,6 +776,7 @@
 				}
 			});
 		});
+
 
 		}
 			

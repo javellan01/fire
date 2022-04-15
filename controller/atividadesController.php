@@ -220,6 +220,18 @@ function medirAtividades($conn,$pid){
 
     return $data;
 }
+//progresso da obra executada
+function getProgressoFisico($conn,$pid){
+    
+    $stmt = $conn->query("SELECT vs.id_pedido, FORMAT(((SUM(vs.progresso) / SUM(vs.nb_valor)) *100),1) as execpercent
+    FROM v_categoria_sums vs 
+    WHERE vs.id_pedido = $pid GROUP BY vs.id_pedido");
+    
+    $data = $stmt->fetch(PDO::FETCH_OBJ);
+    
+    return $data;
+    }    
+
 //get o user Convidado de acordo com o cliente
 function getUsersCliente($conn,$cid){
     $stmt = $conn->query("SELECT tx_nome,id_usuario FROM cliente_usr WHERE id_cliente = $cid");

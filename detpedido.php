@@ -155,7 +155,7 @@
 <!------ LISTAGEM GERAL DAS MEDIÇÕES --------------------------------------->
   <div class="row m-auto">
  	<h4 class='col-6'><cite>Medições Cadastradas: </h4>
-	<table class='table table-striped'>
+	<table class='table table-striped shadow rounded'>
 		<thead>
 			<tr>
 				<th>Medição</th>
@@ -210,7 +210,7 @@ foreach($medicoes AS $medicao){
 		<button type='button' class='btn btn-primary mx-2 float-right' id='updateAllAtividade' value='1'><i class='nav-icon cui-pencil'></i> Salvar Atividades</button>
 		<button type='button' class='btn btn-primary mx-2 float-right' data-toggle='modal' data-target='#modalGenerate'>&plus; Criar Atividades</button>
 	</h4>
-	<table class='table table-striped'>
+	<table class='table table-striped shadow rounded'>
 		<thead>
 			<tr>
 				<th>Item-MD</th>
@@ -267,7 +267,7 @@ foreach($categorias as $categoria){
 	}	
 
 	echo"<tbody><tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th></th><th></th><th></th></tr>
-	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th><th></th><h5>Total:</th></h5><th><h5><span id='totalfinal'>R$ ".moeda($sumatv)."</span></h5></th><th></th><th></th></tr></tbody>";
+	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th><h5>Total:</h5></th><th><h5><span id='totalfinal'>R$ ".moeda($sumatv)."</span></h5></th><th></th><th></th></tr></tbody>";
 
 
 ?>
@@ -277,7 +277,7 @@ foreach($categorias as $categoria){
 </div>
 </div>
 
-<div class="card">
+<div class="card ">
 	<div class='card-header'><div class='row'><div class='col-8'>
         <h5><cite>Controle de Acesso do Pedido</h5>
                         </div>
@@ -286,11 +286,11 @@ foreach($categorias as $categoria){
 						</div>
 						</div>
 					</div>	
-					<div class="card-body">
-					<div class="list-group list-group-accent">
+					<div class="card-body ">
+					<div class="list-group list-group-accent shadow rounded">
 <!------ LISTAGEM PARA CONTROLE ACESSO DE CONVIDADOS --------------------------------------->
 <div class="list-group-item list-group-item-accent-primary">			
-<div class="row col-10">
+<div class="row col-12">
 	
 	<h4><cite>Convidados: </h4>
 	<table class='table table-striped'>
@@ -337,8 +337,8 @@ foreach($categorias as $categoria){
 	</div>   
 </div>
 <!------ LISTAGEM PARA CONTROLE ACESSO DE USUARIOS FIRE --------------------------------------->		
-<div class="list-group-item list-group-item-accent-danger">	
-<div class="row col-10">
+<div class="list-group-item list-group-item-accent-danger border-bottom border-top border-danger">	
+<div class="row col-12">
 	
 	<h4><cite>Usuários FireSystems: </h4>
 	<table class='table table-striped'>
@@ -380,8 +380,8 @@ foreach($categorias as $categoria){
 	</div>   
 
 <!------ LISTAGEM PARA ALOCAR FUNCIONÁRIOS --------------------------------------->			
-<div class="list-group-item list-group-item-accent-dark">
-<div class="row col-10">
+<div class="list-group-item list-group-item-accent-dark ">
+<div class="row col-12">
 
 	<h4><cite>Colaboradores: </h4>
 	<table class='table table-striped'>

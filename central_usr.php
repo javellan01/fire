@@ -57,6 +57,7 @@
 		<script src="./dist/fullcalendar/pt-br.js"></script>
 		<script src="./dist/spectrum/spectrum.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
 		<script>

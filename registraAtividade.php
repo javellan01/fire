@@ -23,8 +23,8 @@ if(($_POST['id_atividade']) && ($_POST['nb_qtd']) != '' && ($_POST['id_atividade
 	$data['id_atividade'] = $_POST['id_atividade'];
     $data['nb_qtd'] = (int)$_POST['nb_qtd'];
     $data['dt_date'] = data_sql($_POST['dt_date']);
+    $data['finalizar'] = 0;
     
-	
 	$max = verificaQtd($conn,$data['id_atividade']);
 	if($data['nb_qtd'] >= $max){
 		$data['nb_qtd'] = $max;

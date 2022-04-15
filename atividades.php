@@ -74,11 +74,17 @@ echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 	<canvas class='px-4 my-4 shadow rounded' id='myChart' style='display: block; box-sizing: border-box; height: 400px; width: 100%;'>
 
 	</canvas>";
+	$fisico = getProgressoFisico($conn,$pedido->id_pedido);
 
+	echo "<div class='row mx-1 my-2 '><div class='callout callout-primary b-t-1 b-r-1 b-b-1 m-1 col-12 float-left shadow rounded'> <div class='progress-group'>";
+	echo "<div class='progress-group-header align-items-center text-center my-1' style='color: #27b;'><strong><i class='nav-icon cui-chart'></i> Progresso da Obra: </strong></div>";
+	echo "<div class='progress-group-bars'> <div class='progress progress-lg' style='height: 1.25rem'>";
+	echo "<div class='progress-bar progress-bar-striped bg-warning' role='progressbar' style='width: ". $fisico->execpercent ."%; color:'black'; 
+		aria-valuenow='". $fisico->execpercent ."' aria-valuemin='0' aria-valuemax='100'><strong class='text-primary' >". $fisico->execpercent ."%</strong></div></div></div></div></div></div>";  
 // Carrega as somas result das medições
 $medicoes = getMedicoes($conn, $pid);
 
-echo"<div class='accordion border border-danger rounded-top mb-3 shadow rounded '  id='accordion'>
+echo"<div class='accordion border border-danger rounded-top my-3 shadow rounded '  id='accordion'>
 		<div class='card mb-0'>
 			<div class='card-header' id='headingMedicao'>
 				<h5 class='mb-0'>
