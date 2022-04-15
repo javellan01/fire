@@ -19,14 +19,16 @@ if(($_POST['id_atividade']) && ($_POST['nb_qtd']) != '' && ($_POST['id_atividade
 	
 	$data = array();
 
-	$data[0] = $_SESSION['userid'];
-	$data[1] = $_POST['id_atividade'];
-    $data[2] = (int)$_POST['nb_qtd'];
-    $data[3] = data_sql($_POST['dt_date']);
+	$data['userid'] = $_SESSION['userid'];
+	$data['id_atividade'] = $_POST['id_atividade'];
+    $data['nb_qtd'] = (int)$_POST['nb_qtd'];
+    $data['dt_date'] = data_sql($_POST['dt_date']);
+    
 	
-	$max = verificaQtd($conn,$data[1]);
-	if($data[2] > $max){
-		$data[2] = $max;
+	$max = verificaQtd($conn,$data['id_atividade']);
+	if($data['nb_qtd'] >= $max){
+		$data['nb_qtd'] = $max;
+        $data['finalizar'] = 1;
 	}
 
     if(verifyAtividadeExec($conn,$data)) registraAtividadeExec($conn,$data);

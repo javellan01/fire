@@ -100,9 +100,6 @@ foreach($categorias AS $categoria){
 		</div><!--/.callout-->
 				</div><!--/.col-->
 		</div><!--/.BAR CALLOUT INFO GROUP END ROW -->";
-		if($percent >= 100){
-			setUsrAtividadeFinalizada($conn,$atividade->id_atividade);	
-		}
 
 		}
 		$pendentes = count($atividades) - $encerradas;

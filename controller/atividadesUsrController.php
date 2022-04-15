@@ -196,62 +196,6 @@ function getAtividade($conn, $id){
 
     return $data;
 }
-
-function setUsrAtividadeFinalizada($conn, $id_atividade){
-
-    $stmt3 = $conn->prepare("UPDATE atividade SET cs_finalizada = 1 WHERE id_atividade = :id_atividade");
-
-	$stmt3->bindParam(':id_atividade', $id_atividade);
-
-	$stmt3->execute();
-}
-
-//verfifica progresso existente
-function verifyAtividadeExec($conn,$data){
-    
-        $stmt = $conn->query("SELECT * FROM atividade_executada 
-                            WHERE id_atividade = $data[1] AND dt_data = $data[3]");
-        
-        $data = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        if(!$data) return true;
-        else {
-            header('HTTP/1.1 403 Forbidden');
-            return false;
-        }
-              
-}
-//insere progresso da atividade
-function registraAtividadeExec($conn,$data){
-    // Return error message
-    //exit(json_encode(array('error' => 'Recebemos um Erro Central!')));
-    //throw new \Exception('Nos falhamos!');
-
-    $conn->setAttribute(PDO::ATTR_ERRMODE, $conn::ERRMODE_EXCEPTION);
-    $e = null;
-    try{
-        $stmt = $conn->prepare("INSERT INTO atividade_executada (id_usuario, id_atividade, nb_qtd, dt_data)
-        VALUES (:id_usuario, :id_atividade, :nb_qtd, :dt_data)");
-
-        $stmt->bindParam(':id_usuario', $data[0]);
-        $stmt->bindParam(':id_atividade', $data[1]);
-        $stmt->bindParam(':nb_qtd', $data[2]);
-        $stmt->bindParam(':dt_data', $data[3]);
-        
-        $stmt->execute();
-
-        }
-	catch(PDOException $e)
-		{   
-            // Set http header error
-	    	//echo "Erro ao cadastrar progresso: " . $e->getMessage();
-            header('HTTP/1.1 403 Forbidden');
-            exit('Está tudo bem.');
-		}
-        
-		if($e == null) echo "Progresso cadastrado!";
-}
-
 // return lista de funcionarios alocados no pedido
 function getAlocacao($conn,$pid){
     $stmt = $conn->query("SELECT fa.*, fu.tx_nome, fu.tx_funcao FROM f_alocacao AS fa INNER JOIN funcionario AS fu ON fa.id_funcionario = fu.id_funcionario WHERE fa.id_pedido = $pid");

@@ -78,7 +78,7 @@ echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 // Carrega as somas result das medições
 $medicoes = getMedicoes($conn, $pid);
 
-echo"<div class='accordion border border-danger rounded-top mb-3 shadow rounded' id='accordion'>
+echo"<div class='accordion border border-danger rounded-top mb-3 shadow rounded '  id='accordion'>
 		<div class='card mb-0'>
 			<div class='card-header' id='headingMedicao'>
 				<h5 class='mb-0'>
@@ -89,7 +89,7 @@ echo"<div class='accordion border border-danger rounded-top mb-3 shadow rounded'
 				</h5>
 			</div>
 				
-			<div id='collapseMedicao' aria-labelledby='headingMedicao' data-parent='#accordion'>
+			<div id='collapseMedicao' class='collapse' aria-labelledby='headingMedicao' data-parent='#accordion'>
 				<div class='card-body'>";
 	
 if(!$medicoes){
@@ -260,7 +260,7 @@ foreach($categorias as $categoria){
 	</div>
 
     <div id='collapseCat$cid' class='collapse show' aria-labelledby='headingCat$cid' data-parent='#accordion'>
-      <div class='card-body'>
+      <div class='card-body' style='overflow-y: scroll; overflow-x: clip; max-height: 600px;'>
 	  
 	  <!-- MAIN FOREACH FOR ATIVIDADE CATEGORIA -->";
 		$encerradas = 0;
@@ -305,7 +305,7 @@ foreach($atividades AS $atividade)  {
 					echo "<div class='progress-group-header align-items-end m-1' style='color: #777;'>
 					<button type='button' class='btn btn-outline-primary px-2 py-1 m-1' 
 					data-toggle='modal' data-target='#modalAtividadeCalendario' value='".$atividade->id_atividade."' data-descricao='" . $atividade->id_idx . " - " . $atividade->tx_descricao . "'><i class='nav-icon cui-calendar'></i></button>
-					<strong><i class='nav-icon cui-check'></i> " . $atividade->id_idx . " - " . $atividade->tx_descricao . " (Encerrada)</strong></div>";
+					<p class='btn btn-ghost-dark p-1 m-1'><strong><i class='nav-icon cui-check'></i> " . $atividade->id_idx . " - " . $atividade->tx_descricao . " (Encerrada)</strong></p></div>";
 		  $percent = ($atividade->qtd_sum / $atividade->nb_qtd) * 100;
 		  $percent = round($percent,1);
 		  echo "<div class='ml-auto'>Progresso: " . $atividade->qtd_sum . " / " . $atividade->nb_qtd ." ". $atividade->tx_tipo . "</div>";
@@ -517,8 +517,8 @@ foreach($atividades AS $atividade)  {
 								  <span aria-hidden="true">&times;</span>
 								</button>
 							  </div>
-							  <div class="modal-body"><h5>
-								<form class="medicao">
+							  <div class="modal-body"><h5 style='overflow-y: scroll; overflow-x: clip; height:600px'>
+								<form class="medicao" >
     <div class="form-row">			
 	  <div class="form-group col-9">
 			<label for="formMPed">Pedido</label>	
@@ -532,6 +532,8 @@ foreach($atividades AS $atividade)  {
 			<label for="formData">Data:</label>
 			<input type="text" class="form-control date" id="formData" value="<?php echo date('d/m/Y');?>" name="MData">
 	  </div>
+		
+		
 	</div>
 	
 	<?php
@@ -574,7 +576,7 @@ foreach($atividades AS $atividade)  {
 	echo"<a class='btn btn-primary float-right m-2' href='javascript:formMProc();' role='button'><i class='nav-icon cui-check'></i> Cadastrar Medição</a>";
 		}				
 	}					
-	?>		</h5></form>	
+	?>		</h5></form >	
 					<div id='process'></div>
 							  </div>
 					<div class="modal-footer">

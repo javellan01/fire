@@ -276,18 +276,22 @@ function updatePedido($conn,$data){
 }
 //verfifica progresso existente
 function verifyAtividadeExec($conn,$data){
-    
-        $stmt = $conn->query("SELECT * FROM atividade_executada 
-                            WHERE id_atividade = $data[1] AND dt_data = $data[3]");
-        
+
+        $stmt = $conn->prepare("SELECT * FROM atividade_executada 
+                            WHERE id_atividade = :id_atividade AND dt_data = :dt_date");
+
+        $stmt->bindParam(':id_atividade', $data["id_atividade"]);
+        $stmt->bindParam(':dt_date', $data["dt_date"]);
+        $stmt->execute();
+
         $data = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-        if(!$data) return true;
+        if(!$data){ return true; }
         else {
             header('HTTP/1.1 403 Forbidden');
             return false;
         }
-              
+
 }
 //insere progresso da atividade
 function registraAtividadeExec($conn,$data){
@@ -301,10 +305,10 @@ function registraAtividadeExec($conn,$data){
         $stmt = $conn->prepare("INSERT INTO atividade_executada (id_usuario, id_atividade, nb_qtd, dt_data)
         VALUES (:id_usuario, :id_atividade, :nb_qtd, :dt_data)");
 
-        $stmt->bindParam(':id_usuario', $data[0]);
-        $stmt->bindParam(':id_atividade', $data[1]);
-        $stmt->bindParam(':nb_qtd', $data[2]);
-        $stmt->bindParam(':dt_data', $data[3]);
+        $stmt->bindParam(':id_usuario', $data['userid']);
+        $stmt->bindParam(':id_atividade', $data['id_atividade']);
+        $stmt->bindParam(':nb_qtd', $data['nb_qtd']);
+        $stmt->bindParam(':dt_data', $data['dt_date']);
         
         $stmt->execute();
 
@@ -317,7 +321,27 @@ function registraAtividadeExec($conn,$data){
             exit('Está tudo bem.');
 		}
         
-		if($e == null) echo "Progresso cadastrado!";
+		if($e == null) 
+        if($data['finalizar']) finalizaAtividade($conn,$data);
+        echo "Progresso cadastrado!";
+}
+//update dos dados da atividade 
+function finalizaAtividade($conn, $data){
+    $e = null;
+    try{
+        $stmt = $conn->prepare("UPDATE atividade 
+        SET cs_finalizada = :cs_finalizada
+        WHERE id_atividade = :id_atividade");
+
+        $stmt->bindParam(':id_atividade',$data['id_atividade']); 
+        $stmt->bindParam(':cs_finalizada',$data['finalizar']); 
+
+        $stmt->execute();
+      }
+      catch(PDOException $e){
+       //  echo  $e->getMessage();
+      }
+      if($e == null) echo "Atividade Encerrada!";
 }
 //update dos dados da atividade 
 function updateAtividade($conn, $data){
@@ -346,7 +370,6 @@ function updateAtividade($conn, $data){
       }
       if($e == null) echo "Atualizado com Sucesso!";
 }
-
 //update dos dados para finalizar a medição
 function finalizarMedicao($conn, $data){
     $e = null;

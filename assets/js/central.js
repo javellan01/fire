@@ -418,7 +418,17 @@
 		$('#formiData').mask('00/00/0000', {reverse: false});
 		$('#formfData').mask('00/00/0000', {reverse: false});
 
-		
+		Chart.register(ChartDataLabels);
+		Chart.defaults.set('plugins.datalabels', {
+			align: 'end',
+			offset: '5',
+			anchor: 'end',
+			font: {weight: 'bold'},
+			borderColor: 'grey',
+			borderWidth: 1,
+			
+		});
+
 		function getdataChart(id_pedido){
 			let portable;
 			$.ajax({
@@ -440,10 +450,12 @@
 		const myChart = new Chart($('#myChart'), {
 			type: 'bar',
 			data: {
-				showTooltips: false,
+				plugins: [ChartDataLabels],
+				
 				labels: ['Total', 'Concluído', '99% Progresso', '75% Progresso', '50% Progresso', '25% Progresso','0% Progresso'],
 				datasets: [{
-					label: 'Dados Gerais do Pedido',
+					label: 'Dados',
+					fill: false,
 					data: JSON.parse(getdataChart($('input#formMPed').val())),
 					barPercentage: 0.5,
 					backgroundColor: [
@@ -464,7 +476,7 @@
 						'rgba(230, 145, 56, 1)',
 						'rgba(204, 30, 0, 1)'
 					],
-					borderWidth: 1
+					borderWidth: 2
 				}]
 			},
 			options: {
@@ -474,8 +486,12 @@
 						beginAtZero: true
 					},
 					x: {
-						beginAtZero: true
-						
+						beginAtZero: true,
+						title: {
+							font: {weight: 'bold'},
+							display: true,
+							text: 'Dados Gerais do Pedido'
+						  }
 					}
 				}
 			}
