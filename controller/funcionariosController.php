@@ -1,12 +1,12 @@
 
 <?php
 
-function data_usql($data) {
+function data_usql($data){
     $ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4);
     return $ndata;
 }
 
-function time_usql($data) {
+function time_usql($data){
     $ndata = substr($data, 8, 2) ."/". substr($data, 5, 2) ."/".substr($data, 0, 4).substr($data, 10, 9);
     return $ndata;
 }
@@ -95,5 +95,27 @@ function updateFuncionario($conn,$data){
 			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Funcionário Editado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
             <span aria-hidden='true'>&times;</span></button></div>";
 
+}
+
+function insertFDocumento($conn,$data){
+    $e = null;
+    try{
+        
+        $stmt = $conn->prepare("REPLACE INTO sesmt (id_funcionario, tx_documento, tx_arquivo, dt_vencimento, dt_upload, cs_doctipo)
+                                VALUES (:id_funcionario, :tx_documento, :tx_arquivo, :dt_vencimento, :dt_upload, :cs_doctipo)");
+        $stmt->bindParam(':dt_vencimento',$data['dataVencimento']);
+        $stmt->bindParam(':dt_upload',$data['dataUpload']);
+        $stmt->bindParam(':tx_documento',$data['Text']);
+        $stmt->bindParam(':id_funcionario',$data['Fid']);
+        $stmt->bindParam(':cs_doctipo',$data['docTipo']);
+        $stmt->bindParam(':tx_arquivo',$data['DNome']);
+       
+        $stmt->execute();
+        }
+    catch(PDOException $e)
+				{
+				print_r($e);
+				}
+			if($e == null) echo 'Enviado com Sucesso no Banco de Dados também!';
 }
 ?>

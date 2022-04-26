@@ -34,6 +34,7 @@
 	<link rel="stylesheet" href="./dist/css/coreui-icons.min.css">
 	<link rel="stylesheet" href="./dist/fullcalendar/main.min.css">
 	<link rel="stylesheet" href="./dist/css/spectrum.min.css">
+	<link rel="stylesheet" href="./dist/pace/red/pace-theme-minimal.css" />
 
 	<style>
       .app-body { overflow-x: initial;}
@@ -53,6 +54,7 @@
 		<script src="./assets/js/perfect-scrollbar.min.js"></script>
 		<script src="./assets/js/coreui.min.js"></script>
 		<script src="./assets/js/toastr.min.js"></script>
+		<script src="./dist/pace/pace.min.js"></script>
 		<script src="./dist/fullcalendar/main.min.js"></script>
 		<script src="./dist/fullcalendar/pt-br.js"></script>
 		<script src="./dist/spectrum/spectrum.min.js"></script>
@@ -82,7 +84,9 @@
 				<a class="btn btn-light" href="logout.php?token=<?php echo md5(session_id());?>">Logout <i class="nav-icon cui-account-logout"></i></a>
 				</li>
 			</ul>
+
 </header>
+
 <div class="app-body">	
 	<div class="sidebar">
 	  <nav class="sidebar-nav" style="font-weight: 480;">

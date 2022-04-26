@@ -755,17 +755,22 @@
 		
 		$("#uploadBtn").click(function(e) {
 			e.preventDefault();
+
+			var uploadData = new FormData(); 
+			uploadData.append("Fid",$('#Fid').val());
+			uploadData.append("uploadBtn",$(this).val());
+			uploadData.append("DNome",$('#formDNome').val());
+			uploadData.append("Text",$('#formDNome option:selected').text());
+			uploadData.append("dataVencimento",$('#formVencimento').val());
+			uploadData.append("uploadedFile", $("#file-upload")[0].files[0]);
+
 			$.ajax({
 				type: "POST",
 				url: "updoc.php",
-				data: { 
-					Fid: $('#Fid').val(), 
-					uploadBtn: $(this).val(),
-					DNome: $('#formDNome').val(),
-					Text: $('#formDNome option:selected').text(),
-					dataVencimento: $('#formVencimento').val()				
-
-					},
+				cache: false,
+				contentType: false,
+				processData: false,
+				data: uploadData,
 				success: function(result) {
 					window.alert(result);
 					loadFData(str);						

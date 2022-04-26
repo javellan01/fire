@@ -88,7 +88,7 @@
                 }
 				echo "<th>".data_usql($row3['dt_upload'])."</th>";
                 echo"	
-                <th><a class='btn btn-outline-primary' href='download.php?token=".md5(session_id())."&data=".md5($fid)."&fname=".$row3['tx_arquivo']."'>Download</a><th>
+                <th><a class='btn btn-outline-primary' href='download.php?token=".md5(session_id())."&data=".md5($fid)."&fname=".$row3['tx_arquivo']."&doctype=".$row3['tx_documento']."&relative=".$data[0]['tx_nome']."'>Download</a><th>
             </tr>";	  
               
               } ?>
