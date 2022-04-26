@@ -76,7 +76,7 @@ foreach($categorias AS $categoria){
 	</div>
 
     <div id='collapseCat$cid' class='collapse show' aria-labelledby='headingCat$cid' data-parent='#accordion'>
-    <div class='card-body' style='overflow-y: scroll; overflow-x: clip; max-height: 600px;'>";
+    <div class='card-body'>";
 	
 	
 //  <!-- MAIN WHILE FOR ATIVIDADES DA CATEGORIA -->

@@ -334,7 +334,7 @@ function registraAtividadeExec($conn,$data){
 		}
         
 		if($e == null) 
-        if($data['finalizar']) finalizaAtividade($conn,$data);
+        if($data['finalizar'] == 1) finalizaAtividade($conn,$data);
         echo "Progresso cadastrado!";
 }
 //update dos dados da atividade 
