@@ -753,9 +753,8 @@
 			loadFData(str);
 		});
 		
-		$("#uploadBtn").click(function(e) {
-			e.preventDefault();
-
+		$("#uploadBtn").click(function() {
+			
 			var uploadData = new FormData(); 
 			uploadData.append("Fid",$('#Fid').val());
 			uploadData.append("uploadBtn",$(this).val());
@@ -773,11 +772,8 @@
 				data: uploadData,
 				success: function(result) {
 					window.alert(result);
+					$('#modalDUpload').modal('hide');
 					loadFData(str);						
-				},
-				error: function(result) {
-					window.alert('Erro: '+result);
-					alert('error');
 				}
 			});
 		});

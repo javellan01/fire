@@ -63,12 +63,10 @@ function newFuncionario($conn,$data){
 				}
 			catch(PDOException $e)
 				{
-				echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao criar novo funcionário! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+				echo "Erro ao Cadastrar Novo Funcionário!";
 				}
 				
-			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Funcionário Cadastrado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-            <span aria-hidden='true'>&times;</span></button></div>";
+			if($e == null) echo "Funcionário Cadastrado com Sucesso!";
 
 }
 
@@ -88,12 +86,10 @@ function updateFuncionario($conn,$data){
 				}
 			catch(PDOException $e)
 				{
-				echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>Erro ao editar funcionário! " . $e->getMessage()."<button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-                <span aria-hidden='true'>&times;</span></button></div>";
+				echo "Erro ao Alterar Dados do Funcionário!";
 				}
 				
-			if($e == null) echo "<div class='alert alert-success alert-dismissible fade show' role='alert'><strong>Funcionário Editado com Sucesso!</strong><button type='button' class='close' data-dismiss='alert' aria-label='Fechar'>
-            <span aria-hidden='true'>&times;</span></button></div>";
+			if($e == null) echo "Dados do Funcionário Alterados com Sucesso!";
 
 }
 
@@ -116,6 +112,6 @@ function insertFDocumento($conn,$data){
 				{
 				print_r($e);
 				}
-			if($e == null) echo 'Enviado com Sucesso no Banco de Dados também!';
+			
 }
 ?>

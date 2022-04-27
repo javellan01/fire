@@ -51,22 +51,23 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Updoc')
     if (in_array($fileExtension, $allowedfileExtensions))
     {
       // directory in which the uploaded file will be moved
-      $uploadFileDir = './storage/docs/'.md5($fid);
+      $uploadFileDir = './storage/funcionarios/'.md5($fid);
       if (!is_dir($uploadFileDir)) {
         mkdir($uploadFileDir);
       }
       $dest_path = $uploadFileDir .'/'. $newFileName;
- 
+      
       if(move_uploaded_file($fileTmpPath, $dest_path)) 
-      {
-        echo implode(',',$data);
+      { 
+        
+        // implode(',',$data);
         insertFDocumento($conn,$data);
         echo'Upload realizado com Sucesso!';
         
       }
       else
       {
-        echo'Erro ao enviar arquivo.';
+        echo'Erro ao enviar arquivo!';
       }
     }
     else
@@ -76,8 +77,8 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Updoc')
   }
   else
   {
-    echo'Erro ao enviar arquivo. Verifique o problema a seguir.<br>';
-    echo'Error:' . $_FILES['uploadedFile']['error'];
+    echo'Erro ao enviar arquivo!';
+    
   }
 }
 
