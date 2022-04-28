@@ -37,7 +37,8 @@ $users = getAcessoConvidado($conn,$pid);
 echo $pedido->tx_codigo." - <cite>".$pedido->tx_nome."</cite></h3>
 							</div>
 							<div class='col-3'>
-								
+							<a class='btn btn-primary float-right' href='javascript:arqPedido($pid);'>
+							<i class='nav-icon cui-paperclip'></i> Anexar Arquivos</a>	
 							</div>
 						</div>
 					</div> 	

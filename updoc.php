@@ -46,7 +46,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Updoc')
     $newFileName = $data['DNome'] = $_POST['DNome'].'_'.$fileDate.'.'.$fileExtension;
  
     // check if file has one of the following extensions
-    $allowedfileExtensions = array('jpg','pdf','png','doc');
+    $allowedfileExtensions = array('jpg','jpeg','pdf','png','doc','docx');
     
     if (in_array($fileExtension, $allowedfileExtensions))
     {
@@ -62,7 +62,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Updoc')
         
         // implode(',',$data);
         insertFDocumento($conn,$data);
-        echo'Upload realizado com Sucesso!';
+        echo'Upload do arquivo: '.$_FILES['uploadedFile']['name'].' realizado com Sucesso!';
         
       }
       else

@@ -76,6 +76,52 @@ function getProgressoFisico($conn,$pid){
     
     return $data;
     }    
+
+function getArquivosPedido($conn,$pid){
     
+    $stmt = $conn->query("SELECT * 
+                        FROM arq_tecnico
+                        WHERE id_pedido = $pid");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
     
+    return $data;   
+
+}    
+
+function insertArquivoTecnico($conn,$data){
+    $e = null;
+    try{
+        
+        $stmt = $conn->prepare("REPLACE INTO arq_tecnico (id_pedido, tx_documento, tx_arquivo, dt_upload, tx_version, nb_tamanho)
+                                VALUES (:id_pedido, :tx_documento, :tx_arquivo,  :dt_upload, :tx_version, :nb_tamanho)");
+
+        $stmt->bindParam(':dt_upload',$data['dataUpload']);
+        $stmt->bindParam(':tx_documento',$data['Text']);
+        $stmt->bindParam(':id_pedido',$data['Pid']);
+        $stmt->bindParam(':tx_version',$data['tx_version']);
+        $stmt->bindParam(':tx_arquivo',$data['tx_arquivo']);
+        $stmt->bindParam(':nb_tamanho',$data['nb_tamanho']);
+       
+        $stmt->execute();
+        }
+    catch(PDOException $e)
+				{
+				print_r($e);
+				}
+			
+}
+
+function getPedidoData($conn, $pid){
+    $stmt = $conn->query("SELECT p.*, c.tx_nome 
+    FROM pedido p 
+    INNER JOIN cliente c ON p.id_cliente = c.id_cliente 
+    WHERE p.id_pedido = $pid");
+
+    $data = $stmt->fetch(PDO::FETCH_OBJ);
+	
+    return $data;
+
+}
+
 ?>

@@ -1405,6 +1405,45 @@ xhttp.send();
 		xhttp.send();
 	}	
 
+	function arqPedido(str) {
+		var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+		document.getElementById("main").innerHTML = this.responseText;
+		}
+
+		$('.modal').on('hide.bs.modal', function (){
+			arqPedido(str);
+		});
+		
+		$("#uploadBtn").click(function() {
+			
+			var uploadData = new FormData(); 
+			uploadData.append("Pid",$('#Pid').val());
+			uploadData.append("uploadBtn",$(this).val());
+			uploadData.append("tx_documento",$('#formDescricao').val());
+			uploadData.append("uploadedFile", $("#file-upload")[0].files[0]);
+
+			$.ajax({
+				type: "POST",
+				url: "uptecnico.php",
+				cache: false,
+				contentType: false,
+				processData: false,
+				data: uploadData,
+				success: function(result) {
+					window.alert(result);
+					arqPedido(str);
+				}
+			});
+		});
+
+		};
+
+		xhttp.open("GET", "arqpedido.php?Pid="+str, true);
+		xhttp.send();
+	}
+
 	function formPProc() {
 		var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {

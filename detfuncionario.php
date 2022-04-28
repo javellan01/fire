@@ -88,7 +88,7 @@
                 }
 				echo "<th>".data_usql($row3['dt_upload'])."</th>";
                 echo"	
-                <th><a class='btn btn-outline-primary' href='download.php?token=".md5(session_id())."&data=".md5($fid)."&fname=".$row3['tx_arquivo']."&doctype=".$row3['tx_documento']."&relative=".$data[0]['tx_nome']."'>Download</a><th>
+                <th><a class='btn btn-outline-primary' href='download.php?token=".md5(session_id())."&data=".md5($fid)."&fname=".$row3['tx_arquivo']."&doctype=".$row3['tx_documento']."&relative=".$data[0]['tx_nome']."'><i class='nav-icon cui-cloud-download'></i>Download</a><th>
             </tr>";	  
               
               } ?>
@@ -98,10 +98,10 @@
         </div>
             <div class='row'>  
               <div class='col-6'>
-              <a class='btn btn-primary float-right' href="javascript:formFProc();" role='button'>Atualizar Cadastro</a>
+              <a class='btn btn-primary float-right' href="javascript:formFProc();" role='button'><i class="nav-icon cui-pencil"></i> Atualizar Cadastro</a>
               </div>
               <div class='col-6'>
-              <button type='button' class='btn btn-primary float-right ml-2' data-toggle='modal' data-target='#modalDUpload'>Incluir Documento</button> 
+              <button type='button' class='btn btn-primary float-right ml-2' data-toggle='modal' data-target='#modalDUpload'>+ Incluir Documento</button> 
               </div>
             </div> 
             <div class='row'>
@@ -146,9 +146,9 @@
 	</div>  
 	  <div class="form-row">
 		<div class="form-group col-12" >
-		<span class="file-name">Selecionar Arquivo:</span><br>
-		<label for="file-upload"><input type="file" id="file-upload" name="uploadedFile"></label>
+		<label for="file-upload">Selecionar Arquivo:<input type="file" id="file-upload" name="uploadedFile"></label>
 	  </div>
+	  <p><small><i class="nav-icon cui-check"></i> Tipos de Arquivos Suportados: Imagem: .JPG ou .PNG e Documento: .DOC e .PDF.</small></p>
 	  </div>
 	<div class="form-row">
 		<div class="form-group col-8">
@@ -157,14 +157,15 @@
 		</div>
 		<input type="text"  class="form-control" value="<?php echo $fid;?>" id="Fid" hidden>
 	</div>	  
-	</div>
-	<button class="btn btn-primary float-right" class="form-control" role="button" value='Updoc' id="uploadBtn"><i class="nav-icon cui-file"></i> Enviar</button>
+	
+	<button class="btn btn-primary float-right px-2" class="form-control" role="button" value='Updoc' id="uploadBtn"><i class="nav-icon cui-paperclip"></i> Anexar Documento</button>
 			</h4></form>
 			  </div>
 			    <div class="modal-footer">
-				
+				<p><cite>Obs.: Enviar apenas um arquivo por tipo de documento.<br>
+				Ao enviar arquivo para documento já cadastrado irá substituir o existente.</cite></p>
 				</div>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="nav-icon cui-action-undo"></i> Fechar</button>
 			  </div>
 			</div>
 		  </div>
