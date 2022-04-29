@@ -42,8 +42,8 @@
                         <h5><cite> <?php echo $pedido->tx_codigo;?></cite> - <?php echo $pedido->tx_nome;?></h5>
                         </div>
 						<div class='col-4'>    
-						<button type='button' class='btn btn-primary float-right' id='anexarArquivos' value=$pid>
-						<i class='nav-icon cui-paperclip'></i> Anexar Arquivos</button>	
+						<button type='button' class='btn btn-primary float-right' data-toggle='modal' data-target='#modalDUpload'>
+						<i class='nav-icon cui-paperclip'></i> Anexar Arquivo</button>	
 						</div>
 						</div>
 					</div>	
@@ -83,23 +83,21 @@ foreach($arquivos AS $arquivo){
 			<td>".$arquivo->tx_version."</td>
 			<td>".$tamanho."</td>
 			<td>".data_usql($arquivo->dt_upload)."</td>
-			<td><button type='button' class='btn btn-danger mx-auto' id='excluirArquivo'
-			disabled><i class='nav-icon cui-trash'></i> Excluir Arquivo</button></td>
+			<td><button type='button' class='btn btn-danger mx-auto' data-toggle='modal' data-target='#modalExArquivo'>
+			<i class='nav-icon cui-trash'></i> Excluir Arquivo</button></td>
 		</tr>";	
 	
 	}	
 ?>
 		</tbody>
 	</table>
-</div>   
+</div>  
+</div 
 	<div class="card-footer"><cite></cite></div>
 	</div>
 </div>
 <!-- Page Closing ------------------------->
-<div class='row'>
-            <div id="process"></div>
-            </div>
-        </div>
+
         </div>
     </div>
 <!-- Modal Remover Pedido ------------------------->
@@ -115,15 +113,15 @@ foreach($arquivos AS $arquivo){
 							  <div class="modal-body">
 	<h4>Deseja excluir este arquivo do sistema?</h4>
 	<form>
-		<input type="text" class="form-control" value="<?php echo$pedido->id_pedido;?>" id="Pid" hidden>
-		<input type="text" class="form-control" value="<?php echo$pedido->id_cliente;?>" id="Cid" hidden>
+		<input type="text" class="form-control" value="<?php echo $pid;?>" id="Pid" hidden>
+
 	</form>
 	<div class='row'>
 		<div class='col-6'>
 	
 		</div>
 		<div class='col-6'>
-	<button type="button" class="btn btn-danger float-left" value="1" id="removeButton"><i class='nav-icon cui-trash'></i> Remover</button>
+	<button type="button" class="btn btn-danger float-left" value="1" id="excluirArquivo"><i class='nav-icon cui-trash'></i> Remover</button>
 	<button type="button" class="btn btn-primary float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
 		</div>
 			</div>
@@ -132,6 +130,45 @@ foreach($arquivos AS $arquivo){
 					<div id="process"></div>
 				</div>
 				
+			  </div>
+			</div>
+		  </div>
+
+<!-- MODAL UPLOAD DOCS TECNICOS                --------------------------------------------------------------------------------------------------------->
+<div class="modal" style="text-align: left" id="modalDUpload" tabindex="-1" role="dialog" aria-labelledby="modalDUpload" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+							<div class="modal-content">
+							  <div class="modal-header">
+								<h4 class="modal-title" id="modalDUpload">Anexar Arquivo Técnico</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							  </div>
+							  <div class="modal-body"><h4>
+								<form id="formArquivos" method="POST" enctype="multipart/form-data">
+	  <div class="form-row">
+		<div class="form-group col-12" >
+		<label for="file-upload">Selecionar Arquivo:<input type="file" id="file-upload" name="uploadedFile"></label>
+	  </div>
+	  <p><small><i class="nav-icon cui-check"></i> Tipos de Arquivos Suportados: Desenho: .DWG ou Documento: .PDF.</small></p>
+	  </div>
+	<div class="form-row">
+		<div class="form-group col-12">
+		<label for="formDescricao">Descrição: </label>
+			<input type="text" require class="form-control" id="formDescricao">
+		</div>
+		<input type="text" class="form-control" value="<?php echo $pid;?>" id="Pid" hidden>
+	</div>	  
+	
+	<button class="btn btn-primary float-right px-2" class="form-control" role="button" value='Uptecnico' id="uploadBtn">
+		<i class="nav-icon cui-paperclip"></i> Anexar Arquivo</button>
+			</h4></form>
+			  </div>
+			    <div class="modal-footer">
+				<p><cite>Obs.: Enviar apenas um arquivo por tipo de documento.<br>
+				Ao enviar arquivo para documento já cadastrado irá substituir o existente.</cite></p>
+				</div>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="nav-icon cui-action-undo"></i> Fechar</button>
 			  </div>
 			</div>
 		  </div>

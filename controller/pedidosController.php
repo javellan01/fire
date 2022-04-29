@@ -97,7 +97,7 @@ function insertArquivoTecnico($conn,$data){
                                 VALUES (:id_pedido, :tx_documento, :tx_arquivo,  :dt_upload, :tx_version, :nb_tamanho)");
 
         $stmt->bindParam(':dt_upload',$data['dataUpload']);
-        $stmt->bindParam(':tx_documento',$data['Text']);
+        $stmt->bindParam(':tx_documento',$data['tx_documento']);
         $stmt->bindParam(':id_pedido',$data['Pid']);
         $stmt->bindParam(':tx_version',$data['tx_version']);
         $stmt->bindParam(':tx_arquivo',$data['tx_arquivo']);

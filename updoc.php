@@ -62,7 +62,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Updoc')
         
         // implode(',',$data);
         insertFDocumento($conn,$data);
-        echo'Upload do arquivo: '.$_FILES['uploadedFile']['name'].' realizado com Sucesso!';
+        echo'Upload do arquivo: '.$fileName.' realizado com Sucesso!';
         
       }
       else
@@ -73,7 +73,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Updoc')
     else
     {
       echo'Erro ao enviar arquivo! Tipos de arquivos suportados: Imagem (JPG), Imagem (PNG), Documento (PDF) e Documento (DOC).';
-    }
+    } 
   }
   else
   {

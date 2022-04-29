@@ -292,7 +292,8 @@
 		});
 
 		$('button#excluirMedicao').on('click', function (event){
-			
+			event.preventDefault();
+
 			$.ajax({
 				type: "POST",
 				url: "updateMedicao.php",
@@ -347,7 +348,8 @@
 			});
 		});
 
-		$('button#registraAtividade').on('click', function (){
+		$('button#registraAtividade').on('click', function (event){
+			event.preventDefault();
 
 			$.ajax({
 				type: "POST",
@@ -381,8 +383,8 @@
 			loadMData(pid,mid,'');
 		});
 
-		$('button#finalizarMedicao').on('click', function (){
-	
+		$('button#finalizarMedicao').on('click', function (event){
+			event.preventDefault();
 			let pid = $(this).attr("data-id_medicao");
 			let mid = $(this).val();
 
@@ -654,7 +656,8 @@
 			
 		});
 
-		$('button#registraAtividade').on('click', function (){
+		$('button#registraAtividade').on('click', function (event){
+			event.preventDefault();
 
 			$.ajax({
 				type: "POST",
@@ -753,8 +756,9 @@
 			loadFData(str);
 		});
 		
-		$("#uploadBtn").click(function() {
-			
+		$("#uploadBtn").click(function(event) {
+			event.preventDefault();
+
 			var uploadData = new FormData(); 
 			uploadData.append("Fid",$('#Fid').val());
 			uploadData.append("uploadBtn",$(this).val());
@@ -1410,14 +1414,14 @@ xhttp.send();
 			xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 		document.getElementById("main").innerHTML = this.responseText;
-		}
-
+		
 		$('.modal').on('hide.bs.modal', function (){
 			arqPedido(str);
 		});
 		
-		$("#uploadBtn").click(function() {
-			
+		$("#uploadBtn").click(function(event) {
+			event.preventDefault();
+
 			var uploadData = new FormData(); 
 			uploadData.append("Pid",$('#Pid').val());
 			uploadData.append("uploadBtn",$(this).val());
@@ -1433,10 +1437,13 @@ xhttp.send();
 				data: uploadData,
 				success: function(result) {
 					window.alert(result);
+					$('#modalDUpload').modal('hide');
 					arqPedido(str);
 				}
 			});
 		});
+
+		}
 
 		};
 
@@ -1476,6 +1483,7 @@ xhttp.send();
 		$(document).ready(function(){
 			$("#removeButton").click(function(e){
 				e.preventDefault();
+
 				$.ajax({
 					type: "GET",
 					url: "ucprocess.php",
@@ -1498,6 +1506,7 @@ xhttp.send();
 			});
 			$("#updateButton").click(function(e) {
 				e.preventDefault();
+
 				$.ajax({
 					type: "GET",
 					url: "ucprocess.php",
@@ -1524,6 +1533,7 @@ xhttp.send();
 			});
 			$("#sendButton").click(function(e){
 				e.preventDefault();
+
 				$.ajax({
 					type: "GET",
 					url: "ucprocess.php",

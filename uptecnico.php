@@ -7,8 +7,10 @@ if(!isset($_SESSION["login"]) || !isset($_SESSION["usuario"]))
 		header("Location: login.php"); 
 		exit; 
 	} 
+
 require("./controller/agentController.php");
 Auth::accessControl($_SESSION['catuser'],0);	 
+
 require("./DB/conn.php");
 require("./controller/pedidosController.php");
 
@@ -84,9 +86,9 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Uptecnico')
           }    
         fclose($fh);
         
-        implode(',',$data);
+        //print_r(implode(' ,',$data));
         insertArquivoTecnico($conn,$data);
-        echo'Upload do arquivo: '.$_FILES['uploadedFile']['name'].' realizado com Sucesso!';
+        echo'Upload do arquivo: '.$fileName.' realizado com Sucesso!';
         
       }
       else
