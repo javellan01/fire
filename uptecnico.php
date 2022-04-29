@@ -30,8 +30,6 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Uptecnico')
     $data = array();
     // set id_pedido
     $pid = $data['Pid'] = $_POST['Pid'];
-    // set New filename
-    $data['tx_arquivo'] = $_FILES['uploadedFile']['name'];
     // set descricao
     $data['tx_documento'] = $_POST['tx_documento'];
     // set descricao
@@ -39,7 +37,11 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Uptecnico')
     // set date
     $data['dataUpload'] = date("Y-m-d", $_SERVER['REQUEST_TIME']);
     // set Doc Name from form Select
-    $newFileName = $data['tx_arquivo'].'.'.$fileExtension;
+    $newFileName = $_FILES['uploadedFile']['name'];
+    // replace spaces with underlines
+    $newFileName = preg_replace('/\s+/','_', $newFileName);
+    // set New filename
+    $data['tx_arquivo'] = $newFileName;
     // check if file has one of the following extensions
     $allowedfileExtensions = array('dwg','pdf');
     

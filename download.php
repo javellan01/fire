@@ -7,21 +7,27 @@ if(!isset($_SESSION["login"]) || !isset($_GET['token']) )
 	// Usuário não logado! Redireciona para a página de login 
 		header("Location: login.php"); 
 		exit; 
-	} 
-	
+	}
+
+if($token != $_GET['token']){
+	header('HTTP/1.1 403 Forbidden');
+	exit;
+}	
+
 	$id = $_GET['data'];
 	$fname = $_GET['fname'];
+	$type = $_GET['type'];
 
-//	header('Location: ./storage/docs/'.$id.'/'.$fname.'');
-
-// path to the file
-$path = './storage/funcionarios/'.$id;
 //
+if($type == 'funcionarios'){
+// path to the file
+$path = './storage/'.$type.'/'.$id;
+// file path
 $file = $path.'/'.$fname.'';
 if(is_dir($path)){
 
 	if(is_file($file)){
-			// Maximum size of chunks (in bytes).
+	// Maximum size of chunks (in bytes).
 	$maxRead = 1 * 1024 * 1024; // 1MB
 	//docType
 	$doctype = $_GET['doctype'];
@@ -59,6 +65,48 @@ else{
 	header('HTTP/1.1 404 Not Found: Directory does not Exists.');
 	exit;
 }
+}
 
+if($type == 'tecnico'){
+	// path to the file
+	$path = './storage/'.$type.'/'.$id;
+	// file path
+	$file = $path.'/'.$fname.'';
+	if(is_dir($path)){
+	
+		if(is_file($file)){
+		// Maximum size of chunks (in bytes).
+		$maxRead = 1 * 1024 * 1024; // 1MB
+	
+		// Open a file in read mode.
+		$fh = fopen($file, 'r');
+	
+		// These headers will force download on browser,
+		// and set the custom file name for the download, respectively.
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename="' . $fname . '"');
+	
+		// Run this until we have read the whole file.
+		// feof (eof means "end of file") returns `true` when the handler
+		// has reached the end of file.
+		while (!feof($fh)) {
+			// Read and output the next chunk.
+			echo fread($fh, $maxRead);
+			// Flush the output buffer to free memory.
+			ob_flush();
+		}
+		// Exit to make sure not to output anything else.
+		exit;
+		}
+		else{
+			header('HTTP/1.1 404 Not Found: File Not Found.');
+			exit;
+		}
+	}
+	else{
+		header('HTTP/1.1 404 Not Found: Directory does not Exists.');
+		exit;
+	}
+}
 
 ?>

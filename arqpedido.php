@@ -70,21 +70,21 @@ foreach($arquivos AS $arquivo){
 	
 	if($arquivo->nb_tamanho >= 1024 && $arquivo->nb_tamanho < 1048576){
 		$tamanho = 1*$arquivo->nb_tamanho/1024;
-		$tamanho = number_format($tamanho,1,'.',',').' kB.';
+		$tamanho = number_format($tamanho,1,'.',',').' kB';
 	
 	} else if($arquivo->nb_tamanho >= 1048576){
 		$tamanho = 1*$arquivo->nb_tamanho/1024/1024;
-		$tamanho = number_format($tamanho,1,'.',',').' MB.';
-	}else $tamanho = $arquivo->nb_tamanho.' bytes.';
+		$tamanho = number_format($tamanho,1,'.',',').' MB';
+	}else $tamanho = $arquivo->nb_tamanho.' bytes';
 	// Aloca os medicaos e cria a list
 	echo"<tr>
-			<td>".$arquivo->tx_arquivo."</td>
+			<td><a class='btn btn-ghost-primary' href='download.php?token=".md5(session_id())."&data=".md5($pid)."&fname=".$arquivo->tx_arquivo."&type=tecnico'><i class='nav-icon cui-cloud-download'></i> ".$arquivo->tx_arquivo."</a></td>
 			<td>".$arquivo->tx_documento."</td>
 			<td>".$arquivo->tx_version."</td>
 			<td>".$tamanho."</td>
 			<td>".data_usql($arquivo->dt_upload)."</td>
-			<td><button type='button' class='btn btn-danger mx-auto' data-toggle='modal' data-target='#modalExArquivo'>
-			<i class='nav-icon cui-trash'></i> Excluir Arquivo</button></td>
+			<td><button type='button' class='btn btn-danger mx-auto' data-toggle='modal' data-target='#modalExArquivo' value=".$arquivo->tx_arquivo.">
+			<i class='nav-icon cui-trash'></i> Excluir</button></td>
 		</tr>";	
 	
 	}	
@@ -112,16 +112,18 @@ foreach($arquivos AS $arquivo){
 							  </div>
 							  <div class="modal-body">
 	<h4>Deseja excluir este arquivo do sistema?</h4>
-	<form>
-		<input type="text" class="form-control" value="<?php echo $pid;?>" id="Pid" hidden>
+	
+		<form>
+			<input type="text" class="form-control" value="<?php echo $pid;?>" id="Pid" hidden>
+			<input type="text" class="form-control" id="exclude-file" disabled>
+		</form>
 
-	</form>
-	<div class='row'>
+	<div class='row my-3'>
 		<div class='col-6'>
 	
 		</div>
 		<div class='col-6'>
-	<button type="button" class="btn btn-danger float-left" value="1" id="excluirArquivo"><i class='nav-icon cui-trash'></i> Remover</button>
+	<button type="button" class="btn btn-danger float-left" value="tecnico" id="excluirArquivo"><i class='nav-icon cui-trash'></i> Excluir</button>
 	<button type="button" class="btn btn-primary float-right" data-dismiss="modal"><i class='nav-icon cui-ban'></i> Cancelar</button>
 		</div>
 			</div>
@@ -165,8 +167,7 @@ foreach($arquivos AS $arquivo){
 			</h4></form>
 			  </div>
 			    <div class="modal-footer">
-				<p><cite>Obs.: Enviar apenas um arquivo por tipo de documento.<br>
-				Ao enviar arquivo para documento já cadastrado irá substituir o existente.</cite></p>
+				<p><cite></cite></p>
 				</div>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="nav-icon cui-action-undo"></i> Fechar</button>
 			  </div>

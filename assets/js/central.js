@@ -1419,6 +1419,34 @@ xhttp.send();
 			arqPedido(str);
 		});
 		
+		$('#modalExArquivo').on('show.bs.modal', function(event){
+			let tx_arquivo = $(event.relatedTarget).val();
+			$(this).find('#exclude-file').val(tx_arquivo);
+		});
+
+		
+		$("#excluirArquivo").click(function(event) {
+			event.preventDefault();
+
+			$.ajax({
+				type: "POST",
+				url: "excludeFile.php",
+				data: {
+
+					type: $(this).val(),
+					data: $('#Pid').val(),
+					fname: $('#exclude-file').val()
+
+				},
+				success: function(result) {
+					window.alert(result);
+					$('#modalExArquivo').modal('hide');
+					arqPedido(str);
+				}
+			});
+
+		});	
+
 		$("#uploadBtn").click(function(event) {
 			event.preventDefault();
 

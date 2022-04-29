@@ -52,11 +52,12 @@
 	<div class="container-fluid">
 				<div class="card">
 					<div class='card-header'><div class='row mt-1'><div class='col-8'>
-						<h3> Dados do Pedido: </h3>
+						<h3><i class='nav-icon cui-list'></i> Dados do Pedido:</h3>
                         <h5><cite> <?php echo $pedido->tx_codigo;?></cite> - <?php echo $pedido->tx_nome;?></h5>
                         </div>
 						<div class='col-4'>    
-						
+						<a class='btn btn-primary float-right' href="javascript:arqPedido('<?php echo $pid ?>');">
+							<i class='nav-icon cui-paperclip'></i> Arquivos Técnicos do Pedido</a>	
 						</div>
 						</div>
 					</div>	

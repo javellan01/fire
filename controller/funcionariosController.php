@@ -112,6 +112,6 @@ function insertFDocumento($conn,$data){
 				{
 				print_r($e);
 				}
-        if($e == null) echo "Arquivo Cadastrado com Sucesso!";
+        if($e == null) echo "Arquivo Cadastrado com Sucesso! ";
 }
 ?>

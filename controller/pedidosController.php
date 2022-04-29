@@ -113,6 +113,7 @@ function insertArquivoTecnico($conn,$data){
 }
 
 function getPedidoData($conn, $pid){
+
     $stmt = $conn->query("SELECT p.*, c.tx_nome 
     FROM pedido p 
     INNER JOIN cliente c ON p.id_cliente = c.id_cliente 
@@ -124,4 +125,22 @@ function getPedidoData($conn, $pid){
 
 }
 
+function excludeArquivoPedido($conn, $data){
+
+    $e = null;
+
+    try{
+    $stmt = $conn->prepare("DELETE FROM arq_tecnico
+                         WHERE id_pedido = :id_pedido AND tx_arquivo = :tx_arquivo");
+    $stmt->bindParam(':id_pedido',$data['id_pedido']);                         
+    $stmt->bindParam(':tx_arquivo',$data['tx_arquivo']);                         
+
+    $stmt->execute();
+    }
+    catch(PDOException $e){
+        echo $e->getMessage();
+        }
+        if($e == null) echo "Arquivo ".$data['tx_arquivo']." Excluído!";
+
+}
 ?>
