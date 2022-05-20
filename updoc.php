@@ -63,7 +63,29 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Updoc')
         // implode(',',$data);
         insertFDocumento($conn,$data);
         echo'Upload do arquivo: '.$fileName.' realizado com Sucesso!';
+        if($fileExtension == 'jpg' || $fileExtension == 'jpeg'){
+          $exif = exif_read_data($dest_path);
+
+          print_r($exif);
+        }
+        $img_h = $exif['COMPUTED']['Height'];
+        $img_w = $exif['COMPUTED']['Width'];
+
+        $gdimage = imagecreatefromjpeg($dest_path);
         
+        if($gdimage){
+          if($img_h > $img_w){
+            $rtr = $img_h / 2048;
+            $new_img_w = int($img_w/$rtr);
+            $resized = imagescale($gdimage, $new_img_w,-1,IMG_BICUBIC); 
+            imagejpeg($resized, null, 80);
+            
+          }else{
+            $resized = imagescale($gdimage, 2048,-1,IMG_BICUBIC);
+            imagejpeg($resized, null, 80);
+          }
+        }
+
       }
       else
       {
