@@ -3,7 +3,7 @@
     {
         private $_connection;
         private static $_instance; 
-        public $_host = 'sql540.main-hosting.eu';
+        public $_host = 'localhost';
         public $_username = 'u658453311_fire';
         public $_password = 'fiream2014';
         public $_database = 'u658453311_fire';

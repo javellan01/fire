@@ -58,6 +58,12 @@ foreach($clientes as $cliente){
 	else{		
 		foreach($pedidos as $pedido){
 		$fisico = getProgressoFisico($conn,$pedido->id_pedido);
+		if(!$fisico){
+			$percent_fisico = 0;
+		}  
+		else {
+			$percent_fisico = $fisico->execpercent;
+		}
 
 		echo "<div class='progress-group'>";
 			if($pedido->cs_estado == 0) 
@@ -65,9 +71,9 @@ foreach($clientes as $cliente){
 			if($pedido->cs_estado == 1) 
 			echo "<div class='progress-group-header align-items-end' style='color: #777;'><div><a class='btn btn-ghost-secondary' href='javascript:atvPhp(".$pedido->id_pedido.");' role='button'><strong>Pedido: " . $pedido->tx_codigo . " (Encerrado) <i class='nav-icon cui-chevron-right'></i></strong></a></div>";
 
-			echo "<div class='ml-auto'>Atividades Concluídas: " . $fisico->execpercent ."%</div></div>";
+			echo "<div class='ml-auto'>Atividades Concluídas: " . $percent_fisico ."%</div></div>";
 			echo "<div class='progress-group-bars'> <div class='progress progress-lg'>";
-			echo "<div class='progress-bar progress-bar-striped bg-warning' role='progressbar' style='width: ". $fisico->execpercent ."%' aria-valuenow='". $fisico->execpercent ."' aria-valuemin='0' aria-valuemax='100'>". $fisico->execpercent ."%</div></div>";
+			echo "<div class='progress-bar progress-bar-striped bg-warning' role='progressbar' style='width: ". $percent_fisico ."%' aria-valuenow='". $percent_fisico ."' aria-valuemin='0' aria-valuemax='100'>". $percent_fisico ."%</div></div>";
 
 			if($pedido->nb_valor != 0.00){
 				$percent = ($pedido->medido_total / $pedido->nb_valor) * 100;
