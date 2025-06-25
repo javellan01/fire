@@ -1,3 +1,5 @@
-
-config/mail.php
-config/db.php
+/vendor/
+/img/
+/img/
+/config/
+/DB/

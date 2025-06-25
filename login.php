@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<script src="./assets/js/jquery-3.6.0.min.js"></script>
+	<script src="./assets/js/jquery-3.7.1.min.js"></script>
 	<script src="./assets/js/jquery.mask.js"></script>
 	<script src="./assets/js/md5.min.js"></script>
 	<style type="text/css">

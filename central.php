@@ -44,7 +44,7 @@
 	  .fc-col-header {background-color: #09568d; color: white;}
 	  th {font-weight: normal;}
     </style>
-		<script src="./assets/js/jquery-3.6.0.min.js"></script>
+		<script src="./assets/js/jquery-3.7.1.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
 		<script src="./assets/js/datepicker-pt-br.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
@@ -60,6 +60,38 @@
 		<script src="./dist/spectrum/spectrum.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+	<!-- VUEJS Scriping for WORKING dynamically PHP on server -->
+	<script type="module">
+        import { createApp, reactive } from "./assets/js/petite-vue.es.js";
+        
+        var real = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+		// PETIT VUE
+		const pedidos = reactive({
+			size: 8,
+            pages: 0,
+            current_page: 0,
+            search_date: 0,
+            search_orc: 0,
+            send_data: [],
+            tableLines: [],
+            pageLines: [],
+            date_query: '',
+            o_query: '',
+			tableLines: [],
+			async loadPedidosList() {
+                const query = await fetch(`req/loadPedidos.php`);
+                const res = await query.json();	
+				this.tableLines = res;
+			}
+		});
+
+		createApp({ pedidos });
+
+		pedidos.loadPedidosList();
+
+		</script>
 	<!-- AJAX Scriping for loading dynamically PHP on server -->
 		<script src="./assets/js/central.js"></script>
 	
@@ -237,6 +269,9 @@
 
 			});
 		</script>
+		
+		
+
  </body> 
  
 </html> 

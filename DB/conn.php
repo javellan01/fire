@@ -3,9 +3,9 @@
     {
         private $_connection;
         private static $_instance; 
-        public $_host = 'localhost';
+        public $_host = 'srv793.hstgr.io';
         public $_username = 'u658453311_fire';
-        public $_password = 'fiream2014';
+        public $_password = '@Fire12247*';
         public $_database = 'u658453311_fire';
     
         public static function getInstance()

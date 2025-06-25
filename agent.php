@@ -6,11 +6,10 @@
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<script src="./assets/js/jquery-3.6.0.min.js"></script>
+	<script src="./assets/js/jquery-3.7.1.min.js"></script>
 	<script src="./assets/js/jquery.mask.js"></script>
 	<script src="./assets/js/md5.min.js"></script>
 	<style type="text/css">
-		@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300);
 		* {
 		  box-sizing: border-box;
 		  margin: 0;
@@ -120,9 +119,20 @@ header("Expires: 0"); //
 
 require("./DB/conn.php");
 require("./controller/agentController.php");
+require_once 'vendor/autoload.php';
+use Firebase\JWT\JWT;
 
-Auth::validateUser($conn);
- 
+$key = include("./config/key.php");
+
+$usuario = Auth::validateUser($conn);
+
+JWT::encode($usuario, $key['jwt'],'HS256');
+
+		$_SESSION['temp-k'] = $key['key'];
+        if($_SESSION['catuser'] == 0) return header('Location: central.php');
+        if($_SESSION['catuser'] == 1) return header('Location: central_ger.php');
+        if($_SESSION['catuser'] == 2) return header('Location: central_usr.php');
+
 ?>
 		</div>
 		</div>

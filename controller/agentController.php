@@ -16,52 +16,31 @@ class Auth
             $login = $_POST['usuario'];
             $senha = md5($_POST['senha']);
 
-        $result = $conn->query("SELECT * FROM usuario WHERE tx_cpf = '".$login."' AND tx_password = '".$senha."'");                                    
-       
-        
-        echo "<p>Login Cancelado!</p>";
+        $result = $conn->query("SELECT id_usuario, nb_category_user, tx_name FROM usuario WHERE tx_cpf = '".$login."' AND tx_password = '".$senha."'");        
+        $data = $result->fetch(PDO::FETCH_ASSOC);
 
         if($result)
         {   
-            while($row = $result->fetch(PDO::FETCH_OBJ)) {
-            $uid = $row->id_usuario;
-	        $catu = $row->nb_category_user;
-	        $user = $row->tx_name;
-            
+            $uid = $data['id_usuario'];
+	        $catu = $data['nb_category_user'];
+	        $user = $data['tx_name'];
             };
-           
 
             $_SESSION['login'] = $login;
             $_SESSION['usuario'] = $user;
             $_SESSION['catuser'] = $catu;
             $_SESSION['userid'] = $uid;
             
-            if($_SESSION['catuser'] == 0) return header('Location: central.php');
-            if($_SESSION['catuser'] == 1) return header('Location: central_ger.php');
-            if($_SESSION['catuser'] == 2) return header('Location: central_usr.php');
- 
+            return $data;
+
         }
         else{
-        unset ($_SESSION['login']);
-        unset ($_SESSION['usuario']);
-        unset ($_SESSION['catuser']);
-        unset ($_SESSION['userid']);
+        $_SESSION = [];
         session_destroy();
-        
-
-
-        // header('Location: login.php');
-        
         }
-	    }
-    }	
-    else{
-        
-    // header('Location: login.php');
-   
-    }
 
-    }
+	}
+    }	
 
     public static function accessControl($catuser,$level){
         
@@ -71,8 +50,10 @@ class Auth
             if($_SESSION['catuser'] == 1) return header('Location: central_ger.php');
             if($_SESSION['catuser'] == 2) return header('Location: central_usr.php');
         }
-    } else session_destroy();
-
+    }
+    else session_destroy();
     }
 }
+
+
 ?>           

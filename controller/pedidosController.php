@@ -42,6 +42,26 @@ function getPedidosCliente($conn,$cid){
     return $data;
   }
 
+function loadPedidosList($conn){
+
+    $stmt = $conn->query("WITH vs AS (SELECT id_pedido, FORMAT(((SUM(progresso) / SUM(nb_valor)) *100),1) as 'execpercent'
+    FROM v_categoria_sums
+    GROUP BY id_pedido)
+    SELECT c.id_cliente, p.tx_codigo, p.id_pedido, DATE_FORMAT(p.dt_idata, '%d/%m/%Y') as 'data', p.cs_estado, u.tx_name,
+    IFNULL(v.medido_total,0) as medido_total, v.nb_valor, vs.execpercent, IFNULL(FORMAT(((v.medido_total / v.nb_valor) *100),1),0) as 'percent'
+        FROM cliente As c 
+        INNER JOIN pedido AS p ON c.id_cliente = p.id_cliente
+        INNER JOIN usuario AS u ON p.id_usu_resp = u.id_usuario
+        INNER JOIN v_sum_pedido_total AS v ON p.id_pedido = v.id_pedido
+        INNER JOIN vs ON p.id_pedido = vs.id_pedido
+        ORDER BY p.id_pedido DESC;");
+
+    $data = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+    return $data;
+
+}
+
 function getUserPedidos($conn,$userid){
     
     $stmt = $conn->query("SELECT p.tx_codigo, p.id_pedido, p.cs_estado

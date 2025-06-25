@@ -151,9 +151,12 @@
 		
 		}		
 			
-		
+		pedidos.mount("#pedidoSection");
+
 		};
-	
+
+		
+
 	xhttp.open("GET", str, true);
 	xhttp.send();
 		}

@@ -43,7 +43,7 @@
 	  .fc-col-header {background-color: #09568d; color: white;}
 	  th {font-weight: normal;}
     </style>
-		<script src="./assets/js/jquery-3.6.0.min.js"></script>
+		<script src="./assets/js/jquery-3.7.1.min.js"></script>
 		<script src="./assets/js/jquery-ui.min.js"></script>
 		<script src="./assets/js/datepicker-pt-br.js"></script>
 		<script src="./assets/js/jquery.ajax.form.js"></script>
